@@ -224,9 +224,11 @@ class _RegistrationFormState extends State<RegistrationForm> {
                             validator: (value) {
                               if (value!.isEmpty) {
                                 registrationController.mobileErrorMessage = MyStrings.fieldErrorMsg;
-                              } else if (value.toString().length != 10) {
-                                registrationController.mobileErrorMessage = MyStrings.mobileErrorMsg;
-                              } else {
+                              }
+                              // else if (value.toString().length != 10) {
+                              //   registrationController.mobileErrorMessage = MyStrings.mobileErrorMsg;
+                              // }
+                              else {
                                 registrationController.mobileErrorMessage = null;
                               }
                               registrationController.update();
@@ -248,8 +250,8 @@ class _RegistrationFormState extends State<RegistrationForm> {
                 ],
               ),
               const SizedBox(height: Dimensions.space16),
-              Text(MyStrings.selectTown, style: regularLarge.copyWith(color: MyColor.secondaryTextColor)),
-              const SizedBox(height: Dimensions.space16),
+              // Text(MyStrings.selectTown, style: regularLarge.copyWith(color: MyColor.secondaryTextColor)),
+              // const SizedBox(height: Dimensions.space16),
               InkWell(
                 onTap: () async {
                   registrationController.selectedTown = await showTownBottomSheet(context);

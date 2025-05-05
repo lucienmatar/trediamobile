@@ -64,7 +64,7 @@ class RegistrationController extends GetxController {
   List<String>? townList;
   String? selectedTownName = MyStrings.selectTown;
   String? selectedTown = MyStrings.selectTown;
-  String? selectedCountryCode = "+971";
+  String? selectedCountryCode = "+961";
   CountryCodeModel? countryCodeModel;
 
   @override
@@ -137,7 +137,7 @@ class RegistrationController extends GetxController {
         "MiddleName": middleNameController.text.toString().trim(),
         "LastName": lastNameController.text.toString().trim(),
         "Email": emailController.text.toString().trim(),
-        "PhoneNumber": "+961 ${mobileController.text.toString().trim()}",
+        "PhoneNumber": "$selectedCountryCode ${mobileController.text.toString().trim()}",
         "Gender": selectedGender,
         "Id_Town": selectedTown,
         "AddressDetails": addressController.text.toString().trim(),
