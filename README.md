@@ -1,0 +1,2 @@
+# ShapeCom
+ tsk starting project

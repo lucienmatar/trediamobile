@@ -1,0 +1,137 @@
+import 'dart:async';
+
+import 'package:ShapeCom/presentation/screens/auth/forget_password/verify_forget_password/model/resend_code_forget_password_model.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:get/get.dart';
+import 'package:pin_code_fields/pin_code_fields.dart';
+
+import '../../../../config/network/api_service.dart';
+import '../../../../config/route/route.dart';
+import '../../../../config/utils/my_constants.dart';
+import '../../../../config/utils/my_preferences.dart';
+import '../../../../config/utils/my_strings.dart';
+import '../../../../presentation/components/snack_bar/show_custom_snackbar.dart';
+import '../../../../presentation/screens/auth/forget_password/verify_forget_password/model/forget_password_validation_model.dart';
+
+class VerifyPasswordController extends GetxController {
+  String email = '';
+  String password = '';
+  bool isLoading = false;
+  bool remember = false;
+  bool hasError = false;
+  StreamController<ErrorAnimationType> errorController = StreamController<ErrorAnimationType>();
+  List<String> errors = [];
+  String currentText = "";
+  String confirmPassword = '';
+  bool isResendLoading = false;
+  ApiService apiService = ApiService(context: Get.context!);
+  ResendCodeForgetPassword? resendCodeForgetPassword;
+  var otpController = TextEditingController();
+  int _counter = 60; // Initial countdown time (seconds)
+  late Timer _timer;
+  int minute = 1;
+  bool verifyLoading = false;
+  ForgetPasswordValidationModel? forgetPasswordValidationModel;
+
+  void startTimer() {
+    print("startTimer");
+    _counter = minute * 60; // Reset counter
+    update();
+
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (_counter > 0) {
+        //print("_counter $_counter");
+        _counter--;
+      } else {
+        minute = resendCodeForgetPassword!.data!.timeoutInMinutes!.toInt();
+        print("minute updated $minute");
+        isResendLoading = false;
+        update();
+        _timer.cancel();
+      }
+    });
+  }
+
+  forgetPasswordValidationApi() async {
+    try {
+      int forgetPasswordID = MyPrefrences.getInt(MyPrefrences.forgetPasswordID) ?? 0;
+      hasError = false;
+      update();
+      var requestBody = {
+        "ForgetPasswordID": forgetPasswordID,
+        "Id_College": MyConstants.Id_College,
+        "lang": MyConstants.currentLanguage,
+        "RegToken": currentText,
+      };
+      dynamic responseBody = await apiService.makeRequest(endPoint: MyConstants.endpointForgetPasswordValidation, method: MyConstants.POST, body: requestBody);
+      forgetPasswordValidationModel = ForgetPasswordValidationModel.fromJson(responseBody);
+      if (forgetPasswordValidationModel!.status == 1) {
+        if (forgetPasswordValidationModel!.msg!.isNotEmpty) {
+          CustomSnackBar.success(successList: [forgetPasswordValidationModel!.msg!]);
+        }
+        Get.toNamed(RouteHelper.resetPasswordScreen);
+      } else {
+        otpController.text = "";
+        errorController.add(ErrorAnimationType.shake); // Triggering error shake animation
+        hasError = true;
+        update();
+        if (forgetPasswordValidationModel!.msg!.isNotEmpty) {
+          CustomSnackBar.error(errorList: [forgetPasswordValidationModel!.msg!]);
+        }
+      }
+    } catch (e) {
+      print("forgetPasswordValidationApi Error ${e.toString()}");
+      CustomSnackBar.error(errorList: [MyStrings.networkError]);
+    }
+  }
+
+  reSendCodePasswordApi() async {
+    try {
+      int forgetPasswordID = MyPrefrences.getInt(MyPrefrences.forgetPasswordID) ?? 0;
+      int userID = MyPrefrences.getInt(MyPrefrences.userID) ?? 0;
+      hasError = false;
+      update();
+      var requestBody = {
+        "ForgetPasswordID": forgetPasswordID,
+        "UserID": userID,
+        "Id_College": MyConstants.Id_College,
+        "lang": MyConstants.currentLanguage,
+      };
+      dynamic responseBody = await apiService.makeRequest(endPoint: MyConstants.endpointResendCodeForgetPassword, method: MyConstants.POST, body: requestBody);
+      resendCodeForgetPassword = ResendCodeForgetPassword.fromJson(responseBody);
+      if (resendCodeForgetPassword!.status == 1) {
+        isResendLoading = true;
+        update();
+        minute = resendCodeForgetPassword!.data!.timeoutInMinutes!.toInt();
+        startTimer();
+        if (resendCodeForgetPassword!.msg!.isNotEmpty) {
+          CustomSnackBar.success(successList: [resendCodeForgetPassword!.msg!]);
+        }
+      } else {
+        otpController.text = "";
+        errorController.add(ErrorAnimationType.shake); // Triggering error shake animation
+        hasError = true;
+        update();
+        if (resendCodeForgetPassword!.msg!.isNotEmpty) {
+          CustomSnackBar.error(errorList: [resendCodeForgetPassword!.msg!]);
+        }
+      }
+    } catch (e) {
+      print("reSendCodePasswordApi Error ${e.toString()}");
+      CustomSnackBar.error(errorList: [MyStrings.networkError]);
+    }
+  }
+
+  @override
+  void onInit() {
+    super.onInit();
+    MyPrefrences.init();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _timer.cancel();
+  }
+}

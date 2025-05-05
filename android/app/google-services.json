@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1068146710401",
+    "project_id": "tredia-69a25",
+    "storage_bucket": "tredia-69a25.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1068146710401:android:918d1f5b6babcbc938ba80",
+        "android_client_info": {
+          "package_name": "com.datarays.tredia"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDHRcWhL6q6j8uhvalfkt-qcrClQ0PesME"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
