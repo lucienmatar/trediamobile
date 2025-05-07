@@ -133,7 +133,7 @@ class FilterController extends GetxController {
       if (maxOnlinePriceBasedOnCcyModel!.status == 1) {
         isRangeValueLoaded=true;
         rangeStartValue = 0;
-        rangeEndValue = (double.parse(maxOnlinePriceBasedOnCcyModel!.data![0].display!) - 50);
+        rangeEndValue = double.parse(maxOnlinePriceBasedOnCcyModel!.data![0].display!);
         update();
         /*if (getItemModel.msg!.isNotEmpty) {
           CustomSnackBar.success(successList: [getItemModel.msg!]);

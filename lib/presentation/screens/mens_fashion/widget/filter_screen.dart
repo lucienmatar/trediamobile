@@ -49,9 +49,9 @@ class FilterScreen extends StatelessWidget {
                 const CustomDivider(dividerHeight: 1,space: Dimensions.space34),
                  ColorSection(controller: controller),
                 const CustomDivider(dividerHeight: 1,space: Dimensions.space34),*/
-                filterController.categoryCount > 0 ? buildCategory() : MyUtils.noRecordsFoundWidget(),
+                filterController.categoryCount > 0 ? buildCategory() : const Offstage(),
                 const CustomDivider(dividerHeight: 1, space: Dimensions.space34),
-                filterController.currencyCount > 0 ? buildCurrencies() : MyUtils.noRecordsFoundWidget(),
+                filterController.currencyCount > 0 ? buildCurrencies() : const Offstage(),
                 const CustomDivider(dividerHeight: 1, space: Dimensions.space34),
                 filterController.isRangeValueLoaded ? buildPriceRangeSection() : const Offstage(),
                 const SizedBox(height: Dimensions.space50),
@@ -164,7 +164,7 @@ class FilterScreen extends StatelessWidget {
           height: Dimensions.space10,
         ),
         Row(
-          children: [Text(MyStrings.price, style: regularDefaultInter.copyWith(fontSize: Dimensions.space14)), const Spacer(), Text("\$${filterController.rangeStartValue.toStringAsFixed(0)} - \$${filterController.rangeEndValue.toStringAsFixed(0)}", style: regularDefaultInter.copyWith(fontSize: Dimensions.space14))],
+          children: [Text(MyStrings.price, style: regularDefaultInter.copyWith(fontSize: Dimensions.space14)), const Spacer(), Text("${filterController.rangeStartValue.toStringAsFixed(0)} - ${filterController.rangeEndValue.toStringAsFixed(0)}", style: regularDefaultInter.copyWith(fontSize: Dimensions.space14))],
         ),
       ],
     );

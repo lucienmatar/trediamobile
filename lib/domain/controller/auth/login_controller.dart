@@ -88,7 +88,7 @@ class LoginController extends GetxController {
         MyPrefrences.saveString(MyPrefrences.guidUser, loginModel.data!.guidUser!);
         MyPrefrences.saveString(MyPrefrences.currency, loginModel.data!.currency!);
         if (loginModel.msg!.isNotEmpty) {
-          CustomSnackBar.success(successList: [loginModel.msg!]);
+          // CustomSnackBar.success(successList: [loginModel.msg!]);
         }
         Get.offAllNamed(RouteHelper.bottomNavBar);
       } else {

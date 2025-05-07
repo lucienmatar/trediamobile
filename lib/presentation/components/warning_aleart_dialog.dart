@@ -10,8 +10,8 @@ import 'buttons/rounded_button.dart';
 class WarningAlertDialog {
   const WarningAlertDialog();
   void warningAlertDialog(BuildContext context, VoidCallback press, {String? titleMessage, String? subtitleMessage, bool isDelete = false}) {
-    titleMessage = MyStrings.areYourSure;
-    subtitleMessage = MyStrings.youWantToExitTheApp;
+    titleMessage = titleMessage;
+    subtitleMessage = subtitleMessage;
     showDialog(
         context: context,
         builder: (context) => Dialog(

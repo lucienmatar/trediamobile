@@ -1,3 +1,4 @@
+import 'package:ShapeCom/config/utils/my_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:ShapeCom/config/utils/dimensions.dart';
 import 'package:ShapeCom/config/utils/my_color.dart';
@@ -103,7 +104,10 @@ class MenuScreen extends StatelessWidget {
                   MenuRowWidget(
                     image: MyImages.signOut,
                     label: MyStrings.signOut,
-                    onPressed: () => Get.offAllNamed(RouteHelper.loginScreen),
+                    onPressed: () async {
+                      MyPrefrences.clear();
+                      Get.offAllNamed(RouteHelper.loginScreen);
+                    },
                   ),
                   MenuRowWidget(
                     image: MyImages.trash,

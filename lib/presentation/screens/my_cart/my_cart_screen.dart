@@ -56,6 +56,7 @@ class _MyCartScreenState extends State<MyCartScreen> {
             child: myCartController.isShimmerShow == false
                 ? myCartController.cartCount > 0
                     ? ListView.builder(
+                        controller: _scrollController,
                         shrinkWrap: true,
                         itemCount: myCartController.cartCount,
                         itemBuilder: (context, index) {
@@ -117,7 +118,7 @@ class _MyCartScreenState extends State<MyCartScreen> {
                 Text("${MyStrings.subTotal} : ${myCartController.subTotalPriceCart!.data!.subtotal!.sellingCurrencyLogo}${myCartController.subTotalPriceCart!.data!.subtotal!.subTotalPrice ?? "0"}", style: semiBoldLargeInter.copyWith(fontWeight: FontWeight.w500)),
                 const SizedBox(width: Dimensions.space12),
                 Text("${myCartController.subTotalPriceCart!.data!.subtotal!.sellingCurrencyLogo}${myCartController.subTotalPriceCart!.data!.subtotal!.subTotalPriceBeforeDiscount ?? "0"}", style: boldLarge.copyWith(fontSize: 12, decoration: TextDecoration.lineThrough, color: MyColor.bodyTextColor)),
-                const SizedBox(width: Dimensions.space12),
+                const Spacer(),
                 InkWell(
                   onTap: () {
                     myCartController.gotoCheckOutPage();
@@ -228,10 +229,7 @@ class _MyCartScreenState extends State<MyCartScreen> {
             bottom: -5,
             child: IconButton(
                 onPressed: () {
-                  const WarningAlertDialog().warningAlertDialog(subtitleMessage: "You want to delete this item?", context, () {
                     myCartController.removeItemFromCartApi(myCartController.myCartItemModel!.data!.items![index].idItem!.toInt());
-                    Get.back();
-                  });
                 },
                 icon: SvgPicture.asset(MyImages.delete, width: 22, height: 22, colorFilter: const ColorFilter.mode(MyColor.primaryColor, BlendMode.srcIn))))
       ],
