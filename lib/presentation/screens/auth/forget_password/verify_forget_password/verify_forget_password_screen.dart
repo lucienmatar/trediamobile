@@ -116,13 +116,9 @@ class _VerifyForgetPassScreenState extends State<VerifyForgetPassScreen> {
                               DefaultText(text: MyStrings.didNotReceiveCode, textColor: MyColor.getTextColor()),
                               const SizedBox(width: Dimensions.space5),
                               controller.isResendLoading
-                                  ? const SizedBox(
-                                      height: 17,
-                                      width: 17,
-                                      child: CircularProgressIndicator(
-                                        color: MyColor.primaryColor,
-                                      ),
-                                    )
+                                  ? Obx(() {
+                                      return DefaultText(text: controller.counter.value.toString(), textStyle: regularDefault.copyWith(color: MyColor.getPrimaryColor()));
+                                    })
                                   : TextButton(
                                       onPressed: () {
                                         controller.reSendCodePasswordApi();

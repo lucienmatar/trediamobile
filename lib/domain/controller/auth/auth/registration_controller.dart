@@ -78,7 +78,7 @@ class RegistrationController extends GetxController {
   countryCodesApi() async {
     try {
       var requestBody = {"Id_College": MyConstants.Id_College, "lang": MyConstants.currentLanguage};
-      dynamic responseBody = await apiService.makeRequest(endPoint: MyConstants.endpointGetCountryCodes, method: MyConstants.POST, body: requestBody, showProgress: false);
+      dynamic responseBody = await apiService.makeRequest(endPoint: MyConstants.endpointGetCountryCodes, method: MyConstants.POST, body: requestBody, showProgress: true);
       countryCodeModel = CountryCodeModel.fromJson(responseBody);
       if (countryCodeModel!.status == 1) {
         update();
@@ -94,7 +94,7 @@ class RegistrationController extends GetxController {
   getAllTownApi() async {
     try {
       var requestBody = {"Id_College": MyConstants.Id_College, "lang": MyConstants.currentLanguage};
-      dynamic responseBody = await apiService.makeRequest(endPoint: MyConstants.endpointGetTowns, method: MyConstants.POST, body: requestBody, showProgress: false);
+      dynamic responseBody = await apiService.makeRequest(endPoint: MyConstants.endpointGetTowns, method: MyConstants.POST, body: requestBody, showProgress: true);
       townModel = TownModel.fromJson(responseBody);
       if (townModel!.status == 1) {
         if (townModel!.msg!.isNotEmpty) {

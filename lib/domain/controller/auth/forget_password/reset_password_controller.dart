@@ -19,31 +19,35 @@ class ResetPasswordController extends GetxController {
   ApiService apiService = ApiService(context: Get.context!);
 
   resetPasswordApi() async {
-    try {
-      int userID = MyPrefrences.getInt(MyPrefrences.userID) ?? 0;
-      var requestBody = {
-        "UserID": userID,
-        "Id_College": MyConstants.Id_College,
-        "lang": MyConstants.currentLanguage,
-        "Password": passController.text.toString().trim(),
-      };
-      dynamic responseBody = await apiService.makeRequest(endPoint: MyConstants.endpointResetPassword, method: MyConstants.POST, body: requestBody);
-      ResetPasswordModel? resetPasswordModel = ResetPasswordModel.fromJson(responseBody);
-      if (resetPasswordModel.status == 1) {
-        if (resetPasswordModel.msg!.isNotEmpty) {
-          CustomSnackBar.success(successList: [resetPasswordModel.msg!]);
+    if (passController.text.toLowerCase() != confirmPassController.text.toLowerCase()) {
+      CustomSnackBar.error(errorList: [MyStrings.kMatchPassError]);
+    } else {
+      try {
+        int userID = MyPrefrences.getInt(MyPrefrences.userID) ?? 0;
+        var requestBody = {
+          "UserID": userID,
+          "Id_College": MyConstants.Id_College,
+          "lang": MyConstants.currentLanguage,
+          "Password": passController.text.toString().trim(),
+        };
+        dynamic responseBody = await apiService.makeRequest(endPoint: MyConstants.endpointResetPassword, method: MyConstants.POST, body: requestBody);
+        ResetPasswordModel? resetPasswordModel = ResetPasswordModel.fromJson(responseBody);
+        if (resetPasswordModel.status == 1) {
+          if (resetPasswordModel.msg!.isNotEmpty) {
+            CustomSnackBar.success(successList: [resetPasswordModel.msg!]);
+          }
+          MyPrefrences.saveInt(MyPrefrences.userID, 0); //reset
+          MyPrefrences.saveInt(MyPrefrences.forgetPasswordID, 0); //reset
+          Get.offAllNamed(RouteHelper.loginScreen);
+        } else {
+          if (resetPasswordModel.msg!.isNotEmpty) {
+            CustomSnackBar.error(errorList: [resetPasswordModel.msg!]);
+          }
         }
-        MyPrefrences.saveInt(MyPrefrences.userID, 0); //reset
-        MyPrefrences.saveInt(MyPrefrences.forgetPasswordID, 0); //reset
-        Get.offAllNamed(RouteHelper.loginScreen);
-      } else {
-        if (resetPasswordModel.msg!.isNotEmpty) {
-          CustomSnackBar.error(errorList: [resetPasswordModel.msg!]);
-        }
+      } catch (e) {
+        print("resetPasswordApi Error ${e.toString()}");
+        CustomSnackBar.error(errorList: [MyStrings.networkError]);
       }
-    } catch (e) {
-      print("resetPasswordApi Error ${e.toString()}");
-      CustomSnackBar.error(errorList: [MyStrings.networkError]);
     }
   }
 

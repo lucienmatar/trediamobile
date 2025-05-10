@@ -23,7 +23,7 @@ class SmsVerificationController extends GetxController {
   ValidateRegistrationModel? validateRegistrationModel;
   StreamController<ErrorAnimationType> errorController = StreamController<ErrorAnimationType>();
   var otpController = TextEditingController();
-  int _counter = 60; // Initial countdown time (seconds)
+  RxInt counter = 60.obs; // Initial countdown time (seconds)
   late Timer _timer;
   bool _isResendButtonEnabled = false;
   int minute = 1;
@@ -33,13 +33,13 @@ class SmsVerificationController extends GetxController {
   void startTimer() {
     print("startTimer");
     _isResendButtonEnabled = false;
-    _counter = minute * 60; // Reset counter
+    counter.value = minute * 60; // Reset counter
     update();
 
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      if (_counter > 0) {
+      if (counter.value > 0) {
         //print("_counter $_counter");
-        _counter--;
+        counter.value--;
       } else {
         minute = resendCodeModel!.data!.timeoutInMinutes!.toInt();
         print("minute updated $minute");
@@ -75,10 +75,10 @@ class SmsVerificationController extends GetxController {
         otpController.text = "";
         errorController.add(ErrorAnimationType.shake); // Triggering error shake animation
         hasError = true;
-        update();
         if (validateRegistrationModel!.msg!.isNotEmpty) {
           CustomSnackBar.error(errorList: [validateRegistrationModel!.msg!]);
         }
+        update();
       }
     } catch (e) {
       print("validateRegistrationApi Error ${e.toString()}");

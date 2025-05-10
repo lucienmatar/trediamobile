@@ -27,7 +27,7 @@ class VerifyPasswordController extends GetxController {
   ApiService apiService = ApiService(context: Get.context!);
   ResendCodeForgetPassword? resendCodeForgetPassword;
   var otpController = TextEditingController();
-  int _counter = 60; // Initial countdown time (seconds)
+  RxInt counter = 60.obs; // Initial countdown time (seconds)
   late Timer _timer;
   int minute = 1;
   bool verifyLoading = false;
@@ -35,13 +35,13 @@ class VerifyPasswordController extends GetxController {
 
   void startTimer() {
     print("startTimer");
-    _counter = minute * 60; // Reset counter
+    counter.value = minute * 60; // Reset counter
     update();
 
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      if (_counter > 0) {
+      if (counter.value > 0) {
         //print("_counter $_counter");
-        _counter--;
+        counter.value--;
       } else {
         minute = resendCodeForgetPassword!.data!.timeoutInMinutes!.toInt();
         print("minute updated $minute");
@@ -111,10 +111,10 @@ class VerifyPasswordController extends GetxController {
         otpController.text = "";
         errorController.add(ErrorAnimationType.shake); // Triggering error shake animation
         hasError = true;
-        update();
         if (resendCodeForgetPassword!.msg!.isNotEmpty) {
           CustomSnackBar.error(errorList: [resendCodeForgetPassword!.msg!]);
         }
+        update();
       }
     } catch (e) {
       print("reSendCodePasswordApi Error ${e.toString()}");

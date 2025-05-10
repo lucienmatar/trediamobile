@@ -96,12 +96,15 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                       return;
                     },
                     validator: (value) {
+                      return controller.validatePassword(value);
+                    },
+                    /*validator: (value) {
                       if (controller.passController.text.toLowerCase() != controller.confirmPassController.text.toLowerCase()) {
                         return MyStrings.kMatchPassError;
                       } else {
                         return null;
                       }
-                    },
+                    },*/
                   ),
                   const SizedBox(height: Dimensions.space35),
                   controller.submitLoading

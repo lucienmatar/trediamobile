@@ -62,7 +62,7 @@ class _HomeScreenState extends State<HomeScreen> {
       // Check if we're near the bottom
       if (maxScrollExtent - currentPosition <= threshold) {
         print("Reached the bottom, loading more...");
-        homeController.loadMoreItems();
+        homeController.refreshItem();
       }
     }
   }
@@ -79,44 +79,44 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return GetBuilder<HomeController>(
         builder: (controller) => StatusBarColorWidget(
-              color: MyColor.colorWhite,
-              iconBrightness: Brightness.dark,
-              child: Scaffold(
-                backgroundColor: MyColor.colorLightGrey,
-                key: scaffoldKey,
-                body: SafeArea(
-                  child: RefreshIndicator(
-                    color: MyColor.primaryColor, // Color of the loading indicator
-                    backgroundColor: Colors.white, // Background color of the refresh indicator
-                    onRefresh: homeController.refreshItem,
-                    child: Column(
-                      children: [
-                        const HomeScreenTopSection(),
-                        const SizedBox(height: 10),
-                        Expanded(
-                          child: Container(
-                            decoration: const BoxDecoration(color: MyColor.colorWhite, borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20))),
-                            child: SingleChildScrollView(
-                              controller: _scrollController, // Attach ScrollController
-                              child: Column(
-                                children: [
-                                  buildSearchBarSection(),
-                                  const SizedBox(
-                                    height: Dimensions.space8,
-                                  ),
-                                  Visibility(visible: MyConstants.filtersApplied, child: buildFilterSection()),
-                                  homeController.isShimmerShow==false ? GridViewProductWidget(physics: const BouncingScrollPhysics(), productModelList: homeController.productModelList) : buildHomeScreenShimmer(),
-                                ],
+          color: MyColor.colorWhite,
+          iconBrightness: Brightness.dark,
+          child: Scaffold(
+            backgroundColor: MyColor.colorLightGrey,
+            key: scaffoldKey,
+            body: SafeArea(
+              child: RefreshIndicator(
+                color: MyColor.primaryColor, // Color of the loading indicator
+                backgroundColor: Colors.white, // Background color of the refresh indicator
+                onRefresh: homeController.refreshItem,
+                child: Column(
+                  children: [
+                    const HomeScreenTopSection(),
+                    const SizedBox(height: 10),
+                    Expanded(
+                      child: Container(
+                        decoration: const BoxDecoration(color: MyColor.colorWhite, borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20))),
+                        child: SingleChildScrollView(
+                          controller: _scrollController, // Attach ScrollController
+                          child: Column(
+                            children: [
+                              buildSearchBarSection(),
+                              const SizedBox(
+                                height: Dimensions.space8,
                               ),
-                            ),
+                              Visibility(visible: MyConstants.filtersApplied, child: buildFilterSection()),
+                              homeController.isShimmerShow == false ? GridViewProductWidget(physics: const BouncingScrollPhysics(), productModelList: homeController.productModelList) : buildHomeScreenShimmer(),
+                            ],
                           ),
                         ),
-                      ],
+                      ),
                     ),
-                  ),
+                  ],
                 ),
               ),
-            ));
+            ),
+          ),
+        ));
   }
 
   Widget buildSearchBarSection() {
@@ -173,7 +173,17 @@ class _HomeScreenState extends State<HomeScreen> {
             "${homeController.filtersCount} items",
             style: mediumDefault.copyWith(color: MyColor.bodyTextColor),
           ),
-          IconButton(
+          InkWell(
+            onTap: () {
+              //reset filters
+              homeController.resetFilters();
+            },
+            child: Text(
+              MyStrings.resetFilters,
+              style: mediumDefault.copyWith(color: MyColor.bodyTextColor),
+            ),
+          ),
+          /*  IconButton(
               padding: EdgeInsets.zero, // removes internal padding
               constraints: const BoxConstraints(), // removes default size constraints
               visualDensity: VisualDensity.compact, // optional: makes it even more compact
@@ -181,7 +191,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 //reset filters
                 homeController.resetFilters();
               },
-              icon: const Icon(Icons.close, color: MyColor.bodyTextColor))
+              icon: const Icon(Icons.close, color: MyColor.bodyTextColor))*/
         ],
       ),
     );

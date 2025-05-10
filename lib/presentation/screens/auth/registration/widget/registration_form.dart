@@ -30,6 +30,13 @@ class _RegistrationFormState extends State<RegistrationForm> {
   final formKey = GlobalKey<FormState>();
   final ControllerMap controllerMap = Get.put(ControllerMap());
   var registrationController = Get.put(RegistrationController());
+  final _fieldKey1 = GlobalKey<FormFieldState>();
+  final _fieldKey2 = GlobalKey<FormFieldState>();
+  final _fieldKey3 = GlobalKey<FormFieldState>();
+  final _fieldKey4 = GlobalKey<FormFieldState>();
+  final _fieldKey5 = GlobalKey<FormFieldState>();
+  final _fieldKey6 = GlobalKey<FormFieldState>();
+  final _fieldKey7 = GlobalKey<FormFieldState>();
 
   @override
   Widget build(BuildContext context) {
@@ -51,6 +58,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
                       controller: registrationController.firstNameController,
                       textInputType: TextInputType.text,
                       inputAction: TextInputAction.next,
+                      fieldKey: _fieldKey1,
                       validator: (value) {
                         if (value!.isEmpty) {
                           return MyStrings.enterYourUsername;
@@ -59,6 +67,9 @@ class _RegistrationFormState extends State<RegistrationForm> {
                         }
                       },
                       onChanged: (value) {
+                        if (registrationController.firstNameController.text.isNotEmpty) {
+                          if (_fieldKey1.currentState!.validate()) {}
+                        }
                         return;
                       },
                     ),
@@ -66,6 +77,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
                   const SizedBox(width: 10),
                   Expanded(
                     child: CustomTextField(
+                      fieldKey: _fieldKey2,
                       animatedLabel: true,
                       needOutlineBorder: true,
                       labelText: MyStrings.middleName,
@@ -80,6 +92,9 @@ class _RegistrationFormState extends State<RegistrationForm> {
                         }
                       },
                       onChanged: (value) {
+                        if (registrationController.middleNameController.text.isNotEmpty) {
+                          if (_fieldKey2.currentState!.validate()) {}
+                        }
                         return;
                       },
                     ),
@@ -88,6 +103,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
               ),
               const SizedBox(height: Dimensions.space16),
               CustomTextField(
+                fieldKey: _fieldKey3,
                 animatedLabel: true,
                 needOutlineBorder: true,
                 labelText: MyStrings.lastName,
@@ -101,6 +117,9 @@ class _RegistrationFormState extends State<RegistrationForm> {
                   }
                 },
                 onChanged: (value) {
+                  if (registrationController.lastNameController.text.isNotEmpty) {
+                    if (_fieldKey3.currentState!.validate()) {}
+                  }
                   return;
                 },
               ),
@@ -161,6 +180,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
               ),
               const SizedBox(height: Dimensions.space16),
               CustomTextField(
+                fieldKey: _fieldKey4,
                 prefixIcon: MyImages.textFieldEmail,
                 animatedLabel: true,
                 needOutlineBorder: true,
@@ -178,6 +198,9 @@ class _RegistrationFormState extends State<RegistrationForm> {
                   }
                 },
                 onChanged: (value) {
+                  if (registrationController.emailController.text.isNotEmpty) {
+                    if (_fieldKey4.currentState!.validate()) {}
+                  }
                   return;
                 },
               ),
@@ -217,6 +240,12 @@ class _RegistrationFormState extends State<RegistrationForm> {
                         const SizedBox(width: 10),
                         Expanded(
                           child: TextFormField(
+                            key: _fieldKey5,
+                            onChanged: (val) {
+                              if (registrationController.mobileController.text.isNotEmpty) {
+                                if (_fieldKey5.currentState!.validate()) {}
+                              }
+                            },
                             controller: registrationController.mobileController,
                             textInputAction: TextInputAction.next,
                             keyboardType: TextInputType.number,
@@ -323,6 +352,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
                     )*/
               const SizedBox(height: Dimensions.space16),
               CustomTextField(
+                fieldKey: _fieldKey6,
                 animatedLabel: true,
                 needOutlineBorder: true,
                 isShowSuffixIcon: true,
@@ -331,7 +361,12 @@ class _RegistrationFormState extends State<RegistrationForm> {
                 controller: registrationController.addressController,
                 textInputType: TextInputType.multiline,
                 inputAction: TextInputAction.next,
-                onChanged: (value) {},
+                onChanged: (value) {
+                  if (registrationController.addressController.text.isNotEmpty) {
+                    if (_fieldKey6.currentState!.validate()) {}
+                  }
+                  return;
+                },
                 validator: (value) {
                   if (value.toString().isEmpty) {
                     return MyStrings.enterYourAddress;
@@ -370,7 +405,19 @@ class _RegistrationFormState extends State<RegistrationForm> {
                     needOutlineBorder: true,
                     labelText: MyStrings.searchLocation,
                     controller: controller,
-                    onChanged: null,
+                    onChanged: (val) {
+                      if (registrationController.searchLocationController.text.isNotEmpty) {
+                        if (_fieldKey7.currentState!.validate()) {}
+                      }
+                    },
+                    fieldKey: _fieldKey7,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return MyStrings.enterYourLocation;
+                      } else {
+                        return null;
+                      }
+                    },
                   );
                 },
                 decorationBuilder: (BuildContext context, Widget child) {
@@ -418,6 +465,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
                   try {
                     // Close the keyboard
                     FocusScope.of(context).unfocus();
+                    formKey.currentState!.validate();
                   } catch (e) {}
                 },
               ),

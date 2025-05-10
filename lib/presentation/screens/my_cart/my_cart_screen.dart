@@ -1,5 +1,4 @@
 import 'package:ShapeCom/config/utils/my_constants.dart';
-import 'package:ShapeCom/config/utils/util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -56,7 +55,6 @@ class _MyCartScreenState extends State<MyCartScreen> {
             child: myCartController.isShimmerShow == false
                 ? myCartController.cartCount > 0
                     ? ListView.builder(
-                        controller: _scrollController,
                         shrinkWrap: true,
                         itemCount: myCartController.cartCount,
                         itemBuilder: (context, index) {
@@ -79,10 +77,15 @@ class _MyCartScreenState extends State<MyCartScreen> {
                           );
                         })
                     : SingleChildScrollView(
-                        child: Column(
-                          children: [
-                            Center(child: Text(myCartController.noDataFound, style: semiBoldLarge.copyWith(fontSize: 14), maxLines: 1)),
-                          ],
+                        child: Container(
+                          height: MediaQuery.of(context).size.height,
+                          alignment: Alignment.center,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(myCartController.noDataFound, style: semiBoldLarge.copyWith(fontSize: 14)),
+                            ],
+                          ),
                         ),
                       )
                 : ListView.builder(
@@ -118,7 +121,7 @@ class _MyCartScreenState extends State<MyCartScreen> {
                 Text("${MyStrings.subTotal} : ${myCartController.subTotalPriceCart!.data!.subtotal!.sellingCurrencyLogo}${myCartController.subTotalPriceCart!.data!.subtotal!.subTotalPrice ?? "0"}", style: semiBoldLargeInter.copyWith(fontWeight: FontWeight.w500)),
                 const SizedBox(width: Dimensions.space12),
                 Text("${myCartController.subTotalPriceCart!.data!.subtotal!.sellingCurrencyLogo}${myCartController.subTotalPriceCart!.data!.subtotal!.subTotalPriceBeforeDiscount ?? "0"}", style: boldLarge.copyWith(fontSize: 12, decoration: TextDecoration.lineThrough, color: MyColor.bodyTextColor)),
-                const Spacer(),
+                const SizedBox(width: Dimensions.space12),
                 InkWell(
                   onTap: () {
                     myCartController.gotoCheckOutPage();
@@ -229,7 +232,10 @@ class _MyCartScreenState extends State<MyCartScreen> {
             bottom: -5,
             child: IconButton(
                 onPressed: () {
+                  const WarningAlertDialog().warningAlertDialog(subtitleMessage: "You want to delete this item?", context, () {
                     myCartController.removeItemFromCartApi(myCartController.myCartItemModel!.data!.items![index].idItem!.toInt());
+                    Get.back();
+                  });
                 },
                 icon: SvgPicture.asset(MyImages.delete, width: 22, height: 22, colorFilter: const ColorFilter.mode(MyColor.primaryColor, BlendMode.srcIn))))
       ],

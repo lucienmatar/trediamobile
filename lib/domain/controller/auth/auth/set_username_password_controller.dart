@@ -21,32 +21,37 @@ class SetUsernamePasswordController extends GetxController {
   CreateAccountModel? createAccountModel;
 
   Future<int> createAccountApi() async {
-    try {
-      int registerUserID = MyPrefrences.getInt(MyPrefrences.registerUserID) ?? 0;
-      var requestBody = {
-        "UserID": registerUserID,
-        "Id_College": MyConstants.Id_College,
-        "lang": MyConstants.currentLanguage,
-        "Username": usernameController.text.toString().trim(),
-        "Password": passController.text.toString().trim(),
-      };
-      dynamic responseBody = await apiService.makeRequest(endPoint: MyConstants.endpointCreateAccount, method: MyConstants.POST, body: requestBody);
-      createAccountModel = CreateAccountModel.fromJson(responseBody);
-      if (createAccountModel!.status == 1) {
-        print("createAccountModel!.status ${createAccountModel!.status}");
-        if (createAccountModel!.msg!.isNotEmpty) {
-          CustomSnackBar.success(successList: [createAccountModel!.msg!]);
-        }
-      } else {
-        if (createAccountModel!.msg!.isNotEmpty) {
-          CustomSnackBar.error(errorList: [createAccountModel!.msg!]);
-        }
-      }
-      return createAccountModel!.status!.toInt();
-    } catch (e) {
-      print("createAccountApi Error ${e.toString()}");
-      CustomSnackBar.error(errorList: [MyStrings.networkError]);
+    if (passController.text.toLowerCase() != confirmPassController.text.toLowerCase()) {
+      CustomSnackBar.error(errorList: [MyStrings.kMatchPassError]);
       return 0;
+    } else {
+      try {
+        int registerUserID = MyPrefrences.getInt(MyPrefrences.registerUserID) ?? 0;
+        var requestBody = {
+          "UserID": registerUserID,
+          "Id_College": MyConstants.Id_College,
+          "lang": MyConstants.currentLanguage,
+          "Username": usernameController.text.toString().trim(),
+          "Password": passController.text.toString().trim(),
+        };
+        dynamic responseBody = await apiService.makeRequest(endPoint: MyConstants.endpointCreateAccount, method: MyConstants.POST, body: requestBody);
+        createAccountModel = CreateAccountModel.fromJson(responseBody);
+        if (createAccountModel!.status == 1) {
+          print("createAccountModel!.status ${createAccountModel!.status}");
+          if (createAccountModel!.msg!.isNotEmpty) {
+            CustomSnackBar.success(successList: [createAccountModel!.msg!]);
+          }
+        } else {
+          if (createAccountModel!.msg!.isNotEmpty) {
+            CustomSnackBar.error(errorList: [createAccountModel!.msg!]);
+          }
+        }
+        return createAccountModel!.status!.toInt();
+      } catch (e) {
+        print("createAccountApi Error ${e.toString()}");
+        CustomSnackBar.error(errorList: [MyStrings.networkError]);
+        return 0;
+      }
     }
   }
 
@@ -61,21 +66,11 @@ class SetUsernamePasswordController extends GetxController {
         guidData = null;
       }
 
-      var requestBody = {
-        "GuidUser": guidData,
-        "Username": usernameController.text.toString().trim(),
-        "Password": passController.text.toString().trim(),
-        "Id_College": MyConstants.Id_College,
-        "PushID": MyConstants.deviceToken,
-        "OsVersion": MyConstants.stOsVersion,
-        "MobileType": MyConstants.stMobileType,
-        "MobVersion": MyConstants.mobVersion,
-        "lang": MyConstants.currentLanguage
-      };
+      var requestBody = {"GuidUser": guidData, "Username": usernameController.text.toString().trim(), "Password": passController.text.toString().trim(), "Id_College": MyConstants.Id_College, "PushID": MyConstants.deviceToken, "OsVersion": MyConstants.stOsVersion, "MobileType": MyConstants.stMobileType, "MobVersion": MyConstants.mobVersion, "lang": MyConstants.currentLanguage};
       dynamic responseBody = await apiService.makeRequest(endPoint: MyConstants.endpointLogin, method: MyConstants.POST, body: requestBody);
       LoginModel loginModel = LoginModel.fromJson(responseBody);
       if (loginModel.status == 1) {
-        MyPrefrences.saveInt(MyPrefrences.registerUserID,0);
+        MyPrefrences.saveInt(MyPrefrences.registerUserID, 0);
         MyPrefrences.saveBool(MyPrefrences.guestLogin, false);
         MyPrefrences.saveString(MyPrefrences.guestGuidUser, "");
         MyPrefrences.saveString(MyPrefrences.token, loginModel.data!.token!);

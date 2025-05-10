@@ -33,8 +33,9 @@ class CustomTextField extends StatefulWidget {
   final String? prefixIcon;
   final double iconSize;
   final double borderRadius;
+  final GlobalKey<FormFieldState>? fieldKey;
 
-  const CustomTextField({Key? key, this.labelText, this.readOnly = false, this.fillColor = MyColor.colorWhite, required this.onChanged, this.hintText, this.controller, this.focusNode, this.nextFocus, this.validator, this.textInputType, this.isEnable = true, this.isPassword = false, this.isShowSuffixIcon = false, this.isIcon = false, this.onSuffixTap, this.borderRadius = Dimensions.defaultRadius, this.isSearch = false, this.isCountryPicker = false, this.inputAction = TextInputAction.next, this.needOutlineBorder = false, this.needRequiredSign = false, this.maxLines = 1, this.animatedLabel = false, this.isRequired = false, this.prefixIcon, this.iconSize = 20}) : super(key: key);
+  const CustomTextField({Key? key, this.labelText, this.readOnly = false, this.fillColor = MyColor.colorWhite, required this.onChanged, this.hintText, this.controller, this.focusNode, this.nextFocus, this.validator, this.textInputType, this.isEnable = true, this.isPassword = false, this.isShowSuffixIcon = false, this.isIcon = false, this.onSuffixTap, this.borderRadius = Dimensions.defaultRadius, this.isSearch = false, this.isCountryPicker = false, this.inputAction = TextInputAction.next, this.needOutlineBorder = false, this.needRequiredSign = false, this.maxLines = 1, this.animatedLabel = false, this.isRequired = false, this.prefixIcon, this.iconSize = 20, this.fieldKey}) : super(key: key);
 
   @override
   State<CustomTextField> createState() => _CustomTextFieldState();
@@ -48,6 +49,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
     return widget.needOutlineBorder
         ? widget.animatedLabel
             ? TextFormField(
+                key: widget.fieldKey,
                 maxLines: widget.maxLines,
                 readOnly: widget.readOnly,
                 style: regularLarge.copyWith(color: MyColor.getTextColor()),

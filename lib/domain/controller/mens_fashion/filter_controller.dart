@@ -20,19 +20,23 @@ class FilterController extends GetxController {
   Set<String> selectedCategoryIds = {};
   double rangeStartValue = 0;
   double rangeEndValue = 0;
-  bool isRangeValueLoaded=false;
+  bool isRangeValueLoaded = false;
   ApiService apiService = ApiService(context: Get.context!);
 
   @override
   void onInit() {
     super.onInit();
     initPreference();
-    getCategoriesApi();
-    getCurrenciesApi();
+    loadFilters();
   }
 
   initPreference() async {
     await MyPrefrences.init();
+  }
+
+  loadFilters() async {
+    await getCategoriesApi();
+    await getCurrenciesApi();
   }
 
   getCategoriesApi() async {
@@ -54,8 +58,22 @@ class FilterController extends GetxController {
       categoryModel = CategoryModel.fromJson(responseBody);
       if (categoryModel!.status == 1) {
         categoryCount = categoryModel!.data!.length;
+        if (MyConstants.filtersApplied) {
+          if (MyConstants.filtersCategories.isNotEmpty) {
+            if (categoryCount > 0) {
+              // Iterate through the categoryModel.data list
+              for (int i = 0; i < categoryCount; i++) {
+                // Check if the category is selected
+                if (MyConstants.filtersCategories.contains(categoryModel!.data![i].value!)) {
+                  categoryModel!.data![i].isChecked = true;
+                } else {
+                  categoryModel!.data![i].isChecked = false;
+                }
+              }
+            }
+          }
+        }
         print("categoryCount $categoryCount");
-        update();
         /*if (getItemModel.msg!.isNotEmpty) {
           CustomSnackBar.success(successList: [getItemModel.msg!]);
         }*/
@@ -67,6 +85,8 @@ class FilterController extends GetxController {
     } catch (e) {
       print("getCategoriesApi Error ${e.toString()}");
       CustomSnackBar.error(errorList: [MyStrings.networkError]);
+    } finally {
+      update();
     }
   }
 
@@ -89,7 +109,12 @@ class FilterController extends GetxController {
       currencyModel = CurrencyModel.fromJson(responseBody);
       if (currencyModel!.status == 1) {
         currencyCount = currencyModel!.data!.length;
-        String selectedCurrency = MyPrefrences.getString(MyPrefrences.currency) ?? "LBP";
+        String selectedCurrency = "";
+        if (MyConstants.filtersApplied) {
+          selectedCurrency = MyConstants.filtersCurrency;
+        } else {
+          selectedCurrency = MyPrefrences.getString(MyPrefrences.currency) ?? "LBP";
+        }
         for (int i = 0; i < currencyCount; i++) {
           if (currencyModel!.data![i].display == selectedCurrency) {
             selectedCurrencyValue = i;
@@ -131,15 +156,20 @@ class FilterController extends GetxController {
       dynamic responseBody = await apiService.makeRequest(endPoint: MyConstants.endpointMaxOnlinePriceBasedOnCcy, method: MyConstants.POST, body: requestBody);
       maxOnlinePriceBasedOnCcyModel = CurrencyModel.fromJson(responseBody);
       if (maxOnlinePriceBasedOnCcyModel!.status == 1) {
-        isRangeValueLoaded=true;
-        rangeStartValue = 0;
-        rangeEndValue = double.parse(maxOnlinePriceBasedOnCcyModel!.data![0].display!);
+        isRangeValueLoaded = true;
+        if (MyConstants.filtersApplied) {
+          rangeStartValue = MyConstants.filtersRangeStartValue;
+          rangeEndValue = MyConstants.filtersRangeEndValue;
+        } else {
+          rangeStartValue = 0;
+          rangeEndValue = (double.parse(maxOnlinePriceBasedOnCcyModel!.data![0].display!) - 50);
+        }
         update();
         /*if (getItemModel.msg!.isNotEmpty) {
           CustomSnackBar.success(successList: [getItemModel.msg!]);
         }*/
       } else {
-        isRangeValueLoaded=false;
+        isRangeValueLoaded = false;
         if (maxOnlinePriceBasedOnCcyModel!.msg!.isNotEmpty) {
           CustomSnackBar.error(errorList: [maxOnlinePriceBasedOnCcyModel!.msg!]);
         }

@@ -24,9 +24,10 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final formKey = GlobalKey<FormState>();
+  final _fieldKey = GlobalKey<FormState>();
   final FocusNode _focusNode = FocusNode();
   final FocusNode passwordFocusNode = FocusNode();
-  final GlobalKey<FormFieldState> _fieldKey = GlobalKey<FormFieldState>();
+  //final GlobalKey<FormFieldState> _fieldKey = GlobalKey<FormFieldState>();
   var loginController = Get.put(LoginController());
 
   @override
@@ -109,6 +110,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         }
                       },
                       onChanged: (value) {
+                        if (_focusNode.hasFocus && loginController.emailController.text.isNotEmpty) {
+                          if (formKey.currentState!.validate()) {}
+                        }
                         return;
                       },
                     ),

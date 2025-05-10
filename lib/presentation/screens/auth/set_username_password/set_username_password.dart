@@ -100,11 +100,12 @@ class _SetUsernamePasswordState extends State<SetUsernamePassword> {
                       return;
                     },
                     validator: (value) {
-                      if (controller.passController.text.toLowerCase() != controller.confirmPassController.text.toLowerCase()) {
+                      return controller.validatePassword(value);
+                     /* if (controller.passController.text.toLowerCase() != controller.confirmPassController.text.toLowerCase()) {
                         return MyStrings.kMatchPassError;
                       } else {
                         return null;
-                      }
+                      }*/
                     },
                   ),
                   const SizedBox(height: Dimensions.space35),

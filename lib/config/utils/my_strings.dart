@@ -208,6 +208,7 @@ class MyStrings {
   static const String kFirstNameNullError = "Enter first name";
   static const String kLastNameNullError = "Enter last name";
   static String get kMatchPassError => "kMatchPassError".tr;
+  static String get resetFilters => "resetFilters".tr;
   static String get kShortUserNameError => "kShortUserNameError".tr;
   static String get invalidEmailMsg => "invalidEmailMsg".tr;
   static String get passVerification => "passVerification".tr;
@@ -218,6 +219,7 @@ class MyStrings {
 
   static const String verificationSuccess = 'Verification Success';
   static String get enterYourUsername => "enterYourUsername".tr;
+  static String get enterYourLocation => "enterYourLocation".tr;
   static String get enterYourEmail => "enterYourEmail".tr;
   static const String enterYourPhoneNumber = "Enter your phone number";
   static const String noCodeReceive = "Didn't receive the code?";

@@ -18,7 +18,6 @@ import 'package:ShapeCom/presentation/components/will_pop_widget.dart';
 
 import '../../../../domain/controller/cart_controller/cartController.dart';
 import '../../../components/image/custom_svg_picture.dart';
-import '../../../components/snack_bar/show_custom_snackbar.dart';
 
 class SmsVerificationScreen extends StatefulWidget {
   const SmsVerificationScreen({Key? key}) : super(key: key);
@@ -108,7 +107,7 @@ class _SmsVerificationScreenState extends State<SmsVerificationScreen> {
                           },
                           validator: (value) {
                             if (value!.length < 4) {
-                              return CustomSnackBar.error(errorList: [MyStrings.otpFieldEmptyMsg]);
+                              return MyStrings.otpFieldEmptyMsg;
                             } else {
                               return null;
                             }
@@ -123,22 +122,22 @@ class _SmsVerificationScreenState extends State<SmsVerificationScreen> {
                     controller.submitLoading
                         ? const RoundedLoadingBtn()
                         : RoundedButton(
-                            text: MyStrings.verify,
-                            press: () {
-                              formKey.currentState!.validate();
-                              if (controller.currentText.length != 4) {
-                                controller.errorController.add(ErrorAnimationType.shake); // Triggering error shake animation
-                                controller.hasError = true;
-                                controller.update();
-                              } else {
-                                controller.validateRegistrationApi();
-                              }
-                              /*if (formKey.currentState!.validate()) {
+                      text: MyStrings.verify,
+                      press: () {
+                        formKey.currentState!.validate();
+                        if (controller.currentText.length != 4) {
+                          controller.errorController.add(ErrorAnimationType.shake); // Triggering error shake animation
+                          controller.hasError = true;
+                          controller.update();
+                        } else {
+                          controller.validateRegistrationApi();
+                        }
+                        /*if (formKey.currentState!.validate()) {
                                 print("OTP ${controller.currentText}");
                               }*/
-                              //Get.toNamed(RouteHelper.twoFactorScreen, arguments: true);
-                            },
-                          ),
+                        //Get.toNamed(RouteHelper.twoFactorScreen, arguments: true);
+                      },
+                    ),
                     const SizedBox(height: Dimensions.space30),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -147,17 +146,17 @@ class _SmsVerificationScreenState extends State<SmsVerificationScreen> {
                         const SizedBox(width: Dimensions.space10),
                         controller.resendLoading
                             ? Container(
-                                margin: const EdgeInsets.all(5),
-                                height: 20,
-                                width: 20,
-                                child: CircularProgressIndicator(
-                                  color: MyColor.getPrimaryColor(),
-                                ))
+                            margin: const EdgeInsets.all(5),
+                            height: 20,
+                            width: 20,
+                            child: CircularProgressIndicator(
+                              color: MyColor.getPrimaryColor(),
+                            ))
                             : GestureDetector(
-                                onTap: () {
-                                  controller.resendCodeApi();
-                                },
-                                child: Text(MyStrings.resendCode, style: regularDefault.copyWith(color: MyColor.getPrimaryColor()))),
+                            onTap: () {
+                              controller.resendCodeApi();
+                            },
+                            child: Text(MyStrings.resendCode, style: regularDefault.copyWith(color: MyColor.getPrimaryColor()))),
                       ],
                     )
                   ],
