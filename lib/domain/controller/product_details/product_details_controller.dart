@@ -184,7 +184,7 @@ class ProductDetailsController extends GetxController {
         guidData = MyPrefrences.getString(MyPrefrences.guidUser) ?? "";
       }
       var requestBody = {"token": token, "lang": MyConstants.currentLanguage, "GuidUser": guidData, "Id_College": MyConstants.Id_College, "Id_Item": id_Item, "ccy": currency};
-      dynamic responseBody = await apiService.makeRequest(endPoint: MyConstants.endpointUpdateItemFavorite, method: MyConstants.POST, body: requestBody);
+      dynamic responseBody = await apiService.makeRequest(endPoint: MyConstants.endpointUpdateItemFavorite, method: MyConstants.POST, body: requestBody, showProgress: false);
       favoriteModel = FavoriteModel.fromJson(responseBody);
       if (favoriteModel!.status == 1) {
         getItemDetailsModel!.data!.item!.isFavorite = favoriteModel!.data!.item!.isFavorite!;
@@ -229,7 +229,7 @@ class ProductDetailsController extends GetxController {
         "GuidUser": guidData,
         "Id_College": MyConstants.Id_College,
       };
-      dynamic responseBody = await apiService.makeRequest(endPoint: MyConstants.endpointGetItemsInCartCount, method: MyConstants.POST, body: requestBody);
+      dynamic responseBody = await apiService.makeRequest(endPoint: MyConstants.endpointGetItemsInCartCount, method: MyConstants.POST, body: requestBody, showProgress: false);
       CartCountModel? cartCountModel = CartCountModel.fromJson(responseBody);
       if (cartCountModel.status == 1) {
         cartCountController.cartCount = cartCountModel.data!.count!.toInt();
@@ -271,7 +271,7 @@ class ProductDetailsController extends GetxController {
         "qty": quantity,
         "ccy": currency,
       };
-      dynamic responseBody = await apiService.makeRequest(endPoint: MyConstants.endpointAddItemToCart, method: MyConstants.POST, body: requestBody);
+      dynamic responseBody = await apiService.makeRequest(endPoint: MyConstants.endpointAddItemToCart, method: MyConstants.POST, body: requestBody, showProgress: false);
       AddItemToCartModel? addItemToCartModel = AddItemToCartModel.fromJson(responseBody);
       if (addItemToCartModel.status == 1) {
         getItemsInCartCountApi();

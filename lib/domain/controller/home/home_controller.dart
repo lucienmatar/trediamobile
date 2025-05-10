@@ -42,6 +42,9 @@ class HomeController extends GetxController {
   int filtersCount = 0;
   CartCountController cartCountController = Get.put(CartCountController());
   bool isShimmerShow = true;
+  bool isLoadingMore = false;
+  bool isLastPage = false;
+
 
   @override
   void onInit() {
@@ -127,6 +130,76 @@ class HomeController extends GetxController {
     }
   }
 
+  Future<void> loadMoreItems() async {
+    if (isLoadingMore || isLastPage) return;
+
+    isLoadingMore = true;
+    currentPageNumber++; // Load next page
+
+    try {
+      bool isGuestLogin = MyPrefrences.getBool(MyPrefrences.guestLogin) ?? false;
+      String? token = isGuestLogin ? null : MyPrefrences.getString(MyPrefrences.token) ?? "";
+      String? guidData = isGuestLogin ? MyPrefrences.getString(MyPrefrences.guestGuidUser) : MyPrefrences.getString(MyPrefrences.guidUser);
+      currency = MyPrefrences.getString(MyPrefrences.currency) ?? "LBP";
+
+      var requestBody = {
+        "Id_College": MyConstants.Id_College,
+        "token": token,
+        "GuidUser": guidData,
+        "lang": MyConstants.currentLanguage,
+        "itmName": itemName,
+        "stkCategories": itemCategories,
+        "priceRangeFrom": minimumPrice,
+        "priceRangeTo": maximumPrice,
+        "ccy": currency,
+        "pageNumber": currentPageNumber,
+        "pageSize": pageSize,
+      };
+
+      dynamic responseBody = await apiService.makeRequest(
+        endPoint: MyConstants.endpointGetItems,
+        method: MyConstants.POST,
+        body: requestBody,
+        showProgress: true,
+      );
+
+      getItemModel = GetItemModel.fromJson(responseBody);
+
+      if (getItemModel!.status == 1) {
+        var items = getItemModel!.data!.items!;
+        if (items.isEmpty) {
+          isLastPage = true;
+        } else {
+          filtersCount = getItemModel!.data!.count!.toInt();
+          productCount = items.length;
+
+          for (var item in items) {
+            productModelList.add(ProductModel(
+              image: "${MyConstants.imageBaseURL}${item.imageURL}",
+              brand: item.categoryName!,
+              title: item.itemName!,
+              description: item.onlineDetails!,
+              onlinePriceBeforeDiscount: item.onlinePriceBeforeDiscount!.toDouble(),
+              price: item.onlinePrice!.toDouble(),
+              sellingCurrencyLogo: item.sellingCurrencyLogo!,
+              productID: item.idItem!.toInt(),
+            ));
+          }
+        }
+      } else {
+        if (getItemModel?.msg?.isNotEmpty ?? false) {
+          CustomSnackBar.error(errorList: [getItemModel!.msg!]);
+        }
+      }
+    } catch (e) {
+      print("loadMoreItems Error ${e.toString()}");
+      CustomSnackBar.error(errorList: [MyStrings.networkError]);
+    } finally {
+      isLoadingMore = false;
+      update();
+    }
+  }
+
   addItemToCartApi(int id_Item, int quantity) async {
     try {
       bool isGuestLogin = false;
@@ -150,7 +223,7 @@ class HomeController extends GetxController {
         "qty": quantity,
         "ccy": currency,
       };
-      dynamic responseBody = await apiService.makeRequest(endPoint: MyConstants.endpointAddItemToCart, method: MyConstants.POST, body: requestBody);
+      dynamic responseBody = await apiService.makeRequest(endPoint: MyConstants.endpointAddItemToCart, method: MyConstants.POST, body: requestBody, showProgress: false);
       AddItemToCartModel? addItemToCartModel = AddItemToCartModel.fromJson(responseBody);
       if (addItemToCartModel!.status == 1) {
         cartCountController.getItemsInCartCountApi();
@@ -173,8 +246,10 @@ class HomeController extends GetxController {
   // Function to refresh data
   Future<void> refreshItem() async {
     currentPageNumber = 1;
-    await Future.delayed(const Duration(seconds: 1)); // Simulate network delay
-    refreshItemAndCartCount();
+    isLastPage = false;
+    productModelList.clear();
+    await getItemsApi();
+    await cartCountController.getItemsInCartCountApi();
   }
 
   applyFilters() {

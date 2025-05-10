@@ -38,7 +38,8 @@ class MyCartController extends GetxController {
 
   getCartItemsApi() async {
     try {
-      isShimmerShow = true;
+      isShimmerShow = currentPageNumber == 1; // Only show shimmer on first page
+      update();
       bool isGuestLogin = false;
       String currency = MyPrefrences.getString(MyPrefrences.currency) ?? "LBP";
       isGuestLogin = MyPrefrences.getBool(MyPrefrences.guestLogin) ?? false;
@@ -60,16 +61,21 @@ class MyCartController extends GetxController {
         "pageNumber": currentPageNumber,
         "pageSize": pageSize,
       };
-      dynamic responseBody = await apiService.makeRequest(endPoint: MyConstants.endpointGetItemsInCart, method: MyConstants.POST, body: requestBody, showProgress: false);
-      myCartItemModel = MyCartItemModel.fromJson(responseBody);
-      if (myCartItemModel!.status == 1) {
-        cartCount = myCartItemModel!.data!.count!.toInt();
-      } else {
-        cartCount = 0;
-        noDataFound = myCartItemModel!.msg!;
-        if (myCartItemModel!.msg!.isNotEmpty) {
-          CustomSnackBar.error(errorList: [myCartItemModel!.msg!]);
+      dynamic responseBody = await apiService.makeRequest(endPoint: MyConstants.endpointGetItemsInCart, method: MyConstants.POST, body: requestBody, showProgress: currentPageNumber > 1);
+      MyCartItemModel tempModel = MyCartItemModel.fromJson(responseBody);
+      if (tempModel.status == 1 && tempModel.data!.items != null) {
+        if (currentPageNumber == 1) {
+          myCartItemModel = tempModel;
+        } else {
+          myCartItemModel!.data!.items!.addAll(tempModel.data!.items!);
         }
+        cartCount = myCartItemModel!.data!.items!.length;
+      } else {
+        if (currentPageNumber == 1) {
+          myCartItemModel = null;
+          cartCount = 0;
+        }
+        noDataFound = tempModel.msg!;
       }
     } catch (e) {
       print("getCartItemsApi Error ${e.toString()}");
@@ -198,7 +204,7 @@ class MyCartController extends GetxController {
           CustomSnackBar.error(errorList: [removeItemFromCartModel.msg!]);
         }
       }
-      loadCartApis();
+      refreshItem();
     } catch (e) {
       print("removeItemFromCartApi Error ${e.toString()}");
       CustomSnackBar.error(errorList: [MyStrings.networkError]);
@@ -212,11 +218,14 @@ class MyCartController extends GetxController {
     loadCartApis();
   }
 
-  // Function to refresh data
   Future<void> loadMoreItem() async {
-    currentPageNumber = currentPageNumber + 1;
+    if (myCartItemModel == null || myCartItemModel!.data!.items!.length < (currentPageNumber * pageSize)) {
+      // No more items to load
+      return;
+    }
+    currentPageNumber += 1;
     await Future.delayed(const Duration(seconds: 1)); // Simulate network delay
-    loadCartApis();
+    await getCartItemsApi();
   }
 
   gotoCheckOutPage() {

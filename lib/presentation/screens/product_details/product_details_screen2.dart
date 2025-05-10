@@ -19,25 +19,29 @@ import '../../components/custom_read_more.dart';
 import '../bottom_nav_section/home/widget/custom_product_section.dart';
 
 class ProductDetailsScreen2 extends StatefulWidget {
-  final ProductModel productModel;
-  const ProductDetailsScreen2({super.key, required this.productModel});
+  const ProductDetailsScreen2({super.key});
 
   @override
   State<ProductDetailsScreen2> createState() => _ProductDetailsScreen2State();
 }
 
 class _ProductDetailsScreen2State extends State<ProductDetailsScreen2> {
+  late ProductModel productModel;
   late ProductDetailsController productDetailsController;
 
   @override
   void initState() {
     super.initState();
-    productDetailsController = Get.put(ProductDetailsController(widget.productModel.productID));
+    productModel = Get.arguments as ProductModel;
+    productDetailsController =
+        Get.put(ProductDetailsController(productModel.productID),
+        tag: productModel.productID.toString());
   }
 
   @override
   Widget build(BuildContext context) {
     return GetBuilder<ProductDetailsController>(
+      tag: productModel.productID.toString(),
       builder: (controller) => Scaffold(
         appBar: const CustomAppBar(
           title: MyStrings.productDetails,
@@ -96,7 +100,7 @@ class _ProductDetailsScreen2State extends State<ProductDetailsScreen2> {
                                   right: 10,
                                   child: GestureDetector(
                                     onTap: () {
-                                      productDetailsController.toggleFavorite(widget.productModel.productID);
+                                      productDetailsController.toggleFavorite(productModel.productID);
                                     },
                                     child: Container(
                                       height: 40,
@@ -146,14 +150,14 @@ class _ProductDetailsScreen2State extends State<ProductDetailsScreen2> {
                                 child: Column(
                                   children: [
                                     Text(
-                                      "${widget.productModel.sellingCurrencyLogo}${widget.productModel.onlinePriceBeforeDiscount}",
+                                      "${productModel.sellingCurrencyLogo}${productModel.onlinePriceBeforeDiscount}",
                                       style: boldLarge.copyWith(
                                         decoration: TextDecoration.lineThrough,
                                         color: MyColor.canceledTextColor,
                                       ),
                                     ),
                                     Text(
-                                      "${widget.productModel.sellingCurrencyLogo}${widget.productModel.price}",
+                                      "${productModel.sellingCurrencyLogo}${productModel.price}",
                                       style: mediumOverLarge,
                                     ),
                                   ],
@@ -353,9 +357,8 @@ class _ProductDetailsScreen2State extends State<ProductDetailsScreen2> {
                       price: productDetailsController.getRelatedItemsModel!.data!.items![index].onlinePrice!.toDouble(),
                       sellingCurrencyLogo: productDetailsController.getRelatedItemsModel!.data!.items![index].sellingCurrencyLogo!,
                       productID: productDetailsController.getRelatedItemsModel!.data!.items![index].idItem!.toInt());
-                  Get.back();
                   Future.delayed(const Duration(milliseconds: 100), () {
-                    Get.toNamed(RouteHelper.productDetailsScreen2, arguments: productModel);
+                    Get.toNamed(RouteHelper.productDetailsScreen2, arguments: productModel, preventDuplicates: false);
                   });
                 },
                 child: Column(

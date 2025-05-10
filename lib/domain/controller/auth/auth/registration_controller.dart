@@ -64,7 +64,7 @@ class RegistrationController extends GetxController {
   List<String>? townList;
   String? selectedTownName = MyStrings.selectTown;
   String? selectedTown = MyStrings.selectTown;
-  String? selectedCountryCode = "+971";
+  String? selectedCountryCode = "+961";
   CountryCodeModel? countryCodeModel;
 
   @override
@@ -78,7 +78,7 @@ class RegistrationController extends GetxController {
   countryCodesApi() async {
     try {
       var requestBody = {"Id_College": MyConstants.Id_College, "lang": MyConstants.currentLanguage};
-      dynamic responseBody = await apiService.makeRequest(endPoint: MyConstants.endpointGetCountryCodes, method: MyConstants.POST, body: requestBody);
+      dynamic responseBody = await apiService.makeRequest(endPoint: MyConstants.endpointGetCountryCodes, method: MyConstants.POST, body: requestBody, showProgress: false);
       countryCodeModel = CountryCodeModel.fromJson(responseBody);
       if (countryCodeModel!.status == 1) {
         update();
@@ -94,7 +94,7 @@ class RegistrationController extends GetxController {
   getAllTownApi() async {
     try {
       var requestBody = {"Id_College": MyConstants.Id_College, "lang": MyConstants.currentLanguage};
-      dynamic responseBody = await apiService.makeRequest(endPoint: MyConstants.endpointGetTowns, method: MyConstants.POST, body: requestBody);
+      dynamic responseBody = await apiService.makeRequest(endPoint: MyConstants.endpointGetTowns, method: MyConstants.POST, body: requestBody, showProgress: false);
       townModel = TownModel.fromJson(responseBody);
       if (townModel!.status == 1) {
         if (townModel!.msg!.isNotEmpty) {
@@ -137,7 +137,7 @@ class RegistrationController extends GetxController {
         "MiddleName": middleNameController.text.toString().trim(),
         "LastName": lastNameController.text.toString().trim(),
         "Email": emailController.text.toString().trim(),
-        "PhoneNumber": "+961 ${mobileController.text.toString().trim()}",
+        "PhoneNumber": "$selectedCountryCode ${mobileController.text.toString().trim()}",
         "Gender": selectedGender,
         "Id_Town": selectedTown,
         "AddressDetails": addressController.text.toString().trim(),

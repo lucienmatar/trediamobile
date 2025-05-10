@@ -46,6 +46,7 @@ class _WishListScreenState extends State<WishListScreen> {
           onRefresh: wishListController.refreshItem,
           child: wishListController.isShimmerShow == false
               ? ListView(
+                  controller: _scrollController,
                   children: List.generate(wishListController.favoriteItemCount, (index) {
                     return Column(
                       children: [

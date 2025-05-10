@@ -14,6 +14,7 @@ import 'package:ShapeCom/presentation/components/buttons/rounded_loading_button.
 import 'package:ShapeCom/presentation/components/image/custom_svg_picture.dart';
 import 'package:ShapeCom/presentation/components/text/default_text.dart';
 import '../../../../../domain/controller/cart_controller/cartController.dart';
+import '../../../../components/snack_bar/show_custom_snackbar.dart';
 
 class VerifyForgetPassScreen extends StatefulWidget {
   const VerifyForgetPassScreen({Key? key}) : super(key: key);
@@ -82,7 +83,7 @@ class _VerifyForgetPassScreenState extends State<VerifyForgetPassScreen> {
                                 },
                                 validator: (value) {
                                   if (value!.length < 4) {
-                                    return MyStrings.otpFieldEmptyMsg;
+                                    return CustomSnackBar.error(errorList: [MyStrings.otpFieldEmptyMsg]);
                                   } else {
                                     return null;
                                   }
