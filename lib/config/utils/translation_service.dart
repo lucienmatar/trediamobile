@@ -3,10 +3,10 @@ import 'package:get/get.dart';
 class TranslationService extends Translations {
   @override
   Map<String, Map<String, String>> get keys => {
-        'en': en,
-        'fr': fr,
-        'ar': ar,
-      };
+    'en': en,
+    'fr': fr,
+    'ar': ar,
+  };
 
   // English translations
   static Map<String, String> en = {

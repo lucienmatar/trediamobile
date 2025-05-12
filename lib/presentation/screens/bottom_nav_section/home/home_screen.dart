@@ -62,7 +62,7 @@ class _HomeScreenState extends State<HomeScreen> {
       // Check if we're near the bottom
       if (maxScrollExtent - currentPosition <= threshold) {
         print("Reached the bottom, loading more...");
-        homeController.refreshItem();
+        homeController.loadMoreItems();
       }
     }
   }

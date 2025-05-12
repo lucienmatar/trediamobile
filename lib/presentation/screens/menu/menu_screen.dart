@@ -30,21 +30,21 @@ class MenuScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             MenuCard(
-              child: Column(
-                children: [
-                  MenuRowWidget(
-                    image: MyImages.person,
-                    label: MyStrings.profile,
-                    iconSize: 25,
-                    onPressed: () => Get.toNamed(RouteHelper.profileScreen),
-                  ),
-                  MenuRowWidget(
-                    image: MyImages.lock,
-                    label: MyStrings.changePassword.tr,
-                    onPressed: () => Get.toNamed(RouteHelper.changePasswordScreen),
-                  ),
-                ],
-              )
+                child: Column(
+                  children: [
+                    MenuRowWidget(
+                      image: MyImages.person,
+                      label: MyStrings.profile,
+                      iconSize: 25,
+                      onPressed: () => Get.toNamed(RouteHelper.profileScreen),
+                    ),
+                    MenuRowWidget(
+                      image: MyImages.lock,
+                      label: MyStrings.changePassword.tr,
+                      onPressed: () => Get.toNamed(RouteHelper.changePasswordScreen),
+                    ),
+                  ],
+                )
             ),
 
             const SizedBox(height: Dimensions.space15),
@@ -114,8 +114,8 @@ class MenuScreen extends StatelessWidget {
                     label: MyStrings.deleteAccount,
                     onPressed: () {
                       const WarningAlertDialog().warningAlertDialog(
-                      isDelete: true,
-                      context, () {Get.offAllNamed(RouteHelper.loginScreen);});
+                          isDelete: true,
+                          context, () {Get.offAllNamed(RouteHelper.loginScreen);});
                     },
                   ),
                 ],

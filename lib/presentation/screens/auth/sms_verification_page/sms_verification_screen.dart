@@ -18,6 +18,7 @@ import 'package:ShapeCom/presentation/components/will_pop_widget.dart';
 
 import '../../../../domain/controller/cart_controller/cartController.dart';
 import '../../../components/image/custom_svg_picture.dart';
+import '../../../components/snack_bar/show_custom_snackbar.dart';
 
 class SmsVerificationScreen extends StatefulWidget {
   const SmsVerificationScreen({Key? key}) : super(key: key);
@@ -107,7 +108,7 @@ class _SmsVerificationScreenState extends State<SmsVerificationScreen> {
                           },
                           validator: (value) {
                             if (value!.length < 4) {
-                              return MyStrings.otpFieldEmptyMsg;
+                              return CustomSnackBar.error(errorList: [MyStrings.otpFieldEmptyMsg]);
                             } else {
                               return null;
                             }

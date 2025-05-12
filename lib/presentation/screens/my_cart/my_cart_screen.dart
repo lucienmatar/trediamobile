@@ -1,4 +1,5 @@
 import 'package:ShapeCom/config/utils/my_constants.dart';
+import 'package:ShapeCom/config/utils/util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -39,12 +40,12 @@ class _MyCartScreenState extends State<MyCartScreen> {
             ),
             leading: widget.isShowBackButton
                 ? IconButton(
-                    splashColor: Colors.transparent,
-                    highlightColor: Colors.transparent,
-                    onPressed: () {
-                      Get.back();
-                    },
-                    icon: SvgPicture.asset(MyImages.backButton))
+                splashColor: Colors.transparent,
+                highlightColor: Colors.transparent,
+                onPressed: () {
+                  Get.back();
+                },
+                icon: SvgPicture.asset(MyImages.backButton))
                 : null,
             automaticallyImplyLeading: false,
           ),
@@ -54,53 +55,49 @@ class _MyCartScreenState extends State<MyCartScreen> {
             onRefresh: myCartController.refreshItem,
             child: myCartController.isShimmerShow == false
                 ? myCartController.cartCount > 0
-                    ? ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: myCartController.cartCount,
-                        itemBuilder: (context, index) {
-                          return InkWell(
-                            onTap: () {
-                              // Handle item tap
-                              ProductModel productModel = ProductModel(image: "${MyConstants.imageBaseURL}${myCartController.myCartItemModel!.data!.items![index].imageURL}", brand: myCartController.myCartItemModel!.data!.items![index].categoryName!, title: myCartController.myCartItemModel!.data!.items![index].itemName!, description: "", onlinePriceBeforeDiscount: myCartController.myCartItemModel!.data!.items![index].sumOnlinePriceBeforeDiscount!.toDouble(), price: myCartController.myCartItemModel!.data!.items![index].sumOnlinePrice!.toDouble(), sellingCurrencyLogo: myCartController.myCartItemModel!.data!.items![index].sellingCurrencyLogo!, productID: myCartController.myCartItemModel!.data!.items![index].idItem!.toInt());
-                              Future.delayed(const Duration(milliseconds: 100), () {
-                                Get.toNamed(RouteHelper.productDetailsScreen2, arguments: productModel);
-                              });
-                            },
-                            child: Container(
-                              color: MyColor.colorWhite,
-                              margin: const EdgeInsets.only(bottom: Dimensions.space4),
-                              child: ListTile(
-                                contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
-                                title: buildCartWidget(index),
-                              ),
-                            ),
-                          );
-                        })
-                    : SingleChildScrollView(
-                        child: Container(
-                          height: MediaQuery.of(context).size.height,
-                          alignment: Alignment.center,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(myCartController.noDataFound, style: semiBoldLarge.copyWith(fontSize: 14)),
-                            ],
-                          ),
-                        ),
-                      )
+                ? ListView.builder(
+                controller: _scrollController,
+                shrinkWrap: true,
+                itemCount: myCartController.cartCount,
+                itemBuilder: (context, index) {
+                  return InkWell(
+                    onTap: () {
+                      // Handle item tap
+                      ProductModel productModel = ProductModel(image: "${MyConstants.imageBaseURL}${myCartController.myCartItemModel!.data!.items![index].imageURL}", brand: myCartController.myCartItemModel!.data!.items![index].categoryName!, title: myCartController.myCartItemModel!.data!.items![index].itemName!, description: "", onlinePriceBeforeDiscount: myCartController.myCartItemModel!.data!.items![index].sumOnlinePriceBeforeDiscount!.toDouble(), price: myCartController.myCartItemModel!.data!.items![index].sumOnlinePrice!.toDouble(), sellingCurrencyLogo: myCartController.myCartItemModel!.data!.items![index].sellingCurrencyLogo!, productID: myCartController.myCartItemModel!.data!.items![index].idItem!.toInt());
+                      Future.delayed(const Duration(milliseconds: 100), () {
+                        Get.toNamed(RouteHelper.productDetailsScreen2, arguments: productModel);
+                      });
+                    },
+                    child: Container(
+                      color: MyColor.colorWhite,
+                      margin: const EdgeInsets.only(bottom: Dimensions.space4),
+                      child: ListTile(
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
+                        title: buildCartWidget(index),
+                      ),
+                    ),
+                  );
+                })
+                : SingleChildScrollView(
+              child: Column(
+                children: [
+                  Center(child: Text(myCartController.noDataFound, style: semiBoldLarge.copyWith(fontSize: 14), maxLines: 1)),
+                ],
+              ),
+            )
                 : ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: 10,
-                    itemBuilder: (context, index) {
-                      return Container(
-                        color: MyColor.colorWhite,
-                        margin: const EdgeInsets.only(bottom: Dimensions.space4),
-                        child: ListTile(
-                          contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
-                          title: buildShimmerCartWidget(),
-                        ),
-                      );
-                    }),
+                shrinkWrap: true,
+                itemCount: 10,
+                itemBuilder: (context, index) {
+                  return Container(
+                    color: MyColor.colorWhite,
+                    margin: const EdgeInsets.only(bottom: Dimensions.space4),
+                    child: ListTile(
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
+                      title: buildShimmerCartWidget(),
+                    ),
+                  );
+                }),
           ),
           bottomNavigationBar: widget.isShowBackButton ? buildBottomSection() : const SizedBox.shrink()),
     );
@@ -109,35 +106,35 @@ class _MyCartScreenState extends State<MyCartScreen> {
   Widget buildBottomSection() {
     return myCartController.loadTotalPrice
         ? Padding(
-            padding: Dimensions.myCartBottomPadding,
-            child: Row(
-              children: [
-                /* TextButton(
+      padding: Dimensions.myCartBottomPadding,
+      child: Row(
+        children: [
+          /* TextButton(
             onPressed: () {
             },
             child: Text(MyStrings.applyCopun, style: boldDefault.copyWith(color: MyColor.primaryColor)),
           ),
           const Spacer(),  */
-                Text("${MyStrings.subTotal} : ${myCartController.subTotalPriceCart!.data!.subtotal!.sellingCurrencyLogo}${myCartController.subTotalPriceCart!.data!.subtotal!.subTotalPrice ?? "0"}", style: semiBoldLargeInter.copyWith(fontWeight: FontWeight.w500)),
-                const SizedBox(width: Dimensions.space12),
-                Text("${myCartController.subTotalPriceCart!.data!.subtotal!.sellingCurrencyLogo}${myCartController.subTotalPriceCart!.data!.subtotal!.subTotalPriceBeforeDiscount ?? "0"}", style: boldLarge.copyWith(fontSize: 12, decoration: TextDecoration.lineThrough, color: MyColor.bodyTextColor)),
-                const SizedBox(width: Dimensions.space12),
-                InkWell(
-                  onTap: () {
-                    myCartController.gotoCheckOutPage();
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    decoration: BoxDecoration(color: MyColor.primaryColor, borderRadius: BorderRadius.circular(4)),
-                    child: Text(
-                      MyStrings.checkOut,
-                      style: regularDefault.copyWith(color: MyColor.colorWhite),
-                    ),
-                  ),
-                )
-              ],
+          Text("${MyStrings.subTotal} : ${myCartController.subTotalPriceCart!.data!.subtotal!.sellingCurrencyLogo}${myCartController.subTotalPriceCart!.data!.subtotal!.subTotalPrice ?? "0"}", style: semiBoldLargeInter.copyWith(fontWeight: FontWeight.w500)),
+          const SizedBox(width: Dimensions.space12),
+          Text("${myCartController.subTotalPriceCart!.data!.subtotal!.sellingCurrencyLogo}${myCartController.subTotalPriceCart!.data!.subtotal!.subTotalPriceBeforeDiscount ?? "0"}", style: boldLarge.copyWith(fontSize: 12, decoration: TextDecoration.lineThrough, color: MyColor.bodyTextColor)),
+          const Spacer(),
+          InkWell(
+            onTap: () {
+              myCartController.gotoCheckOutPage();
+            },
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              decoration: BoxDecoration(color: MyColor.primaryColor, borderRadius: BorderRadius.circular(4)),
+              child: Text(
+                MyStrings.checkOut,
+                style: regularDefault.copyWith(color: MyColor.colorWhite),
+              ),
             ),
           )
+        ],
+      ),
+    )
         : const Offstage();
   }
 
@@ -232,10 +229,7 @@ class _MyCartScreenState extends State<MyCartScreen> {
             bottom: -5,
             child: IconButton(
                 onPressed: () {
-                  const WarningAlertDialog().warningAlertDialog(subtitleMessage: "You want to delete this item?", context, () {
-                    myCartController.removeItemFromCartApi(myCartController.myCartItemModel!.data!.items![index].idItem!.toInt());
-                    Get.back();
-                  });
+                  myCartController.removeItemFromCartApi(myCartController.myCartItemModel!.data!.items![index].idItem!.toInt());
                 },
                 icon: SvgPicture.asset(MyImages.delete, width: 22, height: 22, colorFilter: const ColorFilter.mode(MyColor.primaryColor, BlendMode.srcIn))))
       ],

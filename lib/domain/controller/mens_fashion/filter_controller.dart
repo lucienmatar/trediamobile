@@ -162,7 +162,7 @@ class FilterController extends GetxController {
           rangeEndValue = MyConstants.filtersRangeEndValue;
         } else {
           rangeStartValue = 0;
-          rangeEndValue = (double.parse(maxOnlinePriceBasedOnCcyModel!.data![0].display!) - 50);
+          rangeEndValue = (double.parse(maxOnlinePriceBasedOnCcyModel!.data![0].display!));
         }
         update();
         /*if (getItemModel.msg!.isNotEmpty) {

@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:ShapeCom/config/utils/my_strings.dart';
 import 'package:ShapeCom/domain/controller/wish_list/wish_list_controller.dart';
 import 'package:ShapeCom/presentation/components/app-bar/custom_appbar_mab.dart';
+import 'package:ShapeCom/presentation/screens/wish_list/widget/wish_list_cart_widget.dart';
 import 'package:shimmer/shimmer.dart';
 import '../../../config/route/route.dart';
 import '../../../config/utils/dimensions.dart';
@@ -44,8 +45,8 @@ class _WishListScreenState extends State<WishListScreen> {
           backgroundColor: Colors.white, // Background color of the refresh indicator
           onRefresh: wishListController.refreshItem,
           child: wishListController.isShimmerShow == false
-              ? wishListController.favoriteItemCount > 0
               ? ListView(
+            controller: _scrollController,
             children: List.generate(wishListController.favoriteItemCount, (index) {
               return Column(
                 children: [
@@ -93,7 +94,6 @@ class _WishListScreenState extends State<WishListScreen> {
               );
             }),
           )
-              : Center(child: Text(wishListController.noDataFound!, style: semiBoldLarge))
               : ListView(
             children: List.generate(10, (index) {
               return Column(

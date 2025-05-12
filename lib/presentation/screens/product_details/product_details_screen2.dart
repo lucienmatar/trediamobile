@@ -35,7 +35,7 @@ class _ProductDetailsScreen2State extends State<ProductDetailsScreen2> {
     productModel = Get.arguments as ProductModel;
     productDetailsController =
         Get.put(ProductDetailsController(productModel.productID),
-        tag: productModel.productID.toString());
+            tag: productModel.productID.toString());
   }
 
   @override
@@ -50,130 +50,130 @@ class _ProductDetailsScreen2State extends State<ProductDetailsScreen2> {
         body: productDetailsController.isLoading!
             ? const Center(child: CircularProgressIndicator())
             : SingleChildScrollView(
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(14),
                 child: Column(
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.all(14),
-                      child: Column(
-                        children: [
-                          Stack(
+                    Stack(
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: MyColor.primaryColor.withOpacity(.07)),
+                          child: Column(
                             children: [
-                              Container(
-                                decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: MyColor.primaryColor.withOpacity(.07)),
-                                child: Column(
-                                  children: [
-                                    CarouselSlider(
-                                      items: productDetailsController.getItemDetailsModel!.data!.media!.map((e) => Image.network("${MyConstants.imageBaseURL}${e.thumbnailURL}")).toList(),
-                                      options: CarouselOptions(
-                                        aspectRatio: 1,
-                                        autoPlay: true,
-                                        autoPlayInterval: const Duration(seconds: 2),
-                                        viewportFraction: 1.0,
-                                        height: context.height * .38,
-                                        enableInfiniteScroll: true,
-                                        onPageChanged: (index, reason) {
-                                          controller.setCurrentIndex(index);
-                                        },
-                                      ),
-                                    ),
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: List.generate(
-                                          3,
-                                          (index) => Container(
-                                                padding: const EdgeInsets.symmetric(vertical: Dimensions.space8),
-                                                margin: const EdgeInsets.only(right: Dimensions.space10),
-                                                width: controller.currentIndex == index ? 20 : 10,
-                                                height: 8,
-                                                decoration: BoxDecoration(
-                                                  color: controller.currentIndex == index ? MyColor.primaryColor : MyColor.bodyTextColor,
-                                                  borderRadius: BorderRadius.circular(Dimensions.cardRadius),
-                                                ),
-                                              )),
-                                    ),
-                                    const SizedBox(height: 10)
-                                  ],
+                              CarouselSlider(
+                                items: productDetailsController.getItemDetailsModel!.data!.media!.map((e) => Image.network("${MyConstants.imageBaseURL}${e.thumbnailURL}")).toList(),
+                                options: CarouselOptions(
+                                  aspectRatio: 1,
+                                  autoPlay: true,
+                                  autoPlayInterval: const Duration(seconds: 2),
+                                  viewportFraction: 1.0,
+                                  height: context.height * .38,
+                                  enableInfiniteScroll: true,
+                                  onPageChanged: (index, reason) {
+                                    controller.setCurrentIndex(index);
+                                  },
                                 ),
                               ),
-                              Positioned(
-                                  top: 10,
-                                  right: 10,
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      productDetailsController.toggleFavorite(productModel.productID);
-                                    },
-                                    child: Container(
-                                      height: 40,
-                                      width: 40,
-                                      padding: const EdgeInsets.all(10),
-                                      decoration: const BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        color: MyColor.colorWhite,
-                                      ),
-                                      child: SvgPicture.asset(
-                                        productDetailsController.getItemDetailsModel!.data!.item!.isFavorite! ? MyImages.wishList : MyImages.wishListOutline,
-                                        colorFilter: const ColorFilter.mode(MyColor.primaryColor, BlendMode.srcIn),
-                                      ),
-                                    ),
-                                  ))
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Expanded(
-                                flex: 6,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      productDetailsController.getItemDetailsModel!.data!.item!.itemName!,
-                                      style: boldLarge,
-                                      maxLines: 1,
-                                    ),
-                                    Text(
-                                      productDetailsController.getItemDetailsModel!.data!.item!.categoryName!,
-                                      style: regularLarge.copyWith(color: MyColor.naturalDark),
-                                    ),
-                                    const SizedBox(
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: List.generate(
+                                    3,
+                                        (index) => Container(
+                                      padding: const EdgeInsets.symmetric(vertical: Dimensions.space8),
+                                      margin: const EdgeInsets.only(right: Dimensions.space10),
+                                      width: controller.currentIndex == index ? 20 : 10,
                                       height: 8,
-                                    ),
-                                    //const CustomRatingWidget()
-                                  ],
-                                ),
-                              ),
-                              Expanded(
-                                flex: 4,
-                                child: Column(
-                                  children: [
-                                    Text(
-                                      "${productModel.sellingCurrencyLogo}${productModel.onlinePriceBeforeDiscount}",
-                                      style: boldLarge.copyWith(
-                                        decoration: TextDecoration.lineThrough,
-                                        color: MyColor.canceledTextColor,
+                                      decoration: BoxDecoration(
+                                        color: controller.currentIndex == index ? MyColor.primaryColor : MyColor.bodyTextColor,
+                                        borderRadius: BorderRadius.circular(Dimensions.cardRadius),
                                       ),
-                                    ),
-                                    Text(
-                                      "${productModel.sellingCurrencyLogo}${productModel.price}",
-                                      style: mediumOverLarge,
-                                    ),
-                                  ],
-                                ),
-                              )
+                                    )),
+                              ),
+                              const SizedBox(height: 10)
                             ],
                           ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          Align(alignment: Alignment.topLeft, child: CustomReadMoreText('${productDetailsController.getItemDetailsModel!.data!.item!.onlineDetails ?? ''} ', trimLines: 4, colorClickableText: MyColor.primaryColor, trimMode: TrimMode.Line, trimCollapsedText: MyStrings.seeMore, trimExpandedText: MyStrings.seeLess, moreStyle: regularLarge.copyWith(color: MyColor.primaryColor, fontWeight: FontWeight.w600), lessStyle: regularLarge.copyWith(color: MyColor.colorGreen, fontWeight: FontWeight.w600), style: regularLarge.copyWith(color: MyColor.bodyTextColor))),
-                          const SizedBox(height: 20),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
+                        ),
+                        Positioned(
+                            top: 10,
+                            right: 10,
+                            child: GestureDetector(
+                              onTap: () {
+                                productDetailsController.toggleFavorite(productModel.productID);
+                              },
+                              child: Container(
+                                height: 40,
+                                width: 40,
+                                padding: const EdgeInsets.all(10),
+                                decoration: const BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: MyColor.colorWhite,
+                                ),
+                                child: SvgPicture.asset(
+                                  productDetailsController.getItemDetailsModel!.data!.item!.isFavorite! ? MyImages.wishList : MyImages.wishListOutline,
+                                  colorFilter: const ColorFilter.mode(MyColor.primaryColor, BlendMode.srcIn),
+                                ),
+                              ),
+                            ))
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          flex: 6,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              /*Row(
+                              Text(
+                                productDetailsController.getItemDetailsModel!.data!.item!.itemName!,
+                                style: boldLarge,
+                                maxLines: 1,
+                              ),
+                              Text(
+                                productDetailsController.getItemDetailsModel!.data!.item!.categoryName!,
+                                style: regularLarge.copyWith(color: MyColor.naturalDark),
+                              ),
+                              const SizedBox(
+                                height: 8,
+                              ),
+                              //const CustomRatingWidget()
+                            ],
+                          ),
+                        ),
+                        Expanded(
+                          flex: 4,
+                          child: Column(
+                            children: [
+                              Text(
+                                "${productModel.sellingCurrencyLogo}${productModel.onlinePriceBeforeDiscount}",
+                                style: boldLarge.copyWith(
+                                  decoration: TextDecoration.lineThrough,
+                                  color: MyColor.canceledTextColor,
+                                ),
+                              ),
+                              Text(
+                                "${productModel.sellingCurrencyLogo}${productModel.price}",
+                                style: mediumOverLarge,
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Align(alignment: Alignment.topLeft, child: CustomReadMoreText('${productDetailsController.getItemDetailsModel!.data!.item!.onlineDetails ?? ''} ', trimLines: 4, colorClickableText: MyColor.primaryColor, trimMode: TrimMode.Line, trimCollapsedText: MyStrings.seeMore, trimExpandedText: MyStrings.seeLess, moreStyle: regularLarge.copyWith(color: MyColor.primaryColor, fontWeight: FontWeight.w600), lessStyle: regularLarge.copyWith(color: MyColor.colorGreen, fontWeight: FontWeight.w600), style: regularLarge.copyWith(color: MyColor.bodyTextColor))),
+                    const SizedBox(height: 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        /*Row(
                                 children: [
                                   const Text(
                                     MyStrings.color,
@@ -217,63 +217,63 @@ class _ProductDetailsScreen2State extends State<ProductDetailsScreen2> {
                                   )
                                 ],
                               ),*/
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  GestureDetector(
-                                    onTap: () {
-                                      controller.decreaseQuantity();
-                                    },
-                                    child: Container(
-                                      width: 30,
-                                      height: 30,
-                                      decoration: BoxDecoration(shape: BoxShape.circle, color: MyColor.bodyTextColor, border: Border.all(color: MyColor.colorWhite, width: 3)),
-                                      child: const Icon(
-                                        Icons.remove,
-                                        size: 14,
-                                        color: MyColor.colorWhite,
-                                      ),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(horizontal: 6),
-                                    child: Text(
-                                      "${controller.quantity}",
-                                      style: mediumLarge.copyWith(color: MyColor.bodyTextColor),
-                                    ),
-                                  ),
-                                  GestureDetector(
-                                    onTap: () {
-                                      controller.increaseQuantity();
-                                    },
-                                    child: Container(
-                                      width: 30,
-                                      height: 30,
-                                      decoration: BoxDecoration(shape: BoxShape.circle, color: MyColor.bodyTextColor, border: Border.all(color: MyColor.colorWhite, width: 3)),
-                                      child: const Icon(
-                                        Icons.add,
-                                        size: 14,
-                                        color: MyColor.colorWhite,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              )
-                            ],
-                          ),
-                        ],
-                      ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                controller.decreaseQuantity();
+                              },
+                              child: Container(
+                                width: 30,
+                                height: 30,
+                                decoration: BoxDecoration(shape: BoxShape.circle, color: MyColor.bodyTextColor, border: Border.all(color: MyColor.colorWhite, width: 3)),
+                                child: const Icon(
+                                  Icons.remove,
+                                  size: 14,
+                                  color: MyColor.colorWhite,
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 6),
+                              child: Text(
+                                "${controller.quantity}",
+                                style: mediumLarge.copyWith(color: MyColor.bodyTextColor),
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                controller.increaseQuantity();
+                              },
+                              child: Container(
+                                width: 30,
+                                height: 30,
+                                decoration: BoxDecoration(shape: BoxShape.circle, color: MyColor.bodyTextColor, border: Border.all(color: MyColor.colorWhite, width: 3)),
+                                child: const Icon(
+                                  Icons.add,
+                                  size: 14,
+                                  color: MyColor.colorWhite,
+                                ),
+                              ),
+                            ),
+                          ],
+                        )
+                      ],
                     ),
-                    const SizedBox(height: 20),
-                    productDetailsController.relatedItemsCount > 0 ? buildRelatedProductList() : const Offstage(),
-                    /* CustomProductSection(
+                  ],
+                ),
+              ),
+              const SizedBox(height: 20),
+              productDetailsController.relatedItemsCount > 0 ? buildRelatedProductList() : const Offstage(),
+              /* CustomProductSection(
                       productList: MyProduct.shoeList.reversed.toList(),
                       controller: Get.find(),
                       productType: MyStrings.relatedProduct,
                     )*/
-                  ],
-                ),
-              ),
+            ],
+          ),
+        ),
         bottomNavigationBar: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
           child: Row(
