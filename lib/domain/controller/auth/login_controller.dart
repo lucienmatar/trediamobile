@@ -91,6 +91,8 @@ class LoginController extends GetxController {
           // CustomSnackBar.success(successList: [loginModel.msg!]);
         }
         Get.offAllNamed(RouteHelper.bottomNavBar);
+      } else if(loginModel.status == -2){
+        //open popup
       } else {
         CustomSnackBar.error(errorList: [loginModel.msg!]);
       }

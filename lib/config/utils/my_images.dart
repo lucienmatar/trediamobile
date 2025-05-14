@@ -136,4 +136,5 @@ class MyImages {
   static const String google = "assets/images/google.png";
   static const String wishListOutline = "assets/images/wishlist_outline.svg";
   static const String coupon = "assets/images/coupon.png";
+  static const String calendar = "assets/images/calendar.svg";
 }

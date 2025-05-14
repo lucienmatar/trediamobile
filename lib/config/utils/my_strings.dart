@@ -394,6 +394,9 @@ class MyStrings {
   static String get selectGender => "selectGender".tr;
   static String get male => "male".tr;
   static String get female => "female".tr;
+  static String get dob => "Date of Birth".tr;
+  static String get enterDateOfBirth => "Please select your date of birth".tr;
+
   static const String description = "Discover a blend of quality and innovation with our latest offering. Designed with precision and crafted for durability, this product meets all your needs with style and efficiency. Whether for everyday use or special occasions, it delivers unmatched performance. Experience the perfect balance of functionality and design, making it an essential addition to your collection. Upgrade your lifestyle with a product that truly stands out";
 
   static const String watchDec = "Experience precision and style with our ChronoMaster Elite. Designed for both elegance and functionality, this watch offers timeless appeal with modern technology. Perfect for every occasion, it keeps you punctual and fashionable.";

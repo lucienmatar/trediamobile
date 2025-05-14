@@ -28,7 +28,7 @@ class RegistrationForm extends StatefulWidget {
 
 class _RegistrationFormState extends State<RegistrationForm> {
   final formKey = GlobalKey<FormState>();
-  final ControllerMap controllerMap = Get.put(ControllerMap());
+  // final ControllerMap controllerMap = Get.put(ControllerMap());
   var registrationController = Get.put(RegistrationController());
   final _fieldKey1 = GlobalKey<FormFieldState>();
   final _fieldKey2 = GlobalKey<FormFieldState>();
@@ -179,6 +179,39 @@ class _RegistrationFormState extends State<RegistrationForm> {
                 ],
               ),
               const SizedBox(height: Dimensions.space16),
+              InkWell(
+                onTap: () async {
+                  final DateTime? picked = await showDatePicker(
+                    context: context,
+                    initialDate: DateTime(2000, 1), // default DOB
+                    firstDate: DateTime(1900),
+                    lastDate: DateTime(2010),
+                  );
+                  if (picked != null) {
+                    registrationController.dob = picked;
+                    registrationController.dobController.text = MyUtils.formatDate(picked); // Implement a date formatter if needed
+                    registrationController.update();
+                  }
+                },
+                child: IgnorePointer(
+                  child: CustomTextField(
+                    animatedLabel: true,
+                    needOutlineBorder: true,
+                    labelText: MyStrings.dob,
+                    controller: registrationController.dobController,
+                    textInputType: TextInputType.datetime,
+                    inputAction: TextInputAction.next,
+                    prefixIcon: MyImages.calendar,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return MyStrings.enterDateOfBirth;
+                      }
+                      return null;
+                    }, onChanged: (_) {},
+                  ),
+                ),
+              ),
+              const SizedBox(height: Dimensions.space16),
               CustomTextField(
                 fieldKey: _fieldKey4,
                 prefixIcon: MyImages.textFieldEmail,
@@ -281,37 +314,37 @@ class _RegistrationFormState extends State<RegistrationForm> {
               const SizedBox(height: Dimensions.space16),
               // Text(MyStrings.selectTown, style: regularLarge.copyWith(color: MyColor.secondaryTextColor)),
               // const SizedBox(height: Dimensions.space16),
-              InkWell(
-                onTap: () async {
-                  registrationController.selectedTown = await showTownBottomSheet(context);
-                  if (registrationController.selectedTown != null) {
-                    print('Selected town: ${registrationController.selectedTown}');
-                    registrationController.update();
-                  }
-                },
-                child: Container(
-                  padding: const EdgeInsets.all(15),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: MyColor.colorBlack.withOpacity(0.3), width: 1), // Border
-                    borderRadius: BorderRadius.circular(20), // Rounded border
-                  ),
-                  child: Row(
-                    children: [
-                      CustomSvgPicture(
-                        image: MyImages.town,
-                        color: MyColor.iconColor.withOpacity(0.8),
-                        width: 22,
-                        height: 22,
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: Text(registrationController.selectedTownName!, style: regularLarge.copyWith(color: MyColor.secondaryTextColor)),
-                      ),
-                      Icon(Icons.arrow_drop_down, color: Colors.grey[700]),
-                    ],
-                  ),
-                ),
-              ),
+              // InkWell(
+              //   onTap: () async {
+              //     registrationController.selectedTown = await showTownBottomSheet(context);
+              //     if (registrationController.selectedTown != null) {
+              //       print('Selected town: ${registrationController.selectedTown}');
+              //       registrationController.update();
+              //     }
+              //   },
+              //   child: Container(
+              //     padding: const EdgeInsets.all(15),
+              //     decoration: BoxDecoration(
+              //       border: Border.all(color: MyColor.colorBlack.withOpacity(0.3), width: 1), // Border
+              //       borderRadius: BorderRadius.circular(20), // Rounded border
+              //     ),
+              //     child: Row(
+              //       children: [
+              //         CustomSvgPicture(
+              //           image: MyImages.town,
+              //           color: MyColor.iconColor.withOpacity(0.8),
+              //           width: 22,
+              //           height: 22,
+              //         ),
+              //         const SizedBox(width: 12),
+              //         Expanded(
+              //           child: Text(registrationController.selectedTownName!, style: regularLarge.copyWith(color: MyColor.secondaryTextColor)),
+              //         ),
+              //         Icon(Icons.arrow_drop_down, color: Colors.grey[700]),
+              //       ],
+              //     ),
+              //   ),
+              // ),
               /*Container(
                       height: 62,
                       padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -350,32 +383,32 @@ class _RegistrationFormState extends State<RegistrationForm> {
                         ),
                       ),
                     )*/
-              const SizedBox(height: Dimensions.space16),
-              CustomTextField(
-                fieldKey: _fieldKey6,
-                animatedLabel: true,
-                needOutlineBorder: true,
-                isShowSuffixIcon: true,
-                maxLines: 3,
-                labelText: MyStrings.address,
-                controller: registrationController.addressController,
-                textInputType: TextInputType.multiline,
-                inputAction: TextInputAction.next,
-                onChanged: (value) {
-                  if (registrationController.addressController.text.isNotEmpty) {
-                    if (_fieldKey6.currentState!.validate()) {}
-                  }
-                  return;
-                },
-                validator: (value) {
-                  if (value.toString().isEmpty) {
-                    return MyStrings.enterYourAddress;
-                  } else {
-                    return null;
-                  }
-                },
-              ),
-              const SizedBox(height: Dimensions.space16),
+              // const SizedBox(height: Dimensions.space16),
+              // CustomTextField(
+              //   fieldKey: _fieldKey6,
+              //   animatedLabel: true,
+              //   needOutlineBorder: true,
+              //   isShowSuffixIcon: true,
+              //   maxLines: 3,
+              //   labelText: MyStrings.address,
+              //   controller: registrationController.addressController,
+              //   textInputType: TextInputType.multiline,
+              //   inputAction: TextInputAction.next,
+              //   onChanged: (value) {
+              //     if (registrationController.addressController.text.isNotEmpty) {
+              //       if (_fieldKey6.currentState!.validate()) {}
+              //     }
+              //     return;
+              //   },
+              //   validator: (value) {
+              //     if (value.toString().isEmpty) {
+              //       return MyStrings.enterYourAddress;
+              //     } else {
+              //       return null;
+              //     }
+              //   },
+              // ),
+              // const SizedBox(height: Dimensions.space16),
               // CustomTextField(
               //   animatedLabel: true,
               //   needOutlineBorder: true,
@@ -396,108 +429,108 @@ class _RegistrationFormState extends State<RegistrationForm> {
               //     return;
               //   },
               // ),
-              TypeAheadField(
-                builder: (context, TextEditingController controller, FocusNode focusNode) {
-                  registrationController.searchLocationController = controller;
-                  return CustomTextField(
-                    focusNode: focusNode,
-                    animatedLabel: true,
-                    needOutlineBorder: true,
-                    labelText: MyStrings.searchLocation,
-                    controller: controller,
-                    onChanged: (val) {
-                      if (registrationController.searchLocationController.text.isNotEmpty) {
-                        if (_fieldKey7.currentState!.validate()) {}
-                      }
-                    },
-                    fieldKey: _fieldKey7,
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return MyStrings.enterYourLocation;
-                      } else {
-                        return null;
-                      }
-                    },
-                  );
-                },
-                decorationBuilder: (BuildContext context, Widget child) {
-                  return Material(
-                    color: Colors.white, // Background color for suggestion box
-                    borderRadius: BorderRadius.circular(8.0), // Rounded corners
-                    elevation: 4.0, // Shadow
-                    child: Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey.shade300), // Border
-                      ),
-                      child: child, // The suggestion list
-                    ),
-                  );
-                },
-                suggestionsCallback: (pattern) async {
-                  if (pattern.isNotEmpty) {
-                    return await registrationController.fetchPlaceSuggestions(pattern);
-                  }
-                  return [];
-                },
-                itemBuilder: (context, suggestion) {
-                  return ListTile(
-                    title: Text(suggestion['description']),
-                  );
-                },
-                onSelected: (suggestion) async {
-                  // Handle selected place (e.g., get place details)
-                  CustomSnackBar.success(successList: [MyStrings.pleaseWaitWhileGettingLocation]);
-                  print('Selected: ${suggestion['description']}');
-                  final placeId = suggestion['place_id'];
-                  final placeDetails = await registrationController.fetchPlaceDetails(placeId);
-                  final latitude = placeDetails['geometry']['location']['lat'];
-                  final longitude = placeDetails['geometry']['location']['lng'];
-                  print('Place: ${suggestion['description']}, Lat: $latitude, Lng: $longitude');
-                  registrationController.searchLocationController.text = MyStrings.searching;
-                  LatLng position = LatLng(latitude, longitude);
-                  controllerMap.markers.clear();
-                  controllerMap.addMarker(position: position, id: 'new_marker');
-                  registrationController.searchLocationController.text = suggestion['description'];
-                  // Animate the camera to the new marker
-                  controllerMap.moveCamera(position);
-                  controllerMap.update();
-                  registrationController.update();
-                  try {
-                    // Close the keyboard
-                    FocusScope.of(context).unfocus();
-                    formKey.currentState!.validate();
-                  } catch (e) {}
-                },
-              ),
-              const SizedBox(height: Dimensions.space16),
-              SizedBox(
-                height: 300,
-                child: GoogleMap(
-                  myLocationEnabled: true, // Show blue dot
-                  myLocationButtonEnabled: true, // Show GPS button
-                  zoomGesturesEnabled: true,
-                  onTap: (LatLng position) async {
-                    try {
-                      print("GoogleMap onTap ${position.latitude} ${position.longitude}");
-                      controllerMap.markers.clear();
-                      controllerMap.addMarker(position: position, id: 'new_marker');
-                      registrationController.searchLocationController.text = MyStrings.searching;
-                      controllerMap.update();
-                      registrationController.update();
-                      registrationController.searchLocationController.text = await MyUtils.getAddressFromLatLong(position.latitude, position.longitude);
-                    } catch (e) {
-                      print("GoogleMap onTap error ${e.toString()}");
-                    }
-                  },
-                  initialCameraPosition: controllerMap.initialPosition,
-                  onMapCreated: controllerMap.onMapCreated,
-                  markers: controllerMap.markers,
-                  polylines: controllerMap.polylines,
-                  mapType: controllerMap.mapType,
-                  zoomControlsEnabled: true,
-                  compassEnabled: true,
-                ),
-              ),
+              // TypeAheadField(
+              //   builder: (context, TextEditingController controller, FocusNode focusNode) {
+              //     registrationController.searchLocationController = controller;
+              //     return CustomTextField(
+              //       focusNode: focusNode,
+              //       animatedLabel: true,
+              //       needOutlineBorder: true,
+              //       labelText: MyStrings.searchLocation,
+              //       controller: controller,
+              //       onChanged: (val) {
+              //         if (registrationController.searchLocationController.text.isNotEmpty) {
+              //           if (_fieldKey7.currentState!.validate()) {}
+              //         }
+              //       },
+              //       fieldKey: _fieldKey7,
+              //       validator: (value) {
+              //         if (value!.isEmpty) {
+              //           return MyStrings.enterYourLocation;
+              //         } else {
+              //           return null;
+              //         }
+              //       },
+              //     );
+              //   },
+              //   decorationBuilder: (BuildContext context, Widget child) {
+              //     return Material(
+              //       color: Colors.white, // Background color for suggestion box
+              //       borderRadius: BorderRadius.circular(8.0), // Rounded corners
+              //       elevation: 4.0, // Shadow
+              //       child: Container(
+              //         decoration: BoxDecoration(
+              //           border: Border.all(color: Colors.grey.shade300), // Border
+              //         ),
+              //         child: child, // The suggestion list
+              //       ),
+              //     );
+              //   },
+              //   suggestionsCallback: (pattern) async {
+              //     if (pattern.isNotEmpty) {
+              //       return await registrationController.fetchPlaceSuggestions(pattern);
+              //     }
+              //     return [];
+              //   },
+              //   itemBuilder: (context, suggestion) {
+              //     return ListTile(
+              //       title: Text(suggestion['description']),
+              //     );
+              //   },
+              //   onSelected: (suggestion) async {
+              //     // Handle selected place (e.g., get place details)
+              //     CustomSnackBar.success(successList: [MyStrings.pleaseWaitWhileGettingLocation]);
+              //     print('Selected: ${suggestion['description']}');
+              //     final placeId = suggestion['place_id'];
+              //     final placeDetails = await registrationController.fetchPlaceDetails(placeId);
+              //     final latitude = placeDetails['geometry']['location']['lat'];
+              //     final longitude = placeDetails['geometry']['location']['lng'];
+              //     print('Place: ${suggestion['description']}, Lat: $latitude, Lng: $longitude');
+              //     registrationController.searchLocationController.text = MyStrings.searching;
+              //     LatLng position = LatLng(latitude, longitude);
+              //     controllerMap.markers.clear();
+              //     controllerMap.addMarker(position: position, id: 'new_marker');
+              //     registrationController.searchLocationController.text = suggestion['description'];
+              //     // Animate the camera to the new marker
+              //     controllerMap.moveCamera(position);
+              //     controllerMap.update();
+              //     registrationController.update();
+              //     try {
+              //       // Close the keyboard
+              //       FocusScope.of(context).unfocus();
+              //       formKey.currentState!.validate();
+              //     } catch (e) {}
+              //   },
+              // ),
+              // const SizedBox(height: Dimensions.space16),
+              // SizedBox(
+              //   height: 300,
+              //   child: GoogleMap(
+              //     myLocationEnabled: true, // Show blue dot
+              //     myLocationButtonEnabled: true, // Show GPS button
+              //     zoomGesturesEnabled: true,
+              //     onTap: (LatLng position) async {
+              //       try {
+              //         print("GoogleMap onTap ${position.latitude} ${position.longitude}");
+              //         controllerMap.markers.clear();
+              //         controllerMap.addMarker(position: position, id: 'new_marker');
+              //         registrationController.searchLocationController.text = MyStrings.searching;
+              //         controllerMap.update();
+              //         registrationController.update();
+              //         registrationController.searchLocationController.text = await MyUtils.getAddressFromLatLong(position.latitude, position.longitude);
+              //       } catch (e) {
+              //         print("GoogleMap onTap error ${e.toString()}");
+              //       }
+              //     },
+              //     initialCameraPosition: controllerMap.initialPosition,
+              //     onMapCreated: controllerMap.onMapCreated,
+              //     markers: controllerMap.markers,
+              //     polylines: controllerMap.polylines,
+              //     mapType: controllerMap.mapType,
+              //     zoomControlsEnabled: true,
+              //     compassEnabled: true,
+              //   ),
+              // ),
               /*const SizedBox(height: Dimensions.space16),
               CustomTextField(
                 animatedLabel: true,
@@ -548,7 +581,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
                               SnackBar(content: Text(MyStrings.selectGender)),
                             );
                           } else {
-                            registrationController.registerApi(controllerMap.currentPosition.value!.latitude, controllerMap.currentPosition.value!.longitude);
+                            registrationController.registerApi();
                           }
                         }
                       }),
@@ -612,60 +645,60 @@ class _RegistrationFormState extends State<RegistrationForm> {
     );
   }
 
-  Future<String?> showTownBottomSheet(BuildContext context) async {
-    TextEditingController searchController = TextEditingController();
-    RxList<townData.Data> filteredList = registrationController.townModel!.data!.obs;
-
-    return await Get.bottomSheet<String>(
-      Container(
-        height: 400,
-        padding: const EdgeInsets.all(16),
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-        ),
-        child: Column(
-          children: [
-            TextField(
-              controller: searchController,
-              decoration: InputDecoration(
-                prefixIcon: const Icon(Icons.search),
-                hintText: MyStrings.selectTown,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: const BorderSide(color: MyColor.primaryColor),
-                ),
-              ),
-              onChanged: (value) {
-                print("onChanged value $value");
-                if (value.isNotEmpty) {
-                  filteredList.value = registrationController.townModel!.data!.where((country) => country.display!.toLowerCase().contains(value.toLowerCase())).toList();
-                } else {
-                  filteredList.value = registrationController.townModel!.data!.obs;
-                }
-              },
-            ),
-            const SizedBox(height: 10),
-            Expanded(
-                child: Obx(
-              () => ListView.builder(
-                itemCount: filteredList.length,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    title: Text(filteredList[index].display!),
-                    onTap: () {
-                      registrationController.selectedTownName = filteredList[index].display!;
-                      print("selectedTownName ${registrationController.selectedTownName}");
-                      Get.back(result: filteredList[index].value);
-                    },
-                  );
-                },
-              ),
-            )),
-          ],
-        ),
-      ),
-      isScrollControlled: true,
-    );
-  }
+  // Future<String?> showTownBottomSheet(BuildContext context) async {
+  //   TextEditingController searchController = TextEditingController();
+  //   RxList<townData.Data> filteredList = registrationController.townModel!.data!.obs;
+  //
+  //   return await Get.bottomSheet<String>(
+  //     Container(
+  //       height: 400,
+  //       padding: const EdgeInsets.all(16),
+  //       decoration: const BoxDecoration(
+  //         color: Colors.white,
+  //         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+  //       ),
+  //       child: Column(
+  //         children: [
+  //           TextField(
+  //             controller: searchController,
+  //             decoration: InputDecoration(
+  //               prefixIcon: const Icon(Icons.search),
+  //               hintText: MyStrings.selectTown,
+  //               border: OutlineInputBorder(
+  //                 borderRadius: BorderRadius.circular(12),
+  //                 borderSide: const BorderSide(color: MyColor.primaryColor),
+  //               ),
+  //             ),
+  //             onChanged: (value) {
+  //               print("onChanged value $value");
+  //               if (value.isNotEmpty) {
+  //                 filteredList.value = registrationController.townModel!.data!.where((country) => country.display!.toLowerCase().contains(value.toLowerCase())).toList();
+  //               } else {
+  //                 filteredList.value = registrationController.townModel!.data!.obs;
+  //               }
+  //             },
+  //           ),
+  //           const SizedBox(height: 10),
+  //           Expanded(
+  //               child: Obx(
+  //             () => ListView.builder(
+  //               itemCount: filteredList.length,
+  //               itemBuilder: (context, index) {
+  //                 return ListTile(
+  //                   title: Text(filteredList[index].display!),
+  //                   onTap: () {
+  //                     registrationController.selectedTownName = filteredList[index].display!;
+  //                     print("selectedTownName ${registrationController.selectedTownName}");
+  //                     Get.back(result: filteredList[index].value);
+  //                   },
+  //                 );
+  //               },
+  //             ),
+  //           )),
+  //         ],
+  //       ),
+  //     ),
+  //     isScrollControlled: true,
+  //   );
+  // }
 }
