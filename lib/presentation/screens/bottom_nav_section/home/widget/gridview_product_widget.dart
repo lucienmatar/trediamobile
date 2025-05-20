@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:shimmer/shimmer.dart';
 import '../../../../../config/route/route.dart';
 import '../../../../../config/utils/dimensions.dart';
@@ -107,14 +108,22 @@ class GridViewProductWidget extends StatelessWidget {
                           Row(
                             children: [
                               Text(
-                                "${productModelList[index].sellingCurrencyLogo}${productModelList[index].price}",
+                                '${productModelList[index].sellingCurrencyLogo}${NumberFormat.currency(
+                                    locale: 'en_GB',
+                                    symbol: '',
+                                    decimalDigits: productModelList[index].sellingCurrencyLogo != '\$' && productModelList[index].sellingCurrencyLogo != '€' ? 0 : 2
+                                ).format(productModelList[index].price)}',
                                 style: mediumLarge.copyWith(fontSize: 15),
                               ),
                               const SizedBox(
                                 width: 8,
                               ),
                               Text(
-                                "${productModelList[index].sellingCurrencyLogo}${productModelList[index].onlinePriceBeforeDiscount}",
+                                '${productModelList[index].sellingCurrencyLogo}${NumberFormat.currency(
+                                    locale: 'en_GB',
+                                    symbol: '',
+                                    decimalDigits: productModelList[index].sellingCurrencyLogo != '\$' && productModelList[index].sellingCurrencyLogo != '€' ? 0 : 2
+                                ).format(productModelList[index].onlinePriceBeforeDiscount)}',
                                 style: mediumDefault.copyWith(color: MyColor.canceledTextColor, decoration: TextDecoration.lineThrough),
                               ),
                             ],

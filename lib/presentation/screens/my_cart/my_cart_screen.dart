@@ -7,6 +7,7 @@ import 'package:ShapeCom/config/utils/my_color.dart';
 import 'package:ShapeCom/config/utils/my_images.dart';
 import 'package:ShapeCom/config/utils/my_strings.dart';
 import 'package:ShapeCom/domain/controller/my_cart/my_cart_controller.dart';
+import 'package:intl/intl.dart';
 import 'package:shimmer/shimmer.dart';
 import '../../../config/route/route.dart';
 import '../../../config/utils/dimensions.dart';
@@ -115,9 +116,18 @@ class _MyCartScreenState extends State<MyCartScreen> {
             child: Text(MyStrings.applyCopun, style: boldDefault.copyWith(color: MyColor.primaryColor)),
           ),
           const Spacer(),  */
-          Text("${MyStrings.subTotal} : ${myCartController.subTotalPriceCart!.data!.subtotal!.sellingCurrencyLogo}${myCartController.subTotalPriceCart!.data!.subtotal!.subTotalPrice ?? "0"}", style: semiBoldLargeInter.copyWith(fontWeight: FontWeight.w500)),
+          Text(
+            '${MyStrings.subTotal} : ${myCartController.subTotalPriceCart!.data!.subtotal!.sellingCurrencyLogo}'
+                '${NumberFormat.currency(locale: 'en_GB', symbol: '', decimalDigits: myCartController.subTotalPriceCart!.data!.subtotal!.sellingCurrencyLogo != '\$' && myCartController.subTotalPriceCart!.data!.subtotal!.sellingCurrencyLogo != '€' ? 0 : 2).format(myCartController.subTotalPriceCart!.data!.subtotal!.subTotalPrice ?? 0)}',
+            style: semiBoldLargeInter.copyWith(fontWeight: FontWeight.w500),
+          ),
           const SizedBox(width: Dimensions.space12),
-          Text("${myCartController.subTotalPriceCart!.data!.subtotal!.sellingCurrencyLogo}${myCartController.subTotalPriceCart!.data!.subtotal!.subTotalPriceBeforeDiscount ?? "0"}", style: boldLarge.copyWith(fontSize: 12, decoration: TextDecoration.lineThrough, color: MyColor.bodyTextColor)),
+          Text(
+            '${myCartController.subTotalPriceCart!.data!.subtotal!.sellingCurrencyLogo}'
+                '${NumberFormat.currency(locale: 'en_GB', symbol: '', decimalDigits: myCartController.subTotalPriceCart!.data!.subtotal!.sellingCurrencyLogo != '\$' && myCartController.subTotalPriceCart!.data!.subtotal!.sellingCurrencyLogo != '€' ? 0 : 2).format(myCartController.subTotalPriceCart!.data!.subtotal!.subTotalPriceBeforeDiscount ?? 0)}',
+            style: boldLarge.copyWith(fontSize: 12, decoration: TextDecoration.lineThrough, color: MyColor.bodyTextColor),
+          ),
+
           const Spacer(),
           InkWell(
             onTap: () {
@@ -166,11 +176,20 @@ class _MyCartScreenState extends State<MyCartScreen> {
                   const SizedBox(height: 4),
                   Row(
                     children: [
-                      Text("${myCartController.myCartItemModel!.data!.items![index].sellingCurrencyLogo!}${myCartController.myCartItemModel!.data!.items![index].sumOnlinePrice!}", style: semiBoldLarge.copyWith(fontSize: 14, color: MyColor.primaryColor)),
+                      Text(
+                        '${myCartController.myCartItemModel!.data!.items![index].sellingCurrencyLogo}'
+                            '${NumberFormat.currency(locale: 'en_GB', symbol: '', decimalDigits: myCartController.myCartItemModel!.data!.items![index].sellingCurrencyLogo != '\$' && myCartController.myCartItemModel!.data!.items![index].sellingCurrencyLogo != '€' ? 0 : 2).format(myCartController.myCartItemModel!.data!.items![index].sumOnlinePrice)}',
+                        style: semiBoldLarge.copyWith(fontSize: 14, color: MyColor.primaryColor),
+                      ),
                       const SizedBox(
                         width: 8,
                       ),
-                      Text("${myCartController.myCartItemModel!.data!.items![index].sumOnlinePriceBeforeDiscount!}", style: boldLarge.copyWith(fontSize: 12, decoration: TextDecoration.lineThrough, color: MyColor.bodyTextColor)),
+                      Text(
+                        '${myCartController.myCartItemModel!.data!.items![index].sellingCurrencyLogo}'
+                            '${NumberFormat.currency(locale: 'en_GB', symbol: '', decimalDigits: myCartController.myCartItemModel!.data!.items![index].sellingCurrencyLogo != '\$' && myCartController.myCartItemModel!.data!.items![index].sellingCurrencyLogo != '€' ? 0 : 2).format(myCartController.myCartItemModel!.data!.items![index].sumOnlinePriceBeforeDiscount)}',
+                        style: boldLarge.copyWith(fontSize: 12, decoration: TextDecoration.lineThrough, color: MyColor.bodyTextColor),
+                      ),
+
                     ],
                   ),
                   const SizedBox(height: 8),

@@ -6,6 +6,7 @@ import 'package:ShapeCom/config/utils/my_strings.dart';
 import 'package:ShapeCom/domain/controller/wish_list/wish_list_controller.dart';
 import 'package:ShapeCom/presentation/components/app-bar/custom_appbar_mab.dart';
 import 'package:ShapeCom/presentation/screens/wish_list/widget/wish_list_cart_widget.dart';
+import 'package:intl/intl.dart';
 import 'package:shimmer/shimmer.dart';
 import '../../../config/route/route.dart';
 import '../../../config/utils/dimensions.dart';
@@ -60,7 +61,7 @@ class _WishListScreenState extends State<WishListScreen> {
                     child: SlideMenu(
                       swipeContentWidth: 0.3,
                       menuItems: [
-                        GestureDetector(onTap: () {}, child: SvgPicture.asset(MyImages.delete, width: Dimensions.space20)),
+                        // GestureDetector(onTap: () {}, child: SvgPicture.asset(MyImages.delete, width: Dimensions.space20)),
                         GestureDetector(
                             onTap: () {},
                             child: SvgPicture.asset(
@@ -68,13 +69,13 @@ class _WishListScreenState extends State<WishListScreen> {
                               width: Dimensions.space20,
                               colorFilter: const ColorFilter.mode(MyColor.primaryColor, BlendMode.srcIn),
                             )),
-                        GestureDetector(
-                            onTap: () {},
-                            child: SvgPicture.asset(
-                              MyImages.comparison,
-                              width: Dimensions.space20,
-                              colorFilter: const ColorFilter.mode(MyColor.iconColor, BlendMode.srcIn),
-                            )),
+                        // GestureDetector(
+                        //     onTap: () {},
+                        //     child: SvgPicture.asset(
+                        //       MyImages.comparison,
+                        //       width: Dimensions.space20,
+                        //       colorFilter: const ColorFilter.mode(MyColor.iconColor, BlendMode.srcIn),
+                        //     )),
                       ],
                       child: Container(
                         color: MyColor.colorWhite,
@@ -166,9 +167,21 @@ class _WishListScreenState extends State<WishListScreen> {
                   const SizedBox(height: 4),
                   Row(
                     children: [
-                      Text("${wishListController.favoriteItemModel!.data!.items![index].sellingCurrencyLogo}${wishListController.favoriteItemModel!.data!.items![index].onlinePrice}", style: boldLarge),
+                      Text(
+                        '${wishListController.favoriteItemModel!.data!.items![index].sellingCurrencyLogo}'
+                            '${NumberFormat.currency(locale: 'en_GB', symbol: '', decimalDigits: wishListController.favoriteItemModel!.data!.items![index].sellingCurrencyLogo != '\$' && wishListController.favoriteItemModel!.data!.items![index].sellingCurrencyLogo != '€' ? 0 : 2).format(wishListController.favoriteItemModel!.data!.items![index].onlinePrice)}',
+                        style: boldLarge,
+                      ),
                       const SizedBox(width: 10),
-                      Text("${wishListController.favoriteItemModel!.data!.items![index].sellingCurrencyLogo}${wishListController.favoriteItemModel!.data!.items![index].onlinePriceBeforeDiscount}", style: boldLarge.copyWith(fontSize: 12, decoration: TextDecoration.lineThrough, color: MyColor.bodyTextColor)),
+                      Text(
+                        '${wishListController.favoriteItemModel!.data!.items![index].sellingCurrencyLogo}'
+                            '${NumberFormat.currency(locale: 'en_GB', symbol: '', decimalDigits: wishListController.favoriteItemModel!.data!.items![index].sellingCurrencyLogo != '\$' && wishListController.favoriteItemModel!.data!.items![index].sellingCurrencyLogo != '€' ? 0 : 2).format(wishListController.favoriteItemModel!.data!.items![index].onlinePriceBeforeDiscount)}',
+                        style: boldLarge.copyWith(
+                          fontSize: 12,
+                          decoration: TextDecoration.lineThrough,
+                          color: MyColor.bodyTextColor,
+                        ),
+                      ),
                     ],
                   ),
                 ],
