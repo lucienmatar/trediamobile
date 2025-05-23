@@ -42,7 +42,7 @@ class _VerifyForgetPassScreenState extends State<VerifyForgetPassScreen> {
     return Scaffold(
         backgroundColor: MyColor.getScreenBgColor(),
         appBar: CustomAppBar(
-          fromAuth: true,
+          fromAuth: false,
           isShowBackBtn: true,
           bgColor: MyColor.getAppBarColor(),
           title: verifyPasswordController.isChangePhoneNumber ? MyStrings.phoneVerification : MyStrings.passVerification,
@@ -85,13 +85,13 @@ class _VerifyForgetPassScreenState extends State<VerifyForgetPassScreen> {
                                 beforeTextPaste: (text) {
                                   return true;
                                 },
-                                validator: (value) {
+                                /*validator: (value) {
                                   if (value!.length < 4) {
                                     return CustomSnackBar.error(errorList: [MyStrings.otpFieldEmptyMsg]);
                                   } else {
                                     return null;
                                   }
-                                },
+                                },*/
                                 onChanged: (value) {
                                   controller.currentText = value;
                                 },

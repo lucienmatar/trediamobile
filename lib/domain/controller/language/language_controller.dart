@@ -10,14 +10,17 @@ import '../../../presentation/components/snack_bar/show_custom_snackbar.dart';
 
 class LanguageController extends GetxController {
   int selectedIndex = 0;
+  @override
+  void onInit() {
+    super.onInit();
+    MyPrefrences.init();
+    String language = MyPrefrences.getString(MyPrefrences.language) ?? "English";
+    selectedIndex = languageList.indexOf(language);
+    //update();
+  }
+
   void changeSelectedIndex(int index) {
     selectedIndex = index;
-    if (index == 1) {
-      MyPrefrences.saveString(MyPrefrences.language, "Arabic");
-    } else {
-      MyPrefrences.saveString(MyPrefrences.language, languageList[index]);
-    }
-    CustomSnackBar.success(successList: [MyStrings.languageUpdated]);
     update();
   }
 

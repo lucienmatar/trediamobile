@@ -350,6 +350,7 @@ class _ProfileCompleteScreenState extends State<ProfileCompleteScreen> {
     );
 
     if (picked != null && picked != selectedDate) {
+      profileCompleteController.isSubmitDisable = false;
       profileCompleteController.dob = picked;
       selectedDate = picked;
       String formattedDate = DateFormat('dd-MM-yyyy').format(picked);
@@ -375,22 +376,22 @@ class _ProfileCompleteScreenState extends State<ProfileCompleteScreen> {
             const SizedBox(height: 10),
             Expanded(
                 child: Obx(
-                      () => ListView.builder(
-                    itemCount: filteredList.length,
-                    itemBuilder: (context, index) {
-                      return ListTile(
-                        title: Text(filteredList[index]),
-                        onTap: () {
-                          profileCompleteController.selectedGender.value = filteredList[index];
-                          profileCompleteController.genderController.text = profileCompleteController.selectedGender.value;
-                          profileCompleteController.isSubmitDisable=false;
-                          profileCompleteController.update();
-                          Get.back();
-                        },
-                      );
+              () => ListView.builder(
+                itemCount: filteredList.length,
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    title: Text(filteredList[index]),
+                    onTap: () {
+                      profileCompleteController.selectedGender.value = filteredList[index];
+                      profileCompleteController.genderController.text = profileCompleteController.selectedGender.value;
+                      profileCompleteController.isSubmitDisable = false;
+                      profileCompleteController.update();
+                      Get.back();
                     },
-                  ),
-                )),
+                  );
+                },
+              ),
+            )),
           ],
         ),
       ),

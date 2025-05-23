@@ -105,7 +105,7 @@ class ApiService {
   // Reusable loading dialog
   static void showLoadingDialog() {
     Get.dialog(
-      barrierDismissible: false, // Prevent tap outside to dismiss
+      barrierDismissible: false,
       useSafeArea: true,
       Dialog(
         backgroundColor: Colors.transparent,
@@ -119,24 +119,54 @@ class ApiService {
                   height: 100,
                   width: 100,
                   child: CircularProgressIndicator(
-                    strokeWidth: 2, // Thicker progress indicator
-                    color: MyColor.primaryColor, // Change color as needed
+                    strokeWidth: 2,
+                    color: MyColor.primaryColor,
                   ),
                 ),
-              ), // Show loader while image loads
+              ),
               SvgPicture.asset(MyImages.loadingLogo, width: 60, height: 60),
             ],
           ),
         ),
       ),
+      name: 'progressDialog',
     );
+    // Get.dialog(
+    //   barrierDismissible: false, // Prevent tap outside to dismiss
+    //   useSafeArea: true,
+    //   Dialog(
+    //     backgroundColor: Colors.transparent,
+    //     elevation: 0,
+    //     child: Center(
+    //       child: Stack(
+    //         alignment: Alignment.center,
+    //         children: [
+    //           const Center(
+    //             child: SizedBox(
+    //               height: 100,
+    //               width: 100,
+    //               child: CircularProgressIndicator(
+    //                 strokeWidth: 2, // Thicker progress indicator
+    //                 color: MyColor.primaryColor, // Change color as needed
+    //               ),
+    //             ),
+    //           ), // Show loader while image loads
+    //           SvgPicture.asset(MyImages.loadingLogo, width: 60, height: 60),
+    //         ],
+    //       ),
+    //     ),
+    //   ),
+    // );
   }
 
-  static void hideDialog(bool showProgress) {
+  static Future<void> hideDialog(bool showProgress) async {
     try {
       if (showProgress) {
         // Dismiss loading dialog
-        if (Get.isDialogOpen ?? false) Get.back();
+        if (Get.isDialogOpen!) {
+          Get.back();
+        }
+        //if (Get.isDialogOpen ?? false) Get.back();
         //Get.back();
       }
     } catch (e) {}

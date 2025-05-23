@@ -5,8 +5,9 @@ import 'package:geolocator/geolocator.dart';
 import '../../../../config/utils/my_constants.dart';
 import '../../../../presentation/screens/auth/registration/model/country_code_model.dart';
 
-class ControllerMap extends GetxController {
-  late GoogleMapController mapController;
+class ControllerRefinedMap extends GetxController {
+  GoogleMapController? mapController;
+  bool _isMapInitialized = false;
   var markers = <Marker>{}.obs;
   var polylines = <Polyline>{}.obs;
   var isLoading = false.obs;
@@ -18,10 +19,10 @@ class ControllerMap extends GetxController {
   final MapType mapType;
   final Set<Marker>? initialMarkers;
 
-  ControllerMap({
+  ControllerRefinedMap({
     LatLng? initialLatLng, // Optional static initial position
     double initialZoom = 15, // Higher zoom for live location
-    this.showMyLocation = true,
+    this.showMyLocation = false,
     this.mapType = MapType.normal,
     this.initialMarkers,
   }) {
@@ -32,17 +33,18 @@ class ControllerMap extends GetxController {
     );
   }
 
-  @override
+  /* @override
   void onInit() async {
     super.onInit();
     if (initialMarkers != null) {
       markers.addAll(initialMarkers!);
     }
     await getCurrentLocation(); // Fetch live location on init
-  }
+  }*/
 
   void onMapCreated(GoogleMapController controller) {
     mapController = controller;
+    _isMapInitialized = true;
     if (currentPosition.value != null) {
       moveCamera(currentPosition.value!); // Move to live location when map is ready
     }
@@ -137,26 +139,30 @@ class ControllerMap extends GetxController {
   }
 
   Future<void> moveCamera(LatLng target, {double zoom = 15}) async {
-    try{
-      await mapController.animateCamera(
-        CameraUpdate.newCameraPosition(
-          CameraPosition(target: target, zoom: zoom),
-        ),
-      );
-    }catch(e){}
+    try {
+      if (_isMapInitialized && mapController != null) {
+        await mapController!.animateCamera(
+          CameraUpdate.newCameraPosition(
+            CameraPosition(target: target, zoom: zoom),
+          ),
+        );
+      }
+    } catch (e) {}
   }
 
   Future<void> updateZoom(double zoom) async {
-    try{
-      await mapController.animateCamera(CameraUpdate.zoomTo(zoom));
-    }catch(e){}
+    try {
+      if (_isMapInitialized && mapController != null) {
+        await mapController?.animateCamera(CameraUpdate.zoomTo(zoom));
+      }
+    } catch (e) {}
   }
 
   @override
   void onClose() {
-    try{
-      mapController.dispose();
-    }catch(e){}
+    try {
+      mapController?.dispose();
+    } catch (e) {}
     super.onClose();
   }
 }

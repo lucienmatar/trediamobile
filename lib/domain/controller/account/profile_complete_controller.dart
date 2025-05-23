@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -6,8 +8,11 @@ import 'package:ShapeCom/presentation/components/snack_bar/show_custom_snackbar.
 import 'package:intl/intl.dart';
 
 import '../../../config/network/api_service.dart';
+import '../../../config/utils/dimensions.dart';
+import '../../../config/utils/my_color.dart';
 import '../../../config/utils/my_constants.dart';
 import '../../../config/utils/my_preferences.dart';
+import '../../../config/utils/style.dart';
 import '../../../presentation/screens/auth/profile_complete/model/edit_profile_model.dart';
 import '../../../presentation/screens/auth/profile_complete/model/profile_details_model.dart';
 import '../../../presentation/screens/mens_fashion/model/currency_model.dart';
@@ -19,6 +24,7 @@ class ProfileCompleteController extends GetxController {
     print("gender=$gender");
     selectedGender.value = gender;
   }
+
   DateTime? dob;
   bool isSubmitDisable = true;
   ApiService apiService = ApiService(context: Get.context!);
@@ -33,7 +39,7 @@ class ProfileCompleteController extends GetxController {
   TextEditingController zipCodeController = TextEditingController();
   TextEditingController dobController = TextEditingController();
   TextEditingController genderController = TextEditingController();
-  String? username=" ";
+  String? username = " ";
 
   FocusNode firstNameFocusNode = FocusNode();
   FocusNode lastNameFocusNode = FocusNode();
@@ -53,7 +59,13 @@ class ProfileCompleteController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    getProfileDetails();
+    callapi();
+  }
+
+  callapi() {
+    Future.delayed(Duration(seconds: 2), () {
+      getProfileDetails();
+    });
   }
 
   getProfileDetails() async {
@@ -85,6 +97,7 @@ class ProfileCompleteController extends GetxController {
         lastNameController.text = profileDetailsModel!.data!.lastName!;
         emailController.text = profileDetailsModel!.data!.email!;
         DateTime parsedDate = DateTime.parse(profileDetailsModel!.data!.dateOfBirth!);
+        dob = parsedDate;
         String formattedDate = DateFormat('dd-MM-yyyy').format(parsedDate);
         serverDate = DateFormat('yyyy-MM-dd').format(parsedDate);
         dobController.text = formattedDate;
@@ -152,10 +165,10 @@ class ProfileCompleteController extends GetxController {
         dynamic responseBody = await apiService.makeRequest(endPoint: MyConstants.endpointEditProfile, method: MyConstants.POST, body: requestBody);
         EditProfileModel editProfileModel = EditProfileModel.fromJson(responseBody);
         if (editProfileModel!.status! == 1) {
+          Get.back();
           if (editProfileModel!.msg!.isNotEmpty) {
-            CustomSnackBar.success(successList: [editProfileModel!.msg!]);
+            CustomSnackBar.twoSecondSuccess(successList: [editProfileModel!.msg!]);
           }
-          Navigator.pop(Get.context!);
         } else {
           if (editProfileModel!.msg!.isNotEmpty) {
             CustomSnackBar.error(errorList: [editProfileModel!.msg!]);

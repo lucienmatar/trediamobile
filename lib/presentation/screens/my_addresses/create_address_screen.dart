@@ -14,6 +14,7 @@ import '../../../config/utils/style.dart';
 import '../../../config/utils/util.dart';
 import '../../../domain/controller/account/profile_complete_controller.dart';
 import '../../../domain/controller/auth/auth/controller_map.dart';
+import '../../../domain/controller/auth/auth/controller_refined_map.dart';
 import '../../../domain/controller/menu_screen/add_new_address_controller.dart';
 import '../../../domain/controller/menu_screen/create_address_controller.dart';
 import '../../components/app-bar/custom_appbar.dart';
@@ -35,7 +36,7 @@ class CreateAddressScreen extends StatefulWidget {
 class _CreateAddressScreenState extends State<CreateAddressScreen> {
   var createAddressController = Get.put(CreateAddressController());
   final formKey = GlobalKey<FormState>();
-  ControllerMap controllerMap = Get.put(ControllerMap());
+  ControllerRefinedMap controllerMap = Get.put(ControllerRefinedMap());
   CameraPosition? cameraPosition;
   @override
   Widget build(BuildContext context) {
@@ -117,7 +118,7 @@ class _CreateAddressScreenState extends State<CreateAddressScreen> {
                             InkWell(
                               onTap: () {
                                 Get.toNamed(RouteHelper.addNewAddressScreen, arguments: {'fromedit': true})!.then((result) {
-                                  controllerMap = Get.put(ControllerMap());
+                                  controllerMap = Get.put(ControllerRefinedMap());
                                   print("refresh location");
                                   print("MyConstants.mapLat${MyConstants.mapLat}");
                                   print("MyConstants.mapLong${MyConstants.mapLong}");

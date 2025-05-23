@@ -106,19 +106,20 @@ class VerifyPasswordController extends GetxController {
       };
       dynamic responseBody = await apiService.makeRequest(endPoint: MyConstants.endpointChangePhoneNumberValidation, method: MyConstants.POST, body: requestBody);
       forgetPasswordValidationModel = ForgetPasswordValidationModel.fromJson(responseBody);
+      print("forgetPasswordValidationModel!.status ${forgetPasswordValidationModel!.status}");
       if (forgetPasswordValidationModel!.status == 1) {
-        if (forgetPasswordValidationModel!.msg!.isNotEmpty) {
+        /*if (forgetPasswordValidationModel!.msg!.isNotEmpty) {
           CustomSnackBar.success(successList: [forgetPasswordValidationModel!.msg!]);
-        }
+        }*/
         Get.off(ProfileCompleteScreen());
       } else {
+        if (forgetPasswordValidationModel!.msg!.isNotEmpty) {
+          CustomSnackBar.error(errorList: [forgetPasswordValidationModel!.msg!]);
+        }
         otpController.text = "";
         errorController.add(ErrorAnimationType.shake); // Triggering error shake animation
         hasError = true;
         update();
-        if (forgetPasswordValidationModel!.msg!.isNotEmpty) {
-          CustomSnackBar.error(errorList: [forgetPasswordValidationModel!.msg!]);
-        }
       }
     } catch (e) {
       print("changePhoneNumberValidationApi Error ${e.toString()}");

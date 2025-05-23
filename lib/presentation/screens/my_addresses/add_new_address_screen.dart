@@ -73,8 +73,9 @@ class _AddNewAddressScreenState extends State<AddNewAddressScreen> {
                       onPressed: () {
                         if (addNewAddressController.isFromEdit) {
                           Get.back(result: 'success');
+                        } else {
+                          Get.off(MyAddressesScreen());
                         }
-                        Get.off(MyAddressesScreen());
                       },
                     ),
                     const SizedBox(width: 10),

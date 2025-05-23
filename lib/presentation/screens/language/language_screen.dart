@@ -1,12 +1,15 @@
+import 'package:ShapeCom/config/utils/my_preferences.dart';
 import 'package:ShapeCom/domain/controller/language/language_controller.dart';
 import 'package:ShapeCom/presentation/components/buttons/rounded_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../config/utils/dimensions.dart';
 import '../../../config/utils/my_color.dart';
+import '../../../config/utils/my_constants.dart';
 import '../../../config/utils/my_strings.dart';
 import '../../../domain/controller/language/widget/language_card.dart';
 import '../../components/app-bar/custom_appbar.dart';
+import '../../components/snack_bar/show_custom_snackbar.dart';
 
 class LanguageScreen extends StatefulWidget {
   const LanguageScreen({super.key});
@@ -61,7 +64,16 @@ class _LanguageScreenState extends State<LanguageScreen> {
             child: RoundedButton(
               text: MyStrings.confirm,
               press: () {
+                MyPrefrences.saveString(MyPrefrences.language, controller.languageList[controller.selectedIndex]);
+                if (controller.selectedIndex == 0) {
+                  MyConstants.currentLanguage = "en";
+                } else if (controller.selectedIndex == 2) {
+                  MyConstants.currentLanguage = "fr";
+                } else if (controller.selectedIndex == 1) {
+                  MyConstants.currentLanguage = "ar";
+                }
                 Get.back();
+                CustomSnackBar.success(successList: [MyStrings.languageUpdated]);
               },
             ),
           ),
