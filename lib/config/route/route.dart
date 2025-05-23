@@ -1,5 +1,8 @@
 import 'package:ShapeCom/presentation/screens/auth/set_username_password/set_username_password.dart';
 import 'package:ShapeCom/presentation/screens/language/language_screen.dart';
+import 'package:ShapeCom/presentation/screens/menu/change_phone_number.dart';
+import 'package:ShapeCom/presentation/screens/menu/my_addresses_screen.dart';
+import 'package:ShapeCom/presentation/screens/my_addresses/add_new_address_screen.dart';
 import 'package:get/get.dart';
 import 'package:ShapeCom/presentation/screens/Profile/profile_screen.dart';
 import 'package:ShapeCom/presentation/screens/add_shipping_address/add_shipping_address_screen.dart';
@@ -32,6 +35,7 @@ import 'package:ShapeCom/presentation/screens/splash/splash_screen.dart';
 import 'package:ShapeCom/presentation/screens/track_order/track_order_screen.dart';
 import 'package:ShapeCom/presentation/screens/wish_list/wish_list_screen.dart';
 import '../../presentation/screens/auth/change-password/change_password_screen.dart';
+import '../../presentation/screens/my_addresses/create_address_screen.dart';
 import '../../presentation/screens/top_brand/top_brand_screen.dart';
 
 class RouteHelper{
@@ -55,10 +59,14 @@ static const String myOrderScreen               = "/myOrder_screen";
 static const String myReviewScreen              = "/my_review_screen";
 static const String trackOrderScreen            = "/track_order_screen";
 static const String faqScreen                   = "/faq_screen";
+static const String myAddressesScreen                   = "/my_addresses_screen";
+static const String addNewAddressScreen                   = "/add_new_address_screen";
+static const String createAddressScreen                   = "/create_address_screen";
 
 
 static const String loginScreen                 = "/login_screen";
 static const String forgotPasswordScreen        = "/forgot_password_screen";
+static const String changePhoneNumberScreen        = "/change_phone_number";
 static const String changePasswordScreen        = "/change_password_screen";
 static const String registrationScreen          = "/registration_screen";
 static const String myWalletScreen              = "/my_wallet_screen";
@@ -93,6 +101,9 @@ static const String setUsernamePasswordScreen         = '/set_username_password'
 
   List<GetPage> routes = [
 
+    GetPage(name: createAddressScreen            , page: () => const CreateAddressScreen()),
+    GetPage(name: addNewAddressScreen            , page: () => const AddNewAddressScreen()),
+    GetPage(name: myAddressesScreen            , page: () => const MyAddressesScreen()),
     GetPage(name: splashScreen            , page: () => const SplashScreen()),
     GetPage(name: onboardScreen           , page: () => const OnboardScreen()),
     GetPage(name: loginScreen             , page: () => const LoginScreen()),
@@ -114,6 +125,7 @@ static const String setUsernamePasswordScreen         = '/set_username_password'
 
 
     GetPage(name: forgotPasswordScreen,         page: () => const ForgetPasswordScreen()),
+    GetPage(name: changePhoneNumberScreen,         page: () => const ChangePhoneNumberScreen()),
 
     GetPage(name: registrationScreen,           page: () => const RegistrationScreen()),
     GetPage(name: profileCompleteScreen,        page: () => const ProfileCompleteScreen()),

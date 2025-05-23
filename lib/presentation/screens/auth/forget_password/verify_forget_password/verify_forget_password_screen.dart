@@ -25,23 +25,27 @@ class VerifyForgetPassScreen extends StatefulWidget {
 
 class _VerifyForgetPassScreenState extends State<VerifyForgetPassScreen> {
   final formKey = GlobalKey<FormState>();
+  String? phoneNumber = "";
+  final VerifyPasswordController verifyPasswordController = Get.put(VerifyPasswordController());
   @override
   void initState() {
-    Get.put(VerifyPasswordController());
     Get.put(CartCountController());
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    final String phoneNumber = Get.arguments['phoneNumber']; // Get the argument
+    try {
+      phoneNumber = Get.arguments['phoneNumber']; // Get the argument
+      verifyPasswordController.isChangePhoneNumber = Get.arguments['isChangePhoneNumber']; // Get the argument
+    } catch (e) {}
     return Scaffold(
         backgroundColor: MyColor.getScreenBgColor(),
         appBar: CustomAppBar(
           fromAuth: true,
           isShowBackBtn: true,
           bgColor: MyColor.getAppBarColor(),
-          title: MyStrings.passVerification,
+          title: verifyPasswordController.isChangePhoneNumber ? MyStrings.phoneVerification : MyStrings.passVerification,
         ),
         body: GetBuilder<VerifyPasswordController>(
             builder: (controller) => controller.isLoading
@@ -106,7 +110,12 @@ class _VerifyForgetPassScreenState extends State<VerifyForgetPassScreen> {
                                       controller.errorController.add(ErrorAnimationType.shake); // Triggering error shake animation
                                       controller.update();
                                     } else {
-                                      controller.forgetPasswordValidationApi();
+                                      if(verifyPasswordController.isChangePhoneNumber){
+                                        controller.changePhoneNumberValidationApi();
+                                      }else{
+                                        controller.forgetPasswordValidationApi();
+                                      }
+
                                     }
                                   }),
                           const SizedBox(height: Dimensions.space25),
@@ -121,7 +130,11 @@ class _VerifyForgetPassScreenState extends State<VerifyForgetPassScreen> {
                                     })
                                   : TextButton(
                                       onPressed: () {
-                                        controller.reSendCodePasswordApi();
+                                        if (verifyPasswordController.isChangePhoneNumber) {
+                                          controller.reSendCodeChangePhoneNumberApi();
+                                        } else {
+                                          controller.reSendCodePasswordApi();
+                                        }
                                       },
                                       child: DefaultText(text: MyStrings.resendCode, textStyle: regularDefault.copyWith(color: MyColor.getPrimaryColor())),
                                     )

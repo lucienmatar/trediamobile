@@ -39,7 +39,6 @@ class _SmsVerificationScreenState extends State<SmsVerificationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print(args["phoneNumber"]);
     return WillPopWidget(
       nextRoute: RouteHelper.loginScreen,
       child: Scaffold(

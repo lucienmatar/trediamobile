@@ -2,6 +2,7 @@ class MyImages {
   static const String appLogo = "assets/images/app_logo/app_logo.png";
   static const String splashLogo = "assets/images/app_logo/splash_logo.png";
   static const String loadingLogo = "assets/images/loading_logo.svg";
+  static const String dashboardLogo = "assets/images/app_logo/dashboard_logo.png";
 
   //bottom nav
   static const String cart = "assets/images/nav_bar/cart.svg";
@@ -79,6 +80,7 @@ class MyImages {
 
   static const String noInternet = "assets/animation/no_internet.json";
   static const String noDataFound = "assets/images/no_data.png";
+  static const String frenchFlag = "assets/images/french_flag.png";
   static const String viewTransaction = "assets/images/view_transaction.svg";
 
   static const String amount = "assets/images/amount.png";
@@ -137,4 +139,5 @@ class MyImages {
   static const String wishListOutline = "assets/images/wishlist_outline.svg";
   static const String coupon = "assets/images/coupon.png";
   static const String calendar = "assets/images/calendar.svg";
+  static const String dollar = "assets/images/dollar.png";
 }

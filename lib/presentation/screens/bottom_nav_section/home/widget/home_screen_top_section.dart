@@ -26,8 +26,16 @@ class HomeScreenTopSection extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 12),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: Image.asset(
+                      MyImages.dashboardLogo,
+                      height: 50,
+                      width: 150,
+                    ),
+                  ),
                   /*GestureDetector(
                     onTap: () {
                       Get.toNamed(RouteHelper.couponCodeScreen);

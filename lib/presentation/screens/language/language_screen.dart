@@ -16,7 +16,6 @@ class LanguageScreen extends StatefulWidget {
 }
 
 class _LanguageScreenState extends State<LanguageScreen> {
-
   @override
   void initState() {
     Get.put(LanguageController());
@@ -33,13 +32,13 @@ class _LanguageScreenState extends State<LanguageScreen> {
           title: MyStrings.language.tr,
         ),
         body: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
           child: GridView.builder(
             shrinkWrap: true,
             addAutomaticKeepAlives: true,
             padding: EdgeInsets.zero,
             scrollDirection: Axis.vertical,
-            itemCount: 4,
+            itemCount: controller.languageList.length,
             physics: const NeverScrollableScrollPhysics(),
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, childAspectRatio: MediaQuery.of(context).size.width > 200 ? 2 : 1, crossAxisSpacing: 12, mainAxisSpacing: 12, mainAxisExtent: 150),
             itemBuilder: (context, index) => GestureDetector(

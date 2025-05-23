@@ -1,7 +1,9 @@
+import 'package:ShapeCom/config/utils/my_color.dart';
 import 'package:ShapeCom/config/utils/my_constants.dart';
 import 'package:ShapeCom/domain/controller/auth/guest_login_model.dart';
 import 'package:ShapeCom/presentation/screens/auth/login/model/login_model.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ShapeCom/config/route/route.dart';
 
@@ -9,6 +11,7 @@ import '../../../config/network/api_service.dart';
 import '../../../config/utils/my_preferences.dart';
 import '../../../config/utils/my_strings.dart';
 import '../../../presentation/components/snack_bar/show_custom_snackbar.dart';
+import '../../../presentation/screens/auth/login/model/reactivate_account_model.dart';
 
 class LoginController extends GetxController {
   String selectedLanguage = 'English'; // Default language
@@ -91,8 +94,13 @@ class LoginController extends GetxController {
           // CustomSnackBar.success(successList: [loginModel.msg!]);
         }
         Get.offAllNamed(RouteHelper.bottomNavBar);
-      } else if(loginModel.status == -2){
+      } else if (loginModel.status == -2) {
         //open popup
+        showConfirmDialog(
+            onConfirm: () {
+              reactivateAccountApi();
+            },
+            message: loginModel.msg!);
       } else {
         CustomSnackBar.error(errorList: [loginModel.msg!]);
       }
@@ -100,6 +108,59 @@ class LoginController extends GetxController {
       print("loginApi Error ${e.toString()}");
       CustomSnackBar.error(errorList: [MyStrings.networkError]);
     }
+  }
+
+  reactivateAccountApi() async {
+    try {
+      var requestBody = {"Username": emailController.text.toString().trim(), "Id_College": MyConstants.Id_College, "lang": MyConstants.currentLanguage};
+      dynamic responseBody = await apiService.makeRequest(endPoint: MyConstants.endpointReactivateAccount, method: MyConstants.POST, body: requestBody);
+      ReactivateAccountModel? reactivateAccountModel = ReactivateAccountModel.fromJson(responseBody);
+      if (reactivateAccountModel.status == 1) {
+        if (reactivateAccountModel.msg!.isNotEmpty) {
+          CustomSnackBar.success(successList: [reactivateAccountModel.msg!]);
+        }
+        loginApi();
+      } else {
+        if (reactivateAccountModel.msg!.isNotEmpty) {
+          CustomSnackBar.error(errorList: [reactivateAccountModel.msg!]);
+        }
+      }
+    } catch (e) {
+      print("reactivateAccountApi Error ${e.toString()}");
+      CustomSnackBar.error(errorList: [MyStrings.networkError]);
+    }
+  }
+
+  void showConfirmDialog({required VoidCallback onConfirm, required String message}) {
+    Get.dialog(
+      AlertDialog(
+        content: Text(message),
+        actions: [
+          TextButton(
+            onPressed: () => Get.back(), // Dismiss dialog
+            child: const Text(
+              MyStrings.cancel,
+              style: TextStyle(
+                color: Colors.red,
+              ),
+            ),
+          ),
+          TextButton(
+            onPressed: () {
+              Get.back(); // Dismiss dialog
+              onConfirm(); // Perform delete action
+            },
+            child: Text(
+              MyStrings.confirm,
+              style: TextStyle(
+                color: MyColor.primaryColor,
+              ),
+            ),
+          ),
+        ],
+      ),
+      barrierDismissible: true,
+    );
   }
 
   void forgetPassword() {

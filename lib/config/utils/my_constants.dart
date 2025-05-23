@@ -31,6 +31,19 @@ class MyConstants {
   static String endpointUpdateQtyItemCart = "UpdateQtyItemCart";
   static String endpointGetSubTotalPriceCart = "GetSubTotalPriceCart";
   static String endpointRemoveItemFromCart = "RemoveItemFromCart";
+  static String endpointGetProfileDetails = "Profile";
+  static String endpointEditProfile = "EditProfile";
+  static String endpointLogout = "Logout";
+  static String endpointChangePhoneNumber = "ChangePhoneNumber";
+  static String endpointResendCodeChangePhoneNumber = "ResendCodeChangePhoneNumber";
+  static String endpointGetAddresses = "GetAddresses";
+  static String endpointAddAddress = "AddAddress";
+  static String endpointEditAddress = "EditAddress";
+  static String endpointChangePhoneNumberValidation = "ChangePhoneNumberValidation";
+  static String endpointChangePassword = "ChangePassword";
+  static String endpointDeactivateAccount = "DeactivateAccount";
+  static String endpointDeleteAddress = "DeleteAddress";
+  static String endpointReactivateAccount = "ReactivateAccount";
   static String stOsVersion = "Unknown Device";
   static String stMobileType = "Unknown Device";
   static String currentLanguage = "en";
@@ -41,4 +54,6 @@ class MyConstants {
   static String filtersCurrency = "";
   static double filtersRangeStartValue = 0;
   static double filtersRangeEndValue = 0;
+  static double mapLat = 0;
+  static double mapLong = 0;
 }

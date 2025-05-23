@@ -11,6 +11,7 @@ class MyPrefrences {
   static String forgetPasswordID = "forgetPasswordID";
   static String userID = "userID";
   static String registerUserID = "registerUserID";
+  static String changePhoneNumberID = "ChangePhoneNumberID";
 
   // Initialize SharedPreferences
   static Future<void> init() async {

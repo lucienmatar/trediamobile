@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 
+import '../../../../config/utils/my_constants.dart';
 import '../../../../presentation/screens/auth/registration/model/country_code_model.dart';
 
 class ControllerMap extends GetxController {
@@ -37,7 +38,7 @@ class ControllerMap extends GetxController {
     if (initialMarkers != null) {
       markers.addAll(initialMarkers!);
     }
-    await _getCurrentLocation(); // Fetch live location on init
+    await getCurrentLocation(); // Fetch live location on init
   }
 
   void onMapCreated(GoogleMapController controller) {
@@ -49,7 +50,7 @@ class ControllerMap extends GetxController {
   }
 
   // Fetch current location
-  Future<void> _getCurrentLocation() async {
+  Future<void> getCurrentLocation() async {
     try {
       isLoading.value = true;
       bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
@@ -76,7 +77,8 @@ class ControllerMap extends GetxController {
         desiredAccuracy: LocationAccuracy.high,
       );
       currentPosition.value = LatLng(position.latitude, position.longitude);
-
+      //MyConstants.mapLat=position.latitude;
+      //MyConstants.mapLong=position.longitude;
       // Add a marker for current location
       addMarker(
         position: currentPosition.value!,

@@ -16,17 +16,11 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-
   @override
   void initState() {
     super.initState();
     Get.put(ProfileController());
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {});
-  }
- 
-  @override
-  void dispose() {
-    super.dispose();
   }
 
   @override
@@ -38,30 +32,32 @@ class _ProfileScreenState extends State<ProfileScreen> {
           title: MyStrings.profile,
           bgColor: MyColor.getAppBarColor(),
         ),
-        body: controller.isLoading ? const CustomLoader() : Stack(
-          children: [
-            Positioned(
-              top: -10,
-              child: Container(
-                height: 100,
-                width: MediaQuery.of(context).size.width,
-                color: MyColor.primaryColor,
+        body: controller.isLoading
+            ? const CustomLoader()
+            : Stack(
+                children: [
+                  Positioned(
+                    top: -10,
+                    child: Container(
+                      height: 100,
+                      width: MediaQuery.of(context).size.width,
+                      color: MyColor.primaryColor,
+                    ),
+                  ),
+                  const Align(
+                    alignment: Alignment.topCenter,
+                    child: SingleChildScrollView(
+                      padding: EdgeInsets.only(left: Dimensions.space15, right: Dimensions.space15, top: Dimensions.space20, bottom: Dimensions.space20),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          ProfileTopSection(),
+                        ],
+                      ),
+                    ),
+                  )
+                ],
               ),
-            ),
-            const Align(
-              alignment: Alignment.topCenter,
-              child: SingleChildScrollView(
-                padding: EdgeInsets.only(left: Dimensions.space15, right: Dimensions.space15, top: Dimensions.space20, bottom: Dimensions.space20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    ProfileTopSection(),
-                  ],
-                ),
-              ),
-            )
-          ],
-        ),
       ),
     );
   }

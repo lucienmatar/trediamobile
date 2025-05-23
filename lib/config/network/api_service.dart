@@ -77,15 +77,10 @@ class ApiService {
         }
         // Hide the progress dialog after request is completed
         //print("Response body is ${response.body}");
-        try {
-          if (showProgress) {
-            // Dismiss loading dialog
-            if (Get.isDialogOpen ?? false) Get.back();
-            //Get.back();
-          }
-        } catch (e) {}
+        hideDialog(showProgress);
         print("response.statusCode is ${response.statusCode}");
         if (response.statusCode == 200 || response.statusCode == 201) {
+          print("response.body is ${response.body.toString()}");
           final dynamic jsonData = jsonDecode(response.body);
           // Return JSON data as either List or Map
           return jsonData;
@@ -94,13 +89,7 @@ class ApiService {
         }
       }
     } catch (e) {
-      try {
-        if (showProgress) {
-          // Dismiss loading dialog
-          if (Get.isDialogOpen ?? false) Get.back();
-          //Get.back();
-        }
-      } catch (e) {}
+      hideDialog(showProgress);
       // Hide the progress dialog in case of an error
       throw Exception('Error: $e');
     } finally {
@@ -141,6 +130,16 @@ class ApiService {
         ),
       ),
     );
+  }
+
+  static void hideDialog(bool showProgress) {
+    try {
+      if (showProgress) {
+        // Dismiss loading dialog
+        if (Get.isDialogOpen ?? false) Get.back();
+        //Get.back();
+      }
+    } catch (e) {}
   }
 
   /// **Check Internet Availability**

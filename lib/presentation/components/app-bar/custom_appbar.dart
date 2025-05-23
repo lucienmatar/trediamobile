@@ -10,9 +10,7 @@ import 'package:ShapeCom/presentation/components/dialog/exit_dialog.dart';
 
 import '../../../config/utils/dimensions.dart';
 
-
-class CustomAppBar extends StatefulWidget implements PreferredSizeWidget{
-
+class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
   final String title;
   final bool isShowBackBtn;
   final Color bgColor;
@@ -28,23 +26,7 @@ class CustomAppBar extends StatefulWidget implements PreferredSizeWidget{
   final String? leadingImage;
   final String? actionImage;
 
-  const  CustomAppBar({Key? key,
-    this.isProfileCompleted=false,
-    this.fromAuth = false,
-    this.isTitleCenter = false,
-    this.bgColor = MyColor.primaryColor,
-    this.isShowBackBtn=true,
-    required this.title,
-    this.isShowSingleActionBtn=false,
-    this.actionText = '',
-    this.actionIcon,
-    this.actionPress,
-    this.isActionIconAlignEnd = false,
-    this.isActionImage = true,
-    this.leadingImage,
-    this.actionImage
-
-  }) : super(key: key);
+  const CustomAppBar({Key? key, this.isProfileCompleted = false, this.fromAuth = false, this.isTitleCenter = false, this.bgColor = MyColor.primaryColor, this.isShowBackBtn = true, required this.title, this.isShowSingleActionBtn = false, this.actionText = '', this.actionIcon, this.actionPress, this.isActionIconAlignEnd = false, this.isActionImage = true, this.leadingImage, this.actionImage}) : super(key: key);
 
   @override
   State<CustomAppBar> createState() => _CustomAppBarState();
@@ -54,7 +36,7 @@ class CustomAppBar extends StatefulWidget implements PreferredSizeWidget{
 }
 
 class _CustomAppBarState extends State<CustomAppBar> {
-  bool hasNotification =false;
+  bool hasNotification = false;
   @override
   void initState() {
     super.initState();
@@ -62,68 +44,73 @@ class _CustomAppBarState extends State<CustomAppBar> {
 
   @override
   Widget build(BuildContext context) {
-    return widget.isShowBackBtn?GetBuilder<CartCountController>(
-      builder: (controller) => AppBar(
-        elevation: 0,
-        titleSpacing: 0,
-        leading:widget.isShowBackBtn?IconButton(
-            splashColor: Colors.transparent,
-            highlightColor: Colors.transparent,
-            onPressed: (){
-
-              if(widget.fromAuth){
-                Get.offAllNamed(RouteHelper.loginScreen);
-              }else if(widget.isProfileCompleted){
-                showExitDialog(Get.context!);
-              }
-              else{
-                String previousRoute=Get.previousRoute;
-                if(previousRoute=='/splash-screen'){
-                  Get.offAndToNamed(RouteHelper.bottomNavBar);
-                }else{
-                  Get.back();
-                }
-              }
-            },icon: widget.leadingImage != null? SvgPicture.asset(widget.leadingImage!): Icon(Icons.arrow_back,color: MyColor.getAppBarContentColor(), size: 20)):const SizedBox.shrink(),
-        backgroundColor: widget.bgColor,
-        title: Text(widget.title.tr,style: titleText),
-        centerTitle: widget.isTitleCenter,
-        actions: [
-          widget.isShowSingleActionBtn
-              ? ActionButtonIconWidget(
-            pressed: widget.actionPress!,
-            isImage: widget.isActionImage,
-            icon: widget.isActionImage?Icons.add:widget.actionIcon,  
-            imageSrc: widget.actionImage ?? "",
-          ) : const SizedBox.shrink(),
-          const SizedBox(
-            width: 5,
+    return widget.isShowBackBtn
+        ? GetBuilder<CartCountController>(
+            builder: (controller) => AppBar(
+              elevation: 0,
+              titleSpacing: 0,
+              leading: widget.isShowBackBtn
+                  ? IconButton(
+                      splashColor: Colors.transparent,
+                      highlightColor: Colors.transparent,
+                      onPressed: () {
+                        print("widget.fromAuth ${widget.fromAuth}");
+                        print("widget.isProfileCompleted ${widget.isProfileCompleted}");
+                        if (widget.fromAuth) {
+                          Get.offAllNamed(RouteHelper.loginScreen);
+                        } else if (widget.isProfileCompleted) {
+                          showExitDialog(Get.context!);
+                        } else {
+                          String previousRoute = Get.previousRoute;
+                          print("previousRoute ${previousRoute}");
+                          if (previousRoute == '/splash-screen') {
+                            Get.offAndToNamed(RouteHelper.bottomNavBar);
+                          } else {
+                            Get.back();
+                          }
+                        }
+                      },
+                      icon: widget.leadingImage != null ? SvgPicture.asset(widget.leadingImage!) : Icon(Icons.arrow_back, color: MyColor.getAppBarContentColor(), size: 20))
+                  : const SizedBox.shrink(),
+              backgroundColor: widget.bgColor,
+              title: Text(widget.title.tr, style: titleText),
+              centerTitle: widget.isTitleCenter,
+              actions: [
+                widget.isShowSingleActionBtn
+                    ? ActionButtonIconWidget(
+                        pressed: widget.actionPress!,
+                        isImage: widget.isActionImage,
+                        icon: widget.isActionImage ? Icons.add : widget.actionIcon,
+                        imageSrc: widget.actionImage ?? "",
+                      )
+                    : const SizedBox.shrink(),
+                const SizedBox(
+                  width: 5,
+                )
+              ],
+            ),
           )
-        ],
-      ),
-    ):GetBuilder<CartCountController>(
-      builder: (controller) => AppBar(
-        titleSpacing: 0,
-        elevation: 0,
-        backgroundColor: widget.bgColor,
-        title:Padding(
-          padding: const EdgeInsets.only(left: 16),
-          child: Text(widget.title.tr,style: semiBoldLargeInter.copyWith(color: MyColor.colorWhite)),
-        ),
-        actions: [
-          ActionButtonIconWidget(
-            pressed: widget.actionPress,
-            isImage: widget.isActionImage,
-            icon: widget.actionIcon??Icons.search, 
-            imageSrc: widget.actionImage ?? "",
-            spacing: Dimensions.space14,
-            size: Dimensions.space22,
-          ),
-        ],
-        automaticallyImplyLeading: false,
-      ),
-    );
+        : GetBuilder<CartCountController>(
+            builder: (controller) => AppBar(
+              titleSpacing: 0,
+              elevation: 0,
+              backgroundColor: widget.bgColor,
+              title: Padding(
+                padding: const EdgeInsets.only(left: 16),
+                child: Text(widget.title.tr, style: semiBoldLargeInter.copyWith(color: MyColor.colorWhite)),
+              ),
+              actions: [
+                ActionButtonIconWidget(
+                  pressed: widget.actionPress,
+                  isImage: widget.isActionImage,
+                  icon: widget.actionIcon ?? Icons.search,
+                  imageSrc: widget.actionImage ?? "",
+                  spacing: Dimensions.space14,
+                  size: Dimensions.space22,
+                ),
+              ],
+              automaticallyImplyLeading: false,
+            ),
+          );
   }
-
-
 }

@@ -15,6 +15,8 @@ class MyStrings {
   static const String selectPaymentMethod = "Select PaymentMethod";
 
   static const String item = "item";
+  static const String currencyUpdated = "Currency Updated";
+  static const String select = "Select";
   static const String alert = "Alert";
   static const String finish = "Finish";
   static const String startNow = "Start Now!";
@@ -95,6 +97,9 @@ class MyStrings {
   static const String newPasswordHint = "Enter new password";
 
   static const String changePassword = "Change Password";
+  static const String changePhoneNumber = "Change Phone Number";
+  static const String deactivateAccount = "Deactivate Account";
+  static const String deactivateAccount2 = "This is permanently erase your account details including past orders, addresses, funds, points and credits earned.";
   static const String currentPassword = "Current Password";
   static String get home => "home".tr;
   static String get resetPassword => "resetPassword".tr;
@@ -107,6 +112,9 @@ class MyStrings {
   static const String state = "State";
   static const String city = "City";
   static const String editProfile = "Edit Profile";
+  static const String edit = "Edit";
+  static const String locationPin = "Location pin";
+  static const String refineMap = "Refine map";
   static const String updateProfile = "Update Profile";
 
   static const String selectALanguage = 'Select Language';
@@ -142,6 +150,9 @@ class MyStrings {
   static String get resendCode => "resendCode".tr;
   static String get smsVerification => "smsVerification".tr;
   static const String profileComplete = "Profile Complete";
+  static const String accountSetting = "Account Setting";
+  static const String myAddress = "My Address";
+  static const String addresses = "Addresses";
   static const String completeProfile = "Complete Profile";
   static const String enterYour = "Enter your";
   static const String deposit = "Deposit";
@@ -155,6 +166,9 @@ class MyStrings {
   static const String profile = "Profile";
   static const String theme = "Theme";
   static const String language = "Language";
+  static const String deleteAddress = "Delete Address";
+  static const String deleteAddress2 = "Are you sure you want to delete this address?";
+  static const String languageUpdated = "Language updated";
   static const String transactionNo = "Transaction No.";
   static const String privacyPolicy = "Privacy & Policy";
   static String get doNotHaveAccount => "doNotHaveAccount".tr;
@@ -216,8 +230,10 @@ class MyStrings {
   static const String resendCodeFail = 'Failed to resend code';
   static const String somethingWentWrong = 'Something went wrong';
   static const String invalidAmount = 'Invalid amount';
+  static const String phoneVerification = 'Phone Verification';
 
   static const String verificationSuccess = 'Verification Success';
+  static const String enterLocation = 'Enter Location';
   static String get enterYourUsername => "enterYourUsername".tr;
   static String get enterYourLocation => "enterYourLocation".tr;
   static String get enterYourEmail => "enterYourEmail".tr;
@@ -259,6 +275,8 @@ class MyStrings {
   static const String yourEmail = 'your email';
   static const String depositLimit = "Deposit Limit";
   static const String error = 'Error';
+  static const String delete = 'Delete';
+  static const String deleteMyAccount = 'Delete my account';
   static const String trxType = 'Trx Type';
 
   static const String transactionType = "Transaction Type";
@@ -324,6 +342,7 @@ class MyStrings {
   static String get apply => "apply".tr;
   static String get searchIn => "searchIn".tr;
   static String get onlinePayment => "onlinePayment".tr;
+  static String get myAddresses => "myAddresses".tr;
   static const String wishList = "My Wishlist";
   static const String drawerHeader = "Drawer Header";
   static const String myProfile = "My Profile";
@@ -337,6 +356,7 @@ class MyStrings {
   static const String productDetails = "Product Details";
   static const String paid = "paid";
   static const String ok = "Ok";
+  static const String gender = "Gender";
   static const String cartSubtext = "1 x t-start lite";
   static const String dummyAddresstext = "2118 Thornridge Cir. Syracuse,\nConnecticut 35624";
   static const String purchasedOn = "Purchased on 04 Jul 2022";
@@ -368,6 +388,8 @@ class MyStrings {
   static String get price => "price".tr;
   static String get categories => "categories".tr;
   static String get currencies => "currencies".tr;
+  static String get currency => "currency".tr;
+  static String get signInSignup => "signInSignup".tr;
   static String get emailOrUserName => "emailOrUserName".tr;
   static String get almost => "almost".tr;
   static String get there => "there".tr;

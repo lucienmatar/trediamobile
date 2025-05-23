@@ -106,6 +106,7 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
                         controller.resendLoading?
                         Container(margin:const EdgeInsets.only(left: 5,top: 5),height:20,width:20,child: CircularProgressIndicator(color: MyColor.getPrimaryColor())):
                         GestureDetector(
+                          
                           onTap: (){
 
                           },
@@ -113,7 +114,6 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
                         )
                       ],
                     )
-
                   ],
                 ),
               )

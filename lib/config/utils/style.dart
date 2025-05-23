@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:ShapeCom/config/utils/dimensions.dart';
 import 'package:ShapeCom/config/utils/my_color.dart';
 
-
-
 const TextStyle titleText = TextStyle(
     fontFamily: 'Inter',
     color: MyColor.colorWhite,
