@@ -27,8 +27,8 @@ class LanguageController extends GetxController {
   List<String> languageList = ["English", "العربية", "French"];
 
   List<String> languageImage = [
-    "assets/images/flag/usa.jpg",
-    "assets/images/flag/arabic.jpg",
+    MyImages.usaFlag,
+    MyImages.arabicFlag,
     MyImages.frenchFlag,
   ];
 }

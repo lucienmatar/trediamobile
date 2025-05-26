@@ -59,13 +59,11 @@ class ProfileCompleteController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    callapi();
+    callApi();
   }
 
-  callapi() {
-    Future.delayed(Duration(seconds: 2), () {
-      getProfileDetails();
-    });
+  callApi() {
+    getProfileDetails();
   }
 
   getProfileDetails() async {

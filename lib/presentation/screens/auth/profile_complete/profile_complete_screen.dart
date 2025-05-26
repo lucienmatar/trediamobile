@@ -198,7 +198,7 @@ class _ProfileCompleteScreenState extends State<ProfileCompleteScreen> {
                     ? const RoundedLoadingBtn()
                     : RoundedButton(
                         color: profileCompleteController.isSubmitDisable ? MyColor.colorLightGrey : MyColor.primaryColor,
-                        text: MyStrings.submit.tr,
+                        text: MyStrings.save.tr,
                         press: () {
                           if (profileCompleteController.isSubmitDisable == false) {
                             if (formKey.currentState!.validate()) {
@@ -258,12 +258,12 @@ class _ProfileCompleteScreenState extends State<ProfileCompleteScreen> {
                                 child: Container(
                                   padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                                   decoration: BoxDecoration(
-                                    border: Border.all(color: MyColor.paidContentColor, width: 2),
+                                    border: Border.all(color: MyColor.primaryColor, width: 2),
                                     borderRadius: BorderRadius.circular(5), // Radius border
                                   ),
                                   child: Text(
                                     MyStrings.edit,
-                                    style: regularSmall.copyWith(color: MyColor.paidContentColor),
+                                    style: regularSmall.copyWith(color: MyColor.primaryColor),
                                     maxLines: 1,
                                   ),
                                 ),
