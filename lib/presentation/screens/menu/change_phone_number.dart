@@ -40,17 +40,20 @@ class _ForgetPasswordScreenState extends State<ChangePhoneNumberScreen> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
+        //Get.toNamed(RouteHelper.profileCompleteScreen);
         Get.off(ProfileCompleteScreen());
         return false;
       },
       child: Scaffold(
           backgroundColor: MyColor.getScreenBgColor(),
           appBar: CustomAppBar(
-            fromAuth: false,
             isShowBackBtn: true,
+            fromAuth: false,
+            isProfileCompleted: false,
             title: MyStrings.changePhoneNumber,
+            isHandleBack: true,
             bgColor: MyColor.getAppBarColor(),
-            actionPress: (){
+            onBackPressed: () {
               Get.off(ProfileCompleteScreen());
             },
           ),

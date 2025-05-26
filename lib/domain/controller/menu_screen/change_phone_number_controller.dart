@@ -27,8 +27,12 @@ class ChangePhoneNumberController extends GetxController {
   void onInit() {
     super.onInit();
     MyPrefrences.init(); // Call init separately if needed
-    countryCodesApi();
-    getProfileDetails();
+    callapi();
+  }
+
+  callapi() async {
+    await getProfileDetails();
+    await countryCodesApi();
   }
 
   countryCodesApi() async {
@@ -72,6 +76,7 @@ class ChangePhoneNumberController extends GetxController {
           CustomSnackBar.success(successList: [profileDetailsModel!.msg!]);
         }
         List<String> phoneNumber = profileDetailsModel!.data!.phoneNumber!.split(" ");
+        selectedCountryCode = phoneNumber[0];
         phonenumber = phoneNumber[1];
         mobileController.text = phonenumber!;
       } else {

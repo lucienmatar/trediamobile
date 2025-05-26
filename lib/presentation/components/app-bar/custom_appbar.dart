@@ -23,10 +23,12 @@ class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
   final bool isActionIconAlignEnd;
   final String actionText;
   final bool isActionImage;
+  final bool isHandleBack;
   final String? leadingImage;
   final String? actionImage;
+  final VoidCallback? onBackPressed;
 
-  const CustomAppBar({Key? key, this.isProfileCompleted = false, this.fromAuth = false, this.isTitleCenter = false, this.bgColor = MyColor.primaryColor, this.isShowBackBtn = true, required this.title, this.isShowSingleActionBtn = false, this.actionText = '', this.actionIcon, this.actionPress, this.isActionIconAlignEnd = false, this.isActionImage = true, this.leadingImage, this.actionImage}) : super(key: key);
+  const CustomAppBar({Key? key, this.isHandleBack = false, this.onBackPressed, this.isProfileCompleted = false, this.fromAuth = false, this.isTitleCenter = false, this.bgColor = MyColor.primaryColor, this.isShowBackBtn = true, required this.title, this.isShowSingleActionBtn = false, this.actionText = '', this.actionIcon, this.actionPress, this.isActionIconAlignEnd = false, this.isActionImage = true, this.leadingImage, this.actionImage}) : super(key: key);
 
   @override
   State<CustomAppBar> createState() => _CustomAppBarState();
@@ -37,6 +39,7 @@ class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
 
 class _CustomAppBarState extends State<CustomAppBar> {
   bool hasNotification = false;
+
   @override
   void initState() {
     super.initState();
@@ -66,7 +69,11 @@ class _CustomAppBarState extends State<CustomAppBar> {
                           if (previousRoute == '/splash-screen') {
                             Get.offAndToNamed(RouteHelper.bottomNavBar);
                           } else {
-                            Get.back();
+                            if (widget.isHandleBack) {
+                              _handleBackPress();
+                            } else {
+                              Get.back();
+                            }
                           }
                         }
                       },
@@ -112,5 +119,13 @@ class _CustomAppBarState extends State<CustomAppBar> {
               automaticallyImplyLeading: false,
             ),
           );
+  }
+
+  void _handleBackPress() {
+    // Use custom callback if provided
+    if (widget.onBackPressed != null) {
+      widget.onBackPressed!();
+      return;
+    }
   }
 }
