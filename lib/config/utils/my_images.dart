@@ -80,7 +80,9 @@ class MyImages {
 
   static const String noInternet = "assets/animation/no_internet.json";
   static const String noDataFound = "assets/images/no_data.png";
-  static const String frenchFlag = "assets/images/french_flag.png";
+  static const String frenchFlag = "assets/images/flag/france.png";
+  static const String usaFlag = "assets/images/flag/usa.jpg";
+  static const String arabicFlag = "assets/images/flag/arabic.jpg";
   static const String viewTransaction = "assets/images/view_transaction.svg";
 
   static const String amount = "assets/images/amount.png";

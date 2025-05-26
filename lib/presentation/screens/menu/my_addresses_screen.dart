@@ -110,7 +110,7 @@ class _MyAddressesScreenState extends State<MyAddressesScreen> {
         padding: const EdgeInsets.all(15.0),
         child: RoundedButton(
           cornerRadius: 10,
-          color: MyColor.paidContentColor,
+          color: MyColor.primaryColor,
           text: MyStrings.addNewAddress.tr,
           press: () {
             Get.off(AddNewAddressScreen());

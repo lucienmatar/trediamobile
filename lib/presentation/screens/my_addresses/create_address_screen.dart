@@ -139,7 +139,7 @@ class _CreateAddressScreenState extends State<CreateAddressScreen> {
                               child: Container(
                                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                                 decoration: BoxDecoration(
-                                  border: Border.all(color: MyColor.paidContentColor, width: 1), // Border
+                                  border: Border.all(color: MyColor.primaryColor, width: 1), // Border
                                   borderRadius: BorderRadius.circular(10), // Rounded border
                                 ),
                                 child: Row(
@@ -147,13 +147,13 @@ class _CreateAddressScreenState extends State<CreateAddressScreen> {
                                   children: [
                                     const Icon(
                                       Icons.location_pin,
-                                      color: MyColor.paidContentColor,
+                                      color: MyColor.primaryColor,
                                       size: 20,
                                     ),
                                     const SizedBox(width: 8), // Space between icon and text
                                     Text(
                                       MyStrings.refineMap,
-                                      style: mediumDefault.copyWith(color: MyColor.paidContentColor),
+                                      style: mediumDefault.copyWith(color: MyColor.primaryColor),
                                     ),
                                   ],
                                 ),

@@ -31,9 +31,9 @@ class DeactiveAccountController extends GetxController {
       dynamic responseBody = await apiService.makeRequest(endPoint: MyConstants.endpointDeactivateAccount, method: MyConstants.POST, body: requestBody);
       DeactiveAccountModel deactiveAccountModel = DeactiveAccountModel.fromJson(responseBody);
       if (deactiveAccountModel!.status == 1) {
-        if (deactiveAccountModel!.msg!.isNotEmpty) {
-          CustomSnackBar.success(successList: [deactiveAccountModel!.msg!]);
-        }
+        // if (deactiveAccountModel!.msg!.isNotEmpty) {
+        //   CustomSnackBar.success(successList: [deactiveAccountModel!.msg!]);
+        // }
         logoutApi();
       } else {
         if (deactiveAccountModel!.msg!.isNotEmpty) {

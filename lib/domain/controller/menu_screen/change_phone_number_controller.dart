@@ -87,9 +87,6 @@ class ChangePhoneNumberController extends GetxController {
   }
 
   changePhoneNumberApi() async {
-    if (mobileController.text.toString().trim().length != 10) {
-      CustomSnackBar.error(errorList: [MyStrings.mobileErrorMsg]);
-    } else {
       try {
         bool isGuestLogin = false;
         isGuestLogin = MyPrefrences.getBool(MyPrefrences.guestLogin) ?? false;
@@ -119,6 +116,5 @@ class ChangePhoneNumberController extends GetxController {
         print("changePhoneNumberApi Error ${e.toString()}");
         CustomSnackBar.error(errorList: [MyStrings.networkError]);
       }
-    }
   }
 }

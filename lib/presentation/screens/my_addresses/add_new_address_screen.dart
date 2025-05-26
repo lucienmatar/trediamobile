@@ -225,7 +225,7 @@ class _AddNewAddressScreenState extends State<AddNewAddressScreen> {
                           child: Container(
                             padding: const EdgeInsets.all(20), // Circular padding
                             decoration: const BoxDecoration(
-                              color: MyColor.paidContentColor,
+                              color: MyColor.primaryColor,
                               shape: BoxShape.circle, // Makes the Container circular
                               boxShadow: [
                                 BoxShadow(
@@ -253,7 +253,7 @@ class _AddNewAddressScreenState extends State<AddNewAddressScreen> {
             padding: const EdgeInsets.all(15.0),
             child: RoundedButton(
               cornerRadius: 10,
-              color: MyColor.paidContentColor,
+              color: MyColor.primaryColor,
               text: MyStrings.confirm.tr,
               press: () {
                 print("addNewAddressController.isFromEdit=${addNewAddressController.isFromEdit}");
