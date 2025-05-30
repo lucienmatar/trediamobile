@@ -27,8 +27,10 @@ class _LoginScreenState extends State<LoginScreen> {
   final _fieldKey = GlobalKey<FormState>();
   final FocusNode _focusNode = FocusNode();
   final FocusNode passwordFocusNode = FocusNode();
+
   //final GlobalKey<FormFieldState> _fieldKey = GlobalKey<FormFieldState>();
   var loginController = Get.put(LoginController());
+  String userType = "default";
 
   @override
   void initState() {
@@ -49,10 +51,19 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<LoginController>(
-      builder: (controller) => WillPopWidget(
-        nextRoute: RouteHelper.loginScreen,
-        child: Scaffold(
+    try {
+      userType = Get.arguments ?? 'default';
+      print("userType $userType");
+    } catch (e) {}
+    return WillPopScope(
+      onWillPop: () async {
+        if (userType == "guest") {
+          Get.back();
+        }
+        return false;
+      },
+      child: GetBuilder<LoginController>(
+        builder: (controller) => Scaffold(
           backgroundColor: MyColor.getScreenBgColor(),
           body: SafeArea(
             child: SingleChildScrollView(
@@ -62,11 +73,19 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(
-                      height: context.height * .08,
-                      child: Align(
-                        alignment: Alignment.centerRight, // Align dropdown to the right
-                        child: DropdownButton<String>(
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Visibility(
+                          visible: userType == "guest",
+                          child: IconButton(
+                            icon: const Icon(Icons.arrow_back),
+                            onPressed: () {
+                              Get.back(); // or Navigator.pop(context);
+                            },
+                          ),
+                        ),
+                        DropdownButton<String>(
                           value: controller.selectedLanguage, // Ensure this is a String
                           items: controller.languageMap.keys.map((String key) {
                             // Keys are Strings
@@ -81,7 +100,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             controller.setLocale(controller.languageMap[newValue]!, newValue); // Get Locale from Map
                           },
                         ),
-                      ),
+                      ],
                     ),
                     Text(MyStrings.welcome, style: semiBoldLargeInter.copyWith(fontSize: 40, color: MyColor.primaryColor)),
                     Text(MyStrings.back, style: semiBoldLargeInter.copyWith(fontSize: 40)),
@@ -101,7 +120,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       validator: (value) {
                         if (loginController.emailController.text.toString().isEmpty) {
                           return MyStrings.enterYourUsername;
-                        } /*else if (loginController.emailController.text.toString().length < 6) {
+                        }
+                        /*else if (loginController.emailController.text.toString().length < 6) {
                           print("len ${value.length}");
                           return MyStrings.kShortUserNameError;
                         }*/

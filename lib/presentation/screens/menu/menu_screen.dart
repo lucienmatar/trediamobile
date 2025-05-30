@@ -95,7 +95,7 @@ class _MenuScreenState extends State<MenuScreen> {
                     child: MenuRowWidget(
                       image: MyImages.person,
                       label: MyStrings.signInSignup,
-                      onPressed: () => Get.offAllNamed(RouteHelper.loginScreen),
+                      onPressed: () => Get.toNamed(RouteHelper.loginScreen, arguments: "guest"),
                     ),
                   ),
                   /*MenuRowWidget(

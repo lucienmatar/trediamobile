@@ -21,6 +21,8 @@ class CreateAddressController extends GetxController {
   var AddressID;
   var QazaTown;
   TownModel? townModel;
+  var Longitude;
+  var Latitude;
 //List<Map<String, String>>? townList;
   List<String>? townList;
   String? selectedTownName = MyStrings.selectTown;

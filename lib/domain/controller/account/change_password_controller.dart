@@ -24,39 +24,43 @@ class ChangePasswordController extends GetxController {
   ApiService apiService = ApiService(context: Get.context!);
 
   changePasswordApi() async {
-    try {
-      bool isGuestLogin = false;
-      isGuestLogin = MyPrefrences.getBool(MyPrefrences.guestLogin) ?? false;
-      String? token;
-      if (isGuestLogin) {
-        token = null;
-      } else {
-        token = MyPrefrences.getString(MyPrefrences.token) ?? "";
-      }
-      var requestBody = {
-        "token": token,
-        "lang": MyConstants.currentLanguage,
-        "OldPassword": currentPassController.text.toString().trim(),
-        "NewPassword": passController.text.toString().trim(),
-      };
-      dynamic responseBody = await apiService.makeRequest(endPoint: MyConstants.endpointChangePassword, method: MyConstants.POST, body: requestBody);
-      ChangePasswordModel changePasswordModel = ChangePasswordModel.fromJson(responseBody);
-      if (changePasswordModel!.status == 1) {
-        if (changePasswordModel!.msg!.isNotEmpty) {
-          CustomSnackBar.success(successList: [changePasswordModel!.msg!]);
+    if (confirmPassController.text != passController.text) {
+      CustomSnackBar.error(errorList: [MyStrings.kMatchPassError]); 
+    } else {
+      try {
+        bool isGuestLogin = false;
+        isGuestLogin = MyPrefrences.getBool(MyPrefrences.guestLogin) ?? false;
+        String? token;
+        if (isGuestLogin) {
+          token = null;
+        } else {
+          token = MyPrefrences.getString(MyPrefrences.token) ?? "";
         }
-        Navigator.pop(Get.context!);
-      } else {
-        passController.text = "";
-        currentPassController.text = "";
-        confirmPassController.text = "";
-        if (changePasswordModel!.msg!.isNotEmpty) {
-          CustomSnackBar.error(errorList: [changePasswordModel!.msg!]);
+        var requestBody = {
+          "token": token,
+          "lang": MyConstants.currentLanguage,
+          "OldPassword": currentPassController.text.toString().trim(),
+          "NewPassword": passController.text.toString().trim(),
+        };
+        dynamic responseBody = await apiService.makeRequest(endPoint: MyConstants.endpointChangePassword, method: MyConstants.POST, body: requestBody);
+        ChangePasswordModel changePasswordModel = ChangePasswordModel.fromJson(responseBody);
+        if (changePasswordModel!.status == 1) {
+          if (changePasswordModel!.msg!.isNotEmpty) {
+            CustomSnackBar.success(successList: [changePasswordModel!.msg!]);
+          }
+          Navigator.pop(Get.context!);
+        } else {
+          passController.text = "";
+          currentPassController.text = "";
+          confirmPassController.text = "";
+          if (changePasswordModel!.msg!.isNotEmpty) {
+            CustomSnackBar.error(errorList: [changePasswordModel!.msg!]);
+          }
         }
+      } catch (e) {
+        print("changePasswordApi Error ${e.toString()}");
+        CustomSnackBar.error(errorList: [MyStrings.networkError]);
       }
-    } catch (e) {
-      print("changePasswordApi Error ${e.toString()}");
-      CustomSnackBar.error(errorList: [MyStrings.networkError]);
     }
   }
 

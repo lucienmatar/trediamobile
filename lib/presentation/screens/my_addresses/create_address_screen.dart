@@ -53,15 +53,12 @@ class _CreateAddressScreenState extends State<CreateAddressScreen> {
           createAddressController.selectedTownName = createAddressController.QazaTown;
           print("createAddressController.selectedTownName ${createAddressController.selectedTownName}");
           createAddressController.addressController.text = data['AddressDetails'];
-          createAddressController.isSubmitDisable = false;
           createAddressController.update();
         }
       });
       if (createAddressController.fromEdit) {
-        var Longitude = data['Longitude'];
-        var Latitude = data['Latitude'];
-        MyConstants.mapLat = Latitude;
-        MyConstants.mapLong = Longitude;
+        createAddressController.Longitude = data['Longitude'];
+        createAddressController.Latitude = data['Latitude'];
       }
       LatLng mapPosition;
       mapPosition = LatLng(MyConstants.mapLat, MyConstants.mapLong);
@@ -91,7 +88,8 @@ class _CreateAddressScreenState extends State<CreateAddressScreen> {
           fromAuth: false,
           isProfileCompleted: false,
           bgColor: MyColor.getAppBarColor(),
-          actionPress: () {
+          isHandleBack: true,
+          onBackPressed: () {
             Get.off(MyAddressesScreen());
           },
         ),
@@ -118,22 +116,7 @@ class _CreateAddressScreenState extends State<CreateAddressScreen> {
                             InkWell(
                               onTap: () {
                                 Get.toNamed(RouteHelper.addNewAddressScreen, arguments: {'fromedit': true})!.then((result) {
-                                  controllerMap = Get.put(ControllerRefinedMap());
-                                  print("refresh location");
-                                  print("MyConstants.mapLat${MyConstants.mapLat}");
-                                  print("MyConstants.mapLong${MyConstants.mapLong}");
-                                  LatLng mapPosition = LatLng(MyConstants.mapLat, MyConstants.mapLong);
-                                  controllerMap.markers.clear();
-                                  controllerMap.addMarker(position: mapPosition, id: 'new_marker');
-                                  Future.delayed(Duration(seconds: 2), () {
-                                    //controllerMap.moveCamera(mapPosition);
-                                    print("refresh location moveCamera");
-                                    controllerMap.update();
-                                    print("refresh location update");
-                                  });
-                                  Future.delayed(Duration(seconds: 2), () {
-                                    createAddressController.update();
-                                  });
+                                  updateLocation();
                                 });
                               },
                               child: Container(
@@ -169,7 +152,7 @@ class _CreateAddressScreenState extends State<CreateAddressScreen> {
                             myLocationButtonEnabled: true, // Show GPS button
                             zoomGesturesEnabled: true,
                             onTap: (LatLng position) async {
-                              try {
+                              /*try {
                                 print("GoogleMap onTap ${position.latitude} ${position.longitude}");
                                 controllerMap.markers.clear();
                                 controllerMap.addMarker(position: position, id: 'new_marker');
@@ -180,7 +163,7 @@ class _CreateAddressScreenState extends State<CreateAddressScreen> {
                                 createAddressController.searchLocationController.text = await MyUtils.getAddressFromLatLong(position.latitude, position.longitude);
                               } catch (e) {
                                 print("GoogleMap onTap error ${e.toString()}");
-                              }
+                              }*/
                             },
                             initialCameraPosition: createAddressController.fromEdit ? cameraPosition! : controllerMap.initialPosition,
                             onMapCreated: controllerMap.onMapCreated,
@@ -328,5 +311,30 @@ class _CreateAddressScreenState extends State<CreateAddressScreen> {
       ),
       isScrollControlled: true,
     );
+  }
+
+  updateLocation() {
+    controllerMap = Get.put(ControllerRefinedMap());
+    print("refresh location");
+    print("MyConstants.mapLat${MyConstants.mapLat}");
+    print("MyConstants.mapLong${MyConstants.mapLong}");
+    LatLng mapPosition = LatLng(MyConstants.mapLat, MyConstants.mapLong);
+    controllerMap.currentPosition.value = mapPosition;
+    controllerMap.moveCamera(mapPosition);
+    if (createAddressController.Longitude != MyConstants.mapLong && createAddressController.Latitude != MyConstants.mapLat) {
+      createAddressController.Longitude = MyConstants.mapLat;
+      createAddressController.Latitude = MyConstants.mapLong;
+      createAddressController.isSubmitDisable = false;
+    }
+    controllerMap.markers.clear();
+    controllerMap.addMarker(position: mapPosition, id: 'new_marker');
+    Future.delayed(Duration(seconds: 2), () {
+      print("refresh location moveCamera");
+      controllerMap.update();
+      print("refresh location update");
+    });
+    Future.delayed(Duration(seconds: 2), () {
+      createAddressController.update();
+    });
   }
 }

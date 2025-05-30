@@ -35,8 +35,7 @@ class _AddNewAddressScreenState extends State<AddNewAddressScreen> {
   );
 
   void _onCameraMove(CameraPosition position) {
-    MyConstants.mapLat = position.target.latitude;
-    MyConstants.mapLong = position.target.longitude;
+    addNewAddressController.currentPosition = position;
   }
 
   @override
@@ -138,11 +137,11 @@ class _AddNewAddressScreenState extends State<AddNewAddressScreen> {
                           final longitude = placeDetails['geometry']['location']['lng'];
                           print('Place: ${suggestion['description']}, Lat: $latitude, Lng: $longitude');
                           addNewAddressController.searchLocationController.text = MyStrings.searching;
-                          MyConstants.mapLat = latitude;
-                          MyConstants.mapLong = longitude;
+                          //MyConstants.mapLat = latitude;
+                          //MyConstants.mapLong = longitude;
                           LatLng position = LatLng(latitude, longitude);
-                          controllerMap.markers.clear();
-                          controllerMap.addMarker(position: position, id: 'new_marker');
+                          //controllerMap.markers.clear();
+                          //controllerMap.addMarker(position: position, id: 'new_marker');
                           addNewAddressController.searchLocationController.text = suggestion['description'];
                           // Animate the camera to the new marker
                           controllerMap.moveCamera(position);
@@ -181,7 +180,7 @@ class _AddNewAddressScreenState extends State<AddNewAddressScreen> {
                         onCameraMove: _onCameraMove,
                         tiltGesturesEnabled: true,
                         onTap: (LatLng position) async {
-                          try {
+                          /* try {
                             MyConstants.mapLat = position.latitude;
                             MyConstants.mapLong = position.longitude;
                             print("GoogleMap onTap ${position.latitude} ${position.longitude}");
@@ -193,7 +192,7 @@ class _AddNewAddressScreenState extends State<AddNewAddressScreen> {
                             addNewAddressController.searchLocationController.text = await MyUtils.getAddressFromLatLong(position.latitude, position.longitude);
                           } catch (e) {
                             print("GoogleMap onTap error ${e.toString()}");
-                          }
+                          }*/
                         },
                         initialCameraPosition: _initialPosition,
                         onMapCreated: controllerMap.onMapCreated,
@@ -258,6 +257,8 @@ class _AddNewAddressScreenState extends State<AddNewAddressScreen> {
               press: () {
                 print("addNewAddressController.isFromEdit=${addNewAddressController.isFromEdit}");
                 if (addNewAddressController.isFromEdit) {
+                  MyConstants.mapLat = addNewAddressController.currentPosition!.target.latitude;
+                  MyConstants.mapLong = addNewAddressController.currentPosition!.target.longitude;
                   Get.back(result: 'success');
                 } else {
                   print("from map screen lat=${MyConstants.mapLat}andlong=${MyConstants.mapLong}");
