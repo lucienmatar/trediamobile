@@ -14,14 +14,11 @@ import '../../../../config/utils/style.dart';
 import '../../../../domain/controller/product_details/product_details_controller.dart';
 import '../../../components/bottom-sheet/bottom_sheet_header_row.dart';
 import '../../../components/buttons/custom_rounded_button.dart';
+
 class ShippingBottomSheet extends StatelessWidget {
+  final CheckOutController controller;
 
-  final CheckOutController  controller;
-
-  const ShippingBottomSheet({
-    super.key,
-    required this.controller
-  });
+  const ShippingBottomSheet({super.key, required this.controller});
 
   @override
   Widget build(BuildContext context) {
@@ -32,37 +29,40 @@ class ShippingBottomSheet extends StatelessWidget {
           bottomSpace: Dimensions.space22,
         ),
         Column(
-          children: List.generate(controller.shippingMethode.length, (index) => InkWell(
-            onTap: () {
-              controller.setCurrentShipping(index);
-            },
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: Dimensions.space16),
-              child: Row(
-                children: [
-                  Text(controller.shippingMethode[index],style: regularDefaultInter.copyWith(color: MyColor.labelTextColor),),
-                  const Spacer(),
-                  Container(
-                    padding: const EdgeInsets.all(4),
-                    height: Dimensions.space18,
-                    width: Dimensions.space18,
-                    decoration: BoxDecoration(
-                        color: controller.currentShipping == index ? MyColor.primaryColor : null,
-                        border: controller.currentShipping != index ? Border.all(color: MyColor.colorGrey.withOpacity(.6),width: 1): null,
-                        shape: BoxShape.circle
+          children: List.generate(
+              controller.shippingMethod.length,
+              (index) => InkWell(
+                    onTap: () {
+                      controller.setCurrentShipping(index, controller.shippingMethod[index]);
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: Dimensions.space16),
+                      child: Row(
+                        children: [
+                          Text(
+                            controller.shippingMethod[index],
+                            style: regularDefaultInter.copyWith(color: MyColor.labelTextColor),
+                          ),
+                          const Spacer(),
+                          Container(
+                            padding: const EdgeInsets.all(4),
+                            height: Dimensions.space18,
+                            width: Dimensions.space18,
+                            decoration: BoxDecoration(color: controller.currentShipping == index ? MyColor.primaryColor : null, border: controller.currentShipping != index ? Border.all(color: MyColor.colorGrey.withOpacity(.6), width: 1) : null, shape: BoxShape.circle),
+                            child: controller.currentShipping == index ? SvgPicture.asset(MyImages.check) : const SizedBox.shrink(),
+                          )
+                        ],
+                      ),
                     ),
-                    child: controller.currentShipping == index ? SvgPicture.asset(MyImages.check):const SizedBox.shrink(),
-                  )
-                ],
-              ),
-            ),
-          )),
+                  )),
         ),
         RoundedButton(
-          press: () {Get.back();},
+          press: () {
+            controller.changeShipping();
+            Get.back();
+          },
           verticalPadding: 15,
           text: MyStrings.apply.tr,
-
         )
       ],
     );

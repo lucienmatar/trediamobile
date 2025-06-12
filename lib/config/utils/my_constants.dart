@@ -1,3 +1,5 @@
+import 'my_strings.dart';
+
 class MyConstants {
   static String GOOGLE_PLACE_API_KEY = 'AIzaSyBWjwjz9R43cHP-5K-iLA9y9kPKI7aYE5g';
   static String GET = 'GET';
@@ -44,16 +46,25 @@ class MyConstants {
   static String endpointDeactivateAccount = "DeactivateAccount";
   static String endpointDeleteAddress = "DeleteAddress";
   static String endpointReactivateAccount = "ReactivateAccount";
+  static String endpointGetShippingMethods = "GetShippingMethods";
+  static String endpointGetPaymentMethods = "GetPaymentMethods";
+  static String endpointGetOrderSummaryBeforeCheckout = "GetOrderSummaryBeforeCheckout";
+  static String endpointPlaceOrder = "PlaceOrder";
+  static String endpointGetOrders = "GetOrders";
+  static String endpointGetOrderDetails = "GetOrderDetails";
   static String stOsVersion = "Unknown Device";
   static String stMobileType = "Unknown Device";
   static String currentLanguage = "en";
   static String deviceToken = "";
   static double mobVersion = 1.0;
   static bool filtersApplied = false;
+  static bool isMapinEditMode = false;
   static String filtersCategories = "";
   static String filtersCurrency = "";
   static double filtersRangeStartValue = 0;
   static double filtersRangeEndValue = 0;
   static double mapLat = 0;
   static double mapLong = 0;
+  static var ShippingAddressID = 0;
+  static String currentShippingAddress = MyStrings.addShippingAddress;
 }

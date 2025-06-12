@@ -95,7 +95,6 @@ class CreateAddressController extends GetxController {
       townModel = TownModel.fromJson(responseBody);
       if (townModel!.status == 1) {
         if (townModel!.msg!.isNotEmpty) {
-          print("town len ${townModel!.data!.length}");
           townList = townModel?.data?.map((data) => data.display ?? '').toList() ?? [];
           /*townList = townModel!.data?.map((data) {
               return {
@@ -104,7 +103,23 @@ class CreateAddressController extends GetxController {
               };
             }).toList() ??
             [];*/
-          selectedTown = townModel!.data![0].display!;
+          print("getAllTownApi fromEdit ${fromEdit}");
+          print("getAllTownApi TownID ${TownID}");
+          if (fromEdit) {
+            for (int i = 0; i < townModel!.data!.length; i++) {
+              int t1 = int.tryParse(townModel!.data![i].value!) ?? 0;
+              if (t1 == TownID) {
+                selectedTownName = townModel!.data![i].display!;
+                selectedTown = townModel!.data![i].display!;
+                print("getAllTownApi selectedTownName $selectedTownName");
+                print("getAllTownApi selectedTown $selectedTown");
+                print("getAllTownApi TownID $TownID");
+                break;
+              }
+            }
+          } else {
+            selectedTown = townModel!.data![0].display!;
+          }
           callback();
         }
       } else {

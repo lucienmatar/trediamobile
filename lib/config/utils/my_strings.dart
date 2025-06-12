@@ -15,6 +15,9 @@ class MyStrings {
   static const String selectPaymentMethod = "Select PaymentMethod";
 
   static const String item = "item";
+  static const String settings = "Settings";
+  static const String GPSIsDisabled = "GPS is Disabled";
+  static const String locationPermission = "Location permission is required to use this feature.";
   static const String currencyUpdated = "Currency Updated";
   static const String select = "Select";
   static const String alert = "Alert";
@@ -348,6 +351,8 @@ class MyStrings {
   static const String myProfile = "My Profile";
   static const String paymentHistory = "Payment History";
   static const String orderHistory = "Order History";
+  static const String orderDetails = "Order Details";
+  static const String yourOrder = "Your Order";
   static const String myReview = "My Review";
   static const String trackOrder = "Track Order";
   static const String signOut = "Sign Out";
@@ -355,6 +360,7 @@ class MyStrings {
   static const String products = "Products";
   static const String productDetails = "Product Details";
   static const String paid = "paid";
+  static const String paidWith = "Paid with";
   static const String ok = "Ok";
   static const String gender = "Gender";
   static const String cartSubtext = "1 x t-start lite";
@@ -367,6 +373,7 @@ class MyStrings {
   static const String chooseYourRating = "Choose Your Rating";
   static const String whatCouldBeBetter = "What Could Be Better?";
   static const String delivery = "Delivery";
+  static const String deliveryCharge = "Delivery Charge";
   static const String quality = "Quality";
   static const String valueForMoney = "Value For Money";
   static const String saler = "Saler";

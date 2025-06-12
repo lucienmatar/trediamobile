@@ -1,6 +1,7 @@
 import 'package:ShapeCom/config/utils/my_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -36,6 +37,62 @@ class _AddNewAddressScreenState extends State<AddNewAddressScreen> {
 
   void _onCameraMove(CameraPosition position) {
     addNewAddressController.currentPosition = position;
+    //MyConstants.mapLat = position.target.latitude;
+    //MyConstants.mapLong = position.target.longitude;
+  }
+
+  Future<void> _checkGps() async {
+    // Check if location services (GPS) are enabled
+    bool isLocationServiceEnabled = await Geolocator.isLocationServiceEnabled();
+
+    /*setState(() {
+      if (isLocationServiceEnabled) {
+        _gpsStatus = "GPS is enabled";
+      } else {
+        _gpsStatus = "GPS is disabled";
+      }
+    });*/
+
+    // If GPS is disabled, prompt the user to enable it
+    if (!isLocationServiceEnabled) {
+      showGPSDialog();
+    }
+  }
+
+  showGPSDialog() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(MyStrings.GPSIsDisabled),
+          content: Text(MyStrings.locationPermission),
+          actions: [
+            TextButton(
+              child: Text(MyStrings.cancel),
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+            ),
+            TextButton(
+              child: Text(MyStrings.settings),
+              onPressed: () async {
+                // Open location settings
+                await Geolocator.openLocationSettings();
+                Navigator.of(context).pop(); // Close the dialog
+                // Recheck GPS status after returning from settings
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _checkGps();
   }
 
   @override
@@ -43,13 +100,39 @@ class _AddNewAddressScreenState extends State<AddNewAddressScreen> {
     try {
       var data = Get.arguments;
       addNewAddressController.isFromEdit = data['fromedit'];
+      print("*****");
       print("addNewAddressController isFromEdit ${addNewAddressController.isFromEdit}");
+      if (data['fromedit']) {
+        if (!addNewAddressController.isFromEditValueSet) {
+          addNewAddressController.isFromEditValueSet = true;
+          MyConstants.mapLat = data['Latitude'];
+          MyConstants.mapLong = data['Longitude'];
+          LatLng mapPosition;
+          mapPosition = LatLng(MyConstants.mapLat, MyConstants.mapLong);
+          _initialPosition = CameraPosition(
+            target: LatLng(MyConstants.mapLat, MyConstants.mapLong),
+            zoom: 10,
+          );
+          /*CameraPosition cameraPosition = CameraPosition(
+          target: mapPosition ?? LatLng(0, 0), // Fallback
+          zoom: 10,
+        );*/
+          print("_CreateAddressScreenState mapPosition ${mapPosition.toString()}");
+          controllerMap.currentPosition.value = mapPosition;
+          //controllerMap.markers.clear();
+          //controllerMap.addMarker(position: mapPosition!, id: 'new_marker');
+          controllerMap.moveCamera(mapPosition!);
+          controllerMap.update();
+          addNewAddressController.update();
+        }
+      }
     } catch (e) {
       print("addNewAddressController err ${e.toString()}");
     }
     final screenHeight = MediaQuery.of(context).size.height;
     return WillPopScope(
       onWillPop: () async {
+        MyConstants.isMapinEditMode = false;
         if (addNewAddressController.isFromEdit) {
           Get.back(result: 'success');
           return false;
@@ -70,6 +153,7 @@ class _AddNewAddressScreenState extends State<AddNewAddressScreen> {
                     IconButton(
                       icon: const Icon(Icons.arrow_back, color: Colors.black),
                       onPressed: () {
+                        MyConstants.isMapinEditMode = false;
                         if (addNewAddressController.isFromEdit) {
                           Get.back(result: 'success');
                         } else {
@@ -151,7 +235,9 @@ class _AddNewAddressScreenState extends State<AddNewAddressScreen> {
                             // Close the keyboard
                             FocusScope.of(context).unfocus();
                             _fieldKey7.currentState!.validate();
-                          } catch (e) {}
+                          } catch (e) {
+                            print("AddNewAddressScreen err 1 ${e.toString()}");
+                          }
                         },
                       ),
                     ),
@@ -255,6 +341,7 @@ class _AddNewAddressScreenState extends State<AddNewAddressScreen> {
               color: MyColor.primaryColor,
               text: MyStrings.confirm.tr,
               press: () {
+                MyConstants.isMapinEditMode = false;
                 print("addNewAddressController.isFromEdit=${addNewAddressController.isFromEdit}");
                 if (addNewAddressController.isFromEdit) {
                   MyConstants.mapLat = addNewAddressController.currentPosition!.target.latitude;
@@ -262,7 +349,9 @@ class _AddNewAddressScreenState extends State<AddNewAddressScreen> {
                   Get.back(result: 'success');
                 } else {
                   print("from map screen lat=${MyConstants.mapLat}andlong=${MyConstants.mapLong}");
-                  if (MyConstants.mapLat > 0 && MyConstants.mapLong > 0) {
+                  if (addNewAddressController.currentPosition!.target.latitude > 0 && addNewAddressController.currentPosition!.target.longitude > 0) {
+                    MyConstants.mapLat = addNewAddressController.currentPosition!.target.latitude;
+                    MyConstants.mapLong = addNewAddressController.currentPosition!.target.longitude;
                     Get.off(CreateAddressScreen());
                   } else {
                     CustomSnackBar.error(errorList: ["${MyStrings.please} ${MyStrings.enterLocation}"]);

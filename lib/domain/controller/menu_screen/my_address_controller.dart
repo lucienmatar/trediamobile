@@ -21,6 +21,8 @@ class MyAddressController extends GetxController {
 
   getMyAddresses() async {
     try {
+      MyConstants.mapLong = 0;
+      MyConstants.mapLat = 0;
       isLoading = true;
       bool isGuestLogin = false;
       isGuestLogin = MyPrefrences.getBool(MyPrefrences.guestLogin) ?? false;

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:ShapeCom/presentation/screens/auth/registration/model/town_model.dart' as townData;
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:permission_handler/permission_handler.dart';
 import '../../../config/route/route.dart';
 import '../../../config/utils/dimensions.dart';
 import '../../../config/utils/my_color.dart';
@@ -38,28 +40,119 @@ class _CreateAddressScreenState extends State<CreateAddressScreen> {
   final formKey = GlobalKey<FormState>();
   ControllerRefinedMap controllerMap = Get.put(ControllerRefinedMap());
   CameraPosition? cameraPosition;
+  Future<void> _requestLocationPermission() async {
+    // Request location permission
+    PermissionStatus status = await Permission.location.request();
+
+    if (status.isGranted) {
+      // Permission granted, proceed with location access
+      _checkGps();
+    } else if (status.isDenied) {
+      // Permission denied
+      print("Location permission denied");
+      CustomSnackBar.error(errorList: [MyStrings.locationPermission]);
+      /* ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Location permission is required to use this feature.")),
+      );*/
+    } else if (status.isPermanentlyDenied) {
+      // Permission permanently denied, open app settings
+      print("Location permission permanently denied");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(MyStrings.locationPermission),
+          action: SnackBarAction(
+            label: MyStrings.settings,
+            onPressed: () {
+              openAppSettings(); // Opens app settings
+            },
+          ),
+        ),
+      );
+    }
+  }
+
+  Future<void> _checkGps() async {
+    // Check if location services (GPS) are enabled
+    bool isLocationServiceEnabled = await Geolocator.isLocationServiceEnabled();
+
+    /*setState(() {
+      if (isLocationServiceEnabled) {
+        _gpsStatus = "GPS is enabled";
+      } else {
+        _gpsStatus = "GPS is disabled";
+      }
+    });*/
+
+    // If GPS is disabled, prompt the user to enable it
+    if (!isLocationServiceEnabled) {
+      showGPSDialog();
+    }
+  }
+
+  showGPSDialog() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(MyStrings.GPSIsDisabled),
+          content: Text(MyStrings.locationPermission),
+          actions: [
+            TextButton(
+              child: Text(MyStrings.cancel),
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+            ),
+            TextButton(
+              child: Text(MyStrings.settings),
+              onPressed: () async {
+                // Open location settings
+                await Geolocator.openLocationSettings();
+                Navigator.of(context).pop(); // Close the dialog
+                // Recheck GPS status after returning from settings
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _requestLocationPermission();
+  }
+
   @override
   Widget build(BuildContext context) {
     try {
       var data = Get.arguments;
       if (data != null) {
+        print("data args ${data.toString()}");
         createAddressController.fromEdit = data['fromedit'];
-      }
-      createAddressController.getAllTownApi(callback: () {
+        print("data args fromEdit ${createAddressController.fromEdit}");
+        if (data['fromedit']) {
+          createAddressController.Longitude = data['Longitude'];
+          createAddressController.Latitude = data['Latitude'];
+          MyConstants.mapLat = data['Latitude'];
+          MyConstants.mapLong = data['Longitude'];
+        }
         if (createAddressController.fromEdit) {
           createAddressController.AddressID = data['AddressID'];
           createAddressController.TownID = data['TownID'];
           createAddressController.QazaTown = data['QazaTown'];
-          createAddressController.selectedTownName = createAddressController.QazaTown;
+        }
+      }
+      createAddressController.getAllTownApi(callback: () {
+        if (createAddressController.fromEdit) {
+          //createAddressController.selectedTownName = createAddressController.QazaTown;
           print("createAddressController.selectedTownName ${createAddressController.selectedTownName}");
           createAddressController.addressController.text = data['AddressDetails'];
           createAddressController.update();
         }
       });
-      if (createAddressController.fromEdit) {
-        createAddressController.Longitude = data['Longitude'];
-        createAddressController.Latitude = data['Latitude'];
-      }
       LatLng mapPosition;
       mapPosition = LatLng(MyConstants.mapLat, MyConstants.mapLong);
       cameraPosition = CameraPosition(
@@ -115,7 +208,8 @@ class _CreateAddressScreenState extends State<CreateAddressScreen> {
                             ),
                             InkWell(
                               onTap: () {
-                                Get.toNamed(RouteHelper.addNewAddressScreen, arguments: {'fromedit': true})!.then((result) {
+                                MyConstants.isMapinEditMode = true;
+                                Get.toNamed(RouteHelper.addNewAddressScreen, arguments: {'fromedit': true, 'Longitude': createAddressController.Longitude, 'Latitude': createAddressController.Latitude})!.then((result) {
                                   updateLocation();
                                 });
                               },
@@ -217,6 +311,11 @@ class _CreateAddressScreenState extends State<CreateAddressScreen> {
                           inputAction: TextInputAction.next,
                           controller: controller.addressController,
                           onChanged: (value) {
+                            print("print MyConstants.mapLat ${MyConstants.mapLat}");
+                            print("print MyConstants.mapLong ${MyConstants.mapLong}");
+                            print("print createAddressController.selectedTownName ${createAddressController.selectedTownName}");
+                            print("print addressController ${createAddressController.addressController.text}");
+
                             if (MyConstants.mapLat > 0 && MyConstants.mapLong > 0 && createAddressController.selectedTownName != null && createAddressController.selectedTownName!.isNotEmpty && createAddressController.selectedTownName != MyStrings.selectTown && createAddressController.addressController.text.isNotEmpty) {
                               createAddressController.isSubmitDisable = false;
                             } else {
@@ -296,6 +395,7 @@ class _CreateAddressScreenState extends State<CreateAddressScreen> {
                     onTap: () {
                       createAddressController.selectedTownName = filteredList[index].display!;
                       print("selectedTownName ${createAddressController.selectedTownName}");
+                      print("selectedTownID ${filteredList[index].value!}");
                       if (MyConstants.mapLat > 0 && MyConstants.mapLong > 0 && createAddressController.selectedTownName != null && createAddressController.selectedTownName!.isNotEmpty && createAddressController.selectedTownName != MyStrings.selectTown && createAddressController.addressController.text.isNotEmpty) {
                         createAddressController.isSubmitDisable = false;
                         createAddressController.update();

@@ -10,9 +10,11 @@ import 'package:ShapeCom/presentation/screens/shipping_address/widget/add_new_ad
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../../../config/utils/my_images.dart';
 import '../../../config/utils/my_strings.dart';
+import '../../../config/utils/util.dart';
 import '../../components/app-bar/custom_appbar.dart';
 import '../../components/checkbox/circular_check_box.dart';
 
@@ -24,11 +26,7 @@ class ShippingAddressScreen extends StatefulWidget {
 }
 
 class _ShippingAddressScreenState extends State<ShippingAddressScreen> {
-  @override
-  void initState() {
-    final controller = Get.put(ShippingAddressController());
-    super.initState();
-  }
+  var shippingAddressController = Get.put(ShippingAddressController());
 
   @override
   Widget build(BuildContext context) {
@@ -44,43 +42,68 @@ class _ShippingAddressScreenState extends State<ShippingAddressScreen> {
           child: Column(
             children: [
               Container(
-                  padding: Dimensions.shippingAddressPadding,
-                  decoration: BoxDecoration(color: MyColor.colorWhite, borderRadius: BorderRadius.circular(Dimensions.space5)),
-                  child: Column(
-                    children: [
-                      Column(
-                        children: List.generate(
-                            7,
-                            (index) => Column(
-                                  children: [
-                                    GestureDetector(
-                                      onTap: () {
-                                        controller.setCurrentIndex(index);
-                                      },
-                                      child: Row(
-                                        children: [
-                                          CircularCheckBox(controller: controller, index: index),
-                                          const SizedBox(width: Dimensions.space15),
-                                          CartSubText(
-                                            text: MyStrings.dummyAddresstext.tr,
-                                            fontSize: 13,
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      height: Dimensions.space22,
-                                    )
-                                  ],
-                                )),
-                      ),
-                      const CustomDivider(dividerHeight: 1.5),
-                      const AddNewAddressSection(),
-                    ],
-                  )),
+                padding: Dimensions.shippingAddressPadding,
+                decoration: BoxDecoration(color: MyColor.colorWhite, borderRadius: BorderRadius.circular(Dimensions.space5)),
+                child: shippingAddressController.isLoading
+                    ? buildShimmerEffect()
+                    : shippingAddressController.myAddressesCount > 0
+                        ? ListView.builder(
+                            shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(),
+                            itemCount: shippingAddressController.myAddressesCount,
+                            itemBuilder: (context, index) {
+                              return InkWell(
+                                onTap: () {
+                                  shippingAddressController.setCurrentIndex(index, shippingAddressController.myAddressesModel!.data!.addresses![index].addressID);
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(vertical: 5),
+                                  child: Row(
+                                    children: [
+                                      CircularCheckBox(controller: shippingAddressController, index: index),
+                                      const SizedBox(width: Dimensions.space15),
+                                      CartSubText(
+                                        text: "${shippingAddressController.myAddressesModel?.data?.addresses?[index].qazaTown ?? ""}\n${shippingAddressController.myAddressesModel?.data?.addresses?[index].addressDetails ?? ""}",
+                                        fontSize: 13,
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                          )
+                        : Center(child: MyUtils.noRecordsFoundWidget()),
+              ),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget buildShimmerEffect() {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey[300]!,
+      highlightColor: Colors.grey[100]!,
+      child: ListView.builder(
+        shrinkWrap: true,
+        physics: NeverScrollableScrollPhysics(),
+        itemCount: 10,
+        itemBuilder: (context, index) {
+          return Padding(
+            padding: const EdgeInsets.symmetric(vertical: 10),
+            child: Row(
+              children: [
+                CircularCheckBox(controller: shippingAddressController, index: index),
+                const SizedBox(width: Dimensions.space15),
+                CartSubText(
+                  text: '',
+                  fontSize: 13,
+                )
+              ],
+            ),
+          );
+        },
       ),
     );
   }

@@ -38,7 +38,9 @@ class ControllerMap extends GetxController {
     if (initialMarkers != null) {
       markers.addAll(initialMarkers!);
     }
-    await getCurrentLocation(); // Fetch live location on init
+    if (!MyConstants.isMapinEditMode) {
+      await getCurrentLocation(); // Fetch live location on init
+    }
   }
 
   void onMapCreated(GoogleMapController controller) {
@@ -137,26 +139,26 @@ class ControllerMap extends GetxController {
   }
 
   Future<void> moveCamera(LatLng target, {double zoom = 15}) async {
-    try{
+    try {
       await mapController.animateCamera(
         CameraUpdate.newCameraPosition(
           CameraPosition(target: target, zoom: zoom),
         ),
       );
-    }catch(e){}
+    } catch (e) {}
   }
 
   Future<void> updateZoom(double zoom) async {
-    try{
+    try {
       await mapController.animateCamera(CameraUpdate.zoomTo(zoom));
-    }catch(e){}
+    } catch (e) {}
   }
 
   @override
   void onClose() {
-    try{
+    try {
       mapController.dispose();
-    }catch(e){}
+    } catch (e) {}
     super.onClose();
   }
 }

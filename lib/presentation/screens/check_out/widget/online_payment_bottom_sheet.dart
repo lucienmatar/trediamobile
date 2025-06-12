@@ -13,14 +13,11 @@ import '../../../../config/utils/style.dart';
 import '../../../../domain/controller/product_details/product_details_controller.dart';
 import '../../../components/bottom-sheet/bottom_sheet_header_row.dart';
 import '../../../components/buttons/custom_rounded_button.dart';
+
 class OnlinePaymentBottomSheet extends StatelessWidget {
+  final CheckOutController controller;
 
-  final CheckOutController  controller;
-
-  const OnlinePaymentBottomSheet({
-    super.key,
-    required this.controller
-  });
+  const OnlinePaymentBottomSheet({super.key, required this.controller});
 
   @override
   Widget build(BuildContext context) {
@@ -31,36 +28,38 @@ class OnlinePaymentBottomSheet extends StatelessWidget {
           bottomSpace: Dimensions.space22,
         ),
         Column(
-          children: List.generate(controller.paymentMethode.length, (index) => InkWell(
-            onTap: () {
-              controller.setPaymentMethode(index);
-            },
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: Dimensions.space16),
-              child: Row(
-                children: [
-                  Text(controller.paymentMethode[index],style: regularDefaultInter.copyWith(color: MyColor.labelTextColor),),
-                  const Spacer(),
-                  Container(
-                    padding: const EdgeInsets.all(Dimensions.space4),
-                    height: 18,
-                    width: 18,
-                    decoration: BoxDecoration(
-                      color: controller.currentPayment == index ? MyColor.primaryColor : null,
-                      border: controller.currentPayment != index ? Border.all(color: MyColor.colorGrey.withOpacity(.6),width: 1): null,
-                      shape: BoxShape.circle
+          children: List.generate(
+              controller.paymentMethod.length,
+              (index) => InkWell(
+                    onTap: () {
+                      controller.setPaymentMethode(index);
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: Dimensions.space16),
+                      child: Row(
+                        children: [
+                          Text(
+                            controller.paymentMethod[index],
+                            style: regularDefaultInter.copyWith(color: MyColor.labelTextColor),
+                          ),
+                          const Spacer(),
+                          Container(
+                            padding: const EdgeInsets.all(Dimensions.space4),
+                            height: 18,
+                            width: 18,
+                            decoration: BoxDecoration(color: controller.currentPayment == index ? MyColor.primaryColor : null, border: controller.currentPayment != index ? Border.all(color: MyColor.colorGrey.withOpacity(.6), width: 1) : null, shape: BoxShape.circle),
+                            child: controller.currentPayment == index ? SvgPicture.asset(MyImages.check) : const SizedBox.shrink(),
+                          )
+                        ],
+                      ),
                     ),
-                    child: controller.currentPayment == index ? SvgPicture.asset(MyImages.check):const SizedBox.shrink(),
-                  )
-                ],
-              ),
-            ),
-          )),
+                  )),
         ),
         RoundedButton(
           text: MyStrings.apply.tr,
           press: () {
             Get.back();
+            controller.getOrderSummaryBeforeCheckoutApi();
           },
           verticalPadding: 15,
         )

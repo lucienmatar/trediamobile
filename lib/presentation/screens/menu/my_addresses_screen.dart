@@ -1,15 +1,19 @@
 import 'package:ShapeCom/config/utils/util.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:shimmer/shimmer.dart';
 import '../../../config/route/route.dart';
 import '../../../config/utils/dimensions.dart';
 import '../../../config/utils/my_color.dart';
+import '../../../config/utils/my_constants.dart';
 import '../../../config/utils/my_strings.dart';
 import '../../../config/utils/style.dart';
 import '../../../domain/controller/menu_screen/my_address_controller.dart';
 import '../../components/app-bar/custom_appbar.dart';
 import '../../components/buttons/rounded_button.dart';
+import '../../components/snack_bar/show_custom_snackbar.dart';
 import '../my_addresses/add_new_address_screen.dart';
 import '../my_addresses/create_address_screen.dart';
 
@@ -22,6 +26,91 @@ class MyAddressesScreen extends StatefulWidget {
 
 class _MyAddressesScreenState extends State<MyAddressesScreen> {
   var myAddressController = Get.put(MyAddressController());
+  Future<void> _requestLocationPermission() async {
+    // Request location permission
+    PermissionStatus status = await Permission.location.request();
+
+    if (status.isGranted) {
+      // Permission granted, proceed with location access
+      _checkGps();
+    } else if (status.isDenied) {
+      // Permission denied
+      print("Location permission denied");
+      CustomSnackBar.error(errorList: [MyStrings.locationPermission]);
+      /* ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Location permission is required to use this feature.")),
+      );*/
+    } else if (status.isPermanentlyDenied) {
+      // Permission permanently denied, open app settings
+      print("Location permission permanently denied");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(MyStrings.locationPermission),
+          action: SnackBarAction(
+            label: MyStrings.settings,
+            onPressed: () {
+              openAppSettings(); // Opens app settings
+            },
+          ),
+        ),
+      );
+    }
+  }
+
+  Future<void> _checkGps() async {
+    // Check if location services (GPS) are enabled
+    bool isLocationServiceEnabled = await Geolocator.isLocationServiceEnabled();
+
+    /*setState(() {
+      if (isLocationServiceEnabled) {
+        _gpsStatus = "GPS is enabled";
+      } else {
+        _gpsStatus = "GPS is disabled";
+      }
+    });*/
+
+    // If GPS is disabled, prompt the user to enable it
+    if (!isLocationServiceEnabled) {
+      showGPSDialog();
+    }
+  }
+
+  showGPSDialog() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(MyStrings.GPSIsDisabled),
+          content: Text(MyStrings.locationPermission),
+          actions: [
+            TextButton(
+              child: Text(MyStrings.cancel),
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+            ),
+            TextButton(
+              child: Text(MyStrings.settings),
+              onPressed: () async {
+                // Open location settings
+                await Geolocator.openLocationSettings();
+                Navigator.of(context).pop(); // Close the dialog
+                // Recheck GPS status after returning from settings
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _requestLocationPermission();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -75,7 +164,9 @@ class _MyAddressesScreenState extends State<MyAddressesScreen> {
                                   TextButton(
                                     onPressed: () {
                                       // Handle edit
-                                      Get.off(CreateAddressScreen(), arguments: {'fromedit': true, "AddressID": myAddressController.myAddressesModel?.data?.addresses?[index].addressID ?? "0", "TownID": myAddressController.myAddressesModel?.data?.addresses?[index].townID ?? "0", "QazaTown": myAddressController.myAddressesModel?.data?.addresses?[index].qazaTown ?? "", "AddressDetails": myAddressController.myAddressesModel?.data?.addresses?[index].addressDetails ?? "", "Longitude": myAddressController.myAddressesModel?.data?.addresses?[index].longitude ?? "0", "Latitude": myAddressController.myAddressesModel?.data?.addresses?[index].latitude ?? "0"});
+                                      //print("pass.mapLat ${myAddressController.myAddressesModel!.data!.addresses![index].latitude}");
+                                      //print("pass.mapLong ${myAddressController.myAddressesModel!.data!.addresses![index].longitude}");
+                                      Get.off(CreateAddressScreen(), arguments: {'fromedit': true, "AddressID": myAddressController.myAddressesModel?.data?.addresses?[index].addressID ?? "0", "TownID": myAddressController.myAddressesModel?.data?.addresses?[index].townID ?? "0", "QazaTown": myAddressController.myAddressesModel?.data?.addresses?[index].qazaTown ?? "", "AddressDetails": myAddressController.myAddressesModel?.data?.addresses?[index].addressDetails ?? "", "Longitude": myAddressController.myAddressesModel!.data!.addresses![index].longitude, "Latitude": myAddressController.myAddressesModel!.data!.addresses![index].latitude});
                                     },
                                     child: Text(
                                       MyStrings.edit,
@@ -103,7 +194,7 @@ class _MyAddressesScreenState extends State<MyAddressesScreen> {
                         );
                       },
                     )
-                  : MyUtils.noRecordsFoundWidget(),
+                  : Center(child: MyUtils.noRecordsFoundWidget()),
         ),
       ),
       bottomNavigationBar: Padding(
@@ -113,6 +204,7 @@ class _MyAddressesScreenState extends State<MyAddressesScreen> {
           color: MyColor.primaryColor,
           text: MyStrings.addNewAddress.tr,
           press: () {
+            MyConstants.isMapinEditMode = false;
             Get.off(AddNewAddressScreen());
           },
         ),

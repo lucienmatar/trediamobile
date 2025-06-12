@@ -41,11 +41,6 @@ class _CustomAppBarState extends State<CustomAppBar> {
   bool hasNotification = false;
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return widget.isShowBackBtn
         ? GetBuilder<CartCountController>(

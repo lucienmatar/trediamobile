@@ -26,6 +26,7 @@ class WishListScreen extends StatefulWidget {
 class _WishListScreenState extends State<WishListScreen> {
   final wishListController = Get.put(WishListController());
   final ScrollController _scrollController = ScrollController();
+  bool isReFresh = false;
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +39,13 @@ class _WishListScreenState extends State<WishListScreen> {
           actionImage1: MyImages.search,
           actionImage2: MyImages.card,
           actionPress2: () {
-            Get.toNamed(RouteHelper.myCartScreen);
+            //Get.toNamed(RouteHelper.myCartScreen);
+            Get.toNamed(RouteHelper.myCartScreen)!.then((result) {
+              print("object received");
+              setState(() {
+                isReFresh = true;
+              });
+            });
           },
         ),
         body: RefreshIndicator(
@@ -47,94 +54,94 @@ class _WishListScreenState extends State<WishListScreen> {
           onRefresh: wishListController.refreshItem,
           child: wishListController.isShimmerShow == false
               ? ListView(
-            controller: _scrollController,
-            children: List.generate(wishListController.favoriteItemCount, (index) {
-              return Column(
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      ProductModel productModel = ProductModel(image: "${MyConstants.imageBaseURL}${wishListController.favoriteItemModel!.data!.items![index].imageURL}", brand: wishListController.favoriteItemModel!.data!.items![index].categoryName!, title: wishListController.favoriteItemModel!.data!.items![index].itemName!, description: "", onlinePriceBeforeDiscount: wishListController.favoriteItemModel!.data!.items![index].onlinePriceBeforeDiscount!.toDouble(), price: wishListController.favoriteItemModel!.data!.items![index].onlinePrice!.toDouble(), sellingCurrencyLogo: wishListController.favoriteItemModel!.data!.items![index].sellingCurrencyLogo!, productID: wishListController.favoriteItemModel!.data!.items![index].idItem!.toInt());
-                      Future.delayed(const Duration(milliseconds: 100), () {
-                        Get.toNamed(RouteHelper.productDetailsScreen2, arguments: productModel);
-                      });
-                    },
-                    child: SlideMenu(
-                      swipeContentWidth: 0.3,
-                      menuItems: [
-                        // GestureDetector(onTap: () {}, child: SvgPicture.asset(MyImages.delete, width: Dimensions.space20)),
+                  controller: _scrollController,
+                  children: List.generate(wishListController.favoriteItemCount, (index) {
+                    return Column(
+                      children: [
                         GestureDetector(
-                            onTap: () {},
-                            child: SvgPicture.asset(
-                              MyImages.card,
-                              width: Dimensions.space20,
-                              colorFilter: const ColorFilter.mode(MyColor.primaryColor, BlendMode.srcIn),
-                            )),
-                        // GestureDetector(
-                        //     onTap: () {},
-                        //     child: SvgPicture.asset(
-                        //       MyImages.comparison,
-                        //       width: Dimensions.space20,
-                        //       colorFilter: const ColorFilter.mode(MyColor.iconColor, BlendMode.srcIn),
-                        //     )),
-                      ],
-                      child: Container(
-                        color: MyColor.colorWhite,
-                        child: ListTile(
-                          contentPadding: Dimensions.lisTilePaddingHV,
-                          title: buildWishlist(index),
+                          onTap: () {
+                            ProductModel productModel = ProductModel(image: "${MyConstants.imageBaseURL}${wishListController.favoriteItemModel!.data!.items![index].imageURL}", brand: wishListController.favoriteItemModel!.data!.items![index].categoryName!, title: wishListController.favoriteItemModel!.data!.items![index].itemName!, description: "", onlinePriceBeforeDiscount: wishListController.favoriteItemModel!.data!.items![index].onlinePriceBeforeDiscount!.toDouble(), price: wishListController.favoriteItemModel!.data!.items![index].onlinePrice!.toDouble(), sellingCurrencyLogo: wishListController.favoriteItemModel!.data!.items![index].sellingCurrencyLogo!, productID: wishListController.favoriteItemModel!.data!.items![index].idItem!.toInt());
+                            Future.delayed(const Duration(milliseconds: 100), () {
+                              Get.toNamed(RouteHelper.productDetailsScreen2, arguments: productModel);
+                            });
+                          },
+                          child: SlideMenu(
+                            swipeContentWidth: 0.3,
+                            menuItems: [
+                              // GestureDetector(onTap: () {}, child: SvgPicture.asset(MyImages.delete, width: Dimensions.space20)),
+                              GestureDetector(
+                                  onTap: () {},
+                                  child: SvgPicture.asset(
+                                    MyImages.card,
+                                    width: Dimensions.space20,
+                                    colorFilter: const ColorFilter.mode(MyColor.primaryColor, BlendMode.srcIn),
+                                  )),
+                              // GestureDetector(
+                              //     onTap: () {},
+                              //     child: SvgPicture.asset(
+                              //       MyImages.comparison,
+                              //       width: Dimensions.space20,
+                              //       colorFilter: const ColorFilter.mode(MyColor.iconColor, BlendMode.srcIn),
+                              //     )),
+                            ],
+                            child: Container(
+                              color: MyColor.colorWhite,
+                              child: ListTile(
+                                contentPadding: Dimensions.lisTilePaddingHV,
+                                title: buildWishlist(index),
+                              ),
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    height: 1,
-                    width: double.maxFinite,
-                    color: MyColor.colorLightGrey,
-                  )
-                ],
-              );
-            }),
-          )
+                        Container(
+                          height: 1,
+                          width: double.maxFinite,
+                          color: MyColor.colorLightGrey,
+                        )
+                      ],
+                    );
+                  }),
+                )
               : ListView(
-            children: List.generate(10, (index) {
-              return Column(
-                children: [
-                  SlideMenu(
-                    swipeContentWidth: 0.3,
-                    menuItems: [
-                      GestureDetector(onTap: () {}, child: SvgPicture.asset(MyImages.delete, width: Dimensions.space20)),
-                      GestureDetector(
-                          onTap: () {},
-                          child: SvgPicture.asset(
-                            MyImages.card,
-                            width: Dimensions.space20,
-                            colorFilter: const ColorFilter.mode(MyColor.primaryColor, BlendMode.srcIn),
-                          )),
-                      GestureDetector(
-                          onTap: () {},
-                          child: SvgPicture.asset(
-                            MyImages.comparison,
-                            width: Dimensions.space20,
-                            colorFilter: const ColorFilter.mode(MyColor.iconColor, BlendMode.srcIn),
-                          )),
-                    ],
-                    child: Container(
-                      color: MyColor.colorWhite,
-                      child: ListTile(
-                        contentPadding: Dimensions.lisTilePaddingHV,
-                        title: buildShimmerWishlist(),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    height: 1,
-                    width: double.maxFinite,
-                    color: MyColor.colorLightGrey,
-                  )
-                ],
-              );
-            }),
-          ),
+                  children: List.generate(10, (index) {
+                    return Column(
+                      children: [
+                        SlideMenu(
+                          swipeContentWidth: 0.3,
+                          menuItems: [
+                            GestureDetector(onTap: () {}, child: SvgPicture.asset(MyImages.delete, width: Dimensions.space20)),
+                            GestureDetector(
+                                onTap: () {},
+                                child: SvgPicture.asset(
+                                  MyImages.card,
+                                  width: Dimensions.space20,
+                                  colorFilter: const ColorFilter.mode(MyColor.primaryColor, BlendMode.srcIn),
+                                )),
+                            GestureDetector(
+                                onTap: () {},
+                                child: SvgPicture.asset(
+                                  MyImages.comparison,
+                                  width: Dimensions.space20,
+                                  colorFilter: const ColorFilter.mode(MyColor.iconColor, BlendMode.srcIn),
+                                )),
+                          ],
+                          child: Container(
+                            color: MyColor.colorWhite,
+                            child: ListTile(
+                              contentPadding: Dimensions.lisTilePaddingHV,
+                              title: buildShimmerWishlist(),
+                            ),
+                          ),
+                        ),
+                        Container(
+                          height: 1,
+                          width: double.maxFinite,
+                          color: MyColor.colorLightGrey,
+                        )
+                      ],
+                    );
+                  }),
+                ),
         ),
       ),
     );
@@ -169,13 +176,13 @@ class _WishListScreenState extends State<WishListScreen> {
                     children: [
                       Text(
                         '${wishListController.favoriteItemModel!.data!.items![index].sellingCurrencyLogo}'
-                            '${NumberFormat.currency(locale: 'en_GB', symbol: '', decimalDigits: wishListController.favoriteItemModel!.data!.items![index].sellingCurrencyLogo != '\$' && wishListController.favoriteItemModel!.data!.items![index].sellingCurrencyLogo != '€' ? 0 : 2).format(wishListController.favoriteItemModel!.data!.items![index].onlinePrice)}',
+                        '${NumberFormat.currency(locale: 'en_GB', symbol: '', decimalDigits: wishListController.favoriteItemModel!.data!.items![index].sellingCurrencyLogo != '\$' && wishListController.favoriteItemModel!.data!.items![index].sellingCurrencyLogo != '€' ? 0 : 2).format(wishListController.favoriteItemModel!.data!.items![index].onlinePrice)}',
                         style: boldLarge,
                       ),
                       const SizedBox(width: 10),
                       Text(
                         '${wishListController.favoriteItemModel!.data!.items![index].sellingCurrencyLogo}'
-                            '${NumberFormat.currency(locale: 'en_GB', symbol: '', decimalDigits: wishListController.favoriteItemModel!.data!.items![index].sellingCurrencyLogo != '\$' && wishListController.favoriteItemModel!.data!.items![index].sellingCurrencyLogo != '€' ? 0 : 2).format(wishListController.favoriteItemModel!.data!.items![index].onlinePriceBeforeDiscount)}',
+                        '${NumberFormat.currency(locale: 'en_GB', symbol: '', decimalDigits: wishListController.favoriteItemModel!.data!.items![index].sellingCurrencyLogo != '\$' && wishListController.favoriteItemModel!.data!.items![index].sellingCurrencyLogo != '€' ? 0 : 2).format(wishListController.favoriteItemModel!.data!.items![index].onlinePriceBeforeDiscount)}',
                         style: boldLarge.copyWith(
                           fontSize: 12,
                           decoration: TextDecoration.lineThrough,

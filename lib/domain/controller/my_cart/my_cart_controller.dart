@@ -13,9 +13,11 @@ import '../../../presentation/components/warning_aleart_dialog.dart';
 import '../../../presentation/screens/my_cart/model/my_cart_item_model.dart';
 import '../../../presentation/screens/my_cart/model/remove_item_from_cart_model.dart';
 import '../../../presentation/screens/my_cart/model/sub_total_price_cart.dart';
+import '../cart_controller/cartController.dart';
 
 class MyCartController extends GetxController {
   TextEditingController couponCodeController = TextEditingController();
+  CartCountController cartCountController = Get.put(CartCountController());
   FocusNode couponCodeFocusNode = FocusNode();
   int productSize = 6;
   double productPrice = 245.00;
@@ -196,6 +198,7 @@ class MyCartController extends GetxController {
       dynamic responseBody = await apiService.makeRequest(endPoint: MyConstants.endpointRemoveItemFromCart, method: MyConstants.POST, body: requestBody, showProgress: false);
       RemoveItemFromCartModel removeItemFromCartModel = RemoveItemFromCartModel.fromJson(responseBody);
       if (removeItemFromCartModel.status == 1) {
+        cartCountController.getItemsInCartCountApi();
         if (removeItemFromCartModel.msg!.isNotEmpty) {
           CustomSnackBar.success(successList: [removeItemFromCartModel.msg!]);
         }

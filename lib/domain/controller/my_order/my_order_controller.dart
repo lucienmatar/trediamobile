@@ -1,3 +1,4 @@
+import 'package:ShapeCom/presentation/screens/check_out/widget/my_order_model.dart';
 import 'package:get/get.dart';
 
 import '../../../config/network/api_service.dart';
@@ -13,51 +14,82 @@ class MyOrderController extends GetxController {
   int totalMyOrderCount = 1;
   List<String> orderStatus = ["Delivery", "Canceled", "In Progress"];
   ApiService apiService = ApiService(context: Get.context!);
-  GetItemModel? getItemModel;
+  MyOrderModel? myOrderModel;
+  int currentPageNumber = 1;
+  int pageSize = 10;
+  bool isLoading = true;
 
   @override
   void onInit() {
     super.onInit();
     initPreference();
-    //getMyOrderApi();
+    getMyOrderApi();
   }
 
   getMyOrderApi() async {
     try {
-      bool isGuestLogin = false;
-      String currency = MyPrefrences.getString(MyPrefrences.currency) ?? "LBP";
-      isGuestLogin = MyPrefrences.getBool(MyPrefrences.guestLogin) ?? false;
+      bool isGuestLogin = MyPrefrences.getBool(MyPrefrences.guestLogin) ?? false;
       String? token;
-      String? guidData;
       if (isGuestLogin) {
         token = null;
-        guidData = MyPrefrences.getString(MyPrefrences.guestGuidUser) ?? "";
       } else {
         token = MyPrefrences.getString(MyPrefrences.token) ?? "";
-        guidData = MyPrefrences.getString(MyPrefrences.guidUser) ?? "";
       }
       var requestBody = {
-        "Id_College": MyConstants.Id_College,
         "token": token,
-        "GuidUser": guidData,
-        "lang": MyConstants.currentLanguage,
-        "ccy": currency,
+        "ccy": "LBP",
+        "lang": "en",
+        "pageNumber": currentPageNumber,
+        "pageSize": pageSize,
       };
-      dynamic responseBody = await apiService.makeRequest(endPoint: MyConstants.endpointGetItems, method: MyConstants.POST, body: requestBody);
-      getItemModel = GetItemModel.fromJson(responseBody);
-      if (getItemModel!.status == 1) {
-        //totalMyOrderCount=getItemModel!.data!.count!.toInt();
+      dynamic responseBody = await apiService.makeRequest(endPoint: MyConstants.endpointGetOrders, method: MyConstants.POST, body: requestBody, showProgress: false);
+      MyOrderModel tempMyOrderModel = MyOrderModel.fromJson(responseBody);
+      if (tempMyOrderModel!.status == 1 && tempMyOrderModel!.data!.orders != null) {
+        if (currentPageNumber == 1) {
+          myOrderModel = tempMyOrderModel;
+        } else {
+          myOrderModel!.data!.orders!.addAll(tempMyOrderModel.data!.orders!);
+        }
+        totalMyOrderCount = myOrderModel!.data!.orders!.length;
+        for (int i = 0; i < totalMyOrderCount; i++) {
+          myOrderModel!.data!.orders![i].orderItemsLength = myOrderModel!.data!.orders![i].orderItems!.length;
+        }
       } else {
-        if (getItemModel!.msg!.isNotEmpty) {
-          CustomSnackBar.error(errorList: [getItemModel!.msg!]);
+        if (currentPageNumber == 1) {
+          myOrderModel = null;
+          totalMyOrderCount = 0;
+          if (tempMyOrderModel.msg != null) {
+            CustomSnackBar.error(errorList: [tempMyOrderModel.msg!]);
+          }
         }
       }
     } catch (e) {
       print("getMyOrderApi Error ${e.toString()}");
       CustomSnackBar.error(errorList: [MyStrings.networkError]);
     } finally {
+      isLoading = false;
       update();
     }
+  }
+
+  Future<void> refreshItem() async {
+    isLoading = true;
+    update();
+    currentPageNumber = 1;
+    await Future.delayed(const Duration(seconds: 1));
+    getMyOrderApi();
+  }
+
+  Future<void> refreshLoadMoreItem() async {
+    if (myOrderModel == null || myOrderModel!.data!.orders!.length < (currentPageNumber * pageSize)) {
+      // No more items to load
+      return;
+    }
+    isLoading = true;
+    update();
+    currentPageNumber++;
+    await Future.delayed(const Duration(seconds: 1));
+    getMyOrderApi();
   }
 
   initPreference() async {

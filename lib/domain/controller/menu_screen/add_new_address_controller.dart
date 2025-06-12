@@ -9,6 +9,7 @@ import '../../../config/utils/my_constants.dart';
 class AddNewAddressController extends GetxController {
   TextEditingController searchLocationController = TextEditingController();
   bool isFromEdit = false;
+  bool isFromEditValueSet = false;
   CameraPosition? currentPosition;
   Future<List<dynamic>> fetchPlaceSuggestions(String query) async {
     final String url = 'https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$query&key=${MyConstants.GOOGLE_PLACE_API_KEY}';
