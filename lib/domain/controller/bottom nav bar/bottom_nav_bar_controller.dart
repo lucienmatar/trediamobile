@@ -10,5 +10,11 @@ import '../../../presentation/screens/my_cart/model/cart_count_model.dart';
 import '../../../presentation/screens/my_cart/model/get_item_model.dart';
 
 class BottomNavBarController extends GetxController {
-
+  bool isGuestLogin = true;
+  @override
+  void onInit() {
+    // TODO: implement onInit
+    super.onInit();
+    isGuestLogin = MyPrefrences.getBool(MyPrefrences.guestLogin) ?? true;
+  }
 }

@@ -18,10 +18,12 @@ class WishListController extends GetxController {
   ApiService apiService = ApiService(context: Get.context!);
   FavoriteItemModel? favoriteItemModel;
   bool isShimmerShow = true;
+  bool isGuestLogin = true;
 
   @override
   void onInit() {
     super.onInit();
+    isGuestLogin = MyPrefrences.getBool(MyPrefrences.guestLogin) ?? true;
     getItemsInFavoritesApi();
   }
 

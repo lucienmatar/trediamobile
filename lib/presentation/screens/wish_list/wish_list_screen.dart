@@ -39,13 +39,16 @@ class _WishListScreenState extends State<WishListScreen> {
           actionImage1: MyImages.search,
           actionImage2: MyImages.card,
           actionPress2: () {
-            //Get.toNamed(RouteHelper.myCartScreen);
-            Get.toNamed(RouteHelper.myCartScreen)!.then((result) {
-              print("object received");
-              setState(() {
-                isReFresh = true;
+            if (wishListController.isGuestLogin) {
+              showGuestLoginDialog();
+            } else {
+              Get.toNamed(RouteHelper.myCartScreen)!.then((result) {
+                print("object received");
+                setState(() {
+                  isReFresh = true;
+                });
               });
-            });
+            }
           },
         ),
         body: RefreshIndicator(
@@ -301,5 +304,51 @@ class _WishListScreenState extends State<WishListScreen> {
         wishListController.loadMoreItem();
       }
     }
+  }
+
+  showGuestLoginDialog() {
+    Get.defaultDialog(
+      title: MyStrings.guestLogin,
+      titleStyle: const TextStyle(
+        fontSize: 18,
+        fontWeight: FontWeight.bold,
+        color: Colors.black,
+      ),
+      middleText: MyStrings.guestLogin2,
+      middleTextStyle: const TextStyle(
+        fontSize: 14,
+        color: Colors.black87,
+      ),
+      barrierDismissible: false, // Prevent dismissing by tapping outside
+      radius: 10, // Rounded corners
+      actions: [
+        TextButton(
+          onPressed: () {
+            Get.back(); // Close dialog
+            Get.toNamed(RouteHelper.loginScreen, arguments: "guest");
+          },
+          child: Text(
+            MyStrings.signInSignup,
+            style: TextStyle(
+              color: MyColor.primaryColor,
+              fontSize: 14,
+            ),
+          ),
+        ),
+        TextButton(
+          onPressed: () {
+            Get.back(); // Close dialog
+          },
+          child: Text(
+            MyStrings.close,
+            style: TextStyle(
+              color: MyColor.colorGrey,
+              fontSize: 14,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+      ],
+    );
   }
 }

@@ -82,12 +82,12 @@ class ControllerRefinedMap extends GetxController {
       //MyConstants.mapLat=position.latitude;
       //MyConstants.mapLong=position.longitude;
       // Add a marker for current location
-      addMarker(
+     /* addMarker(
         position: currentPosition.value!,
         id: 'current_location',
         title: 'My Location',
         icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
-      );
+      );*/
 
       // Move camera to current location if map is already created
       if (mapController != null) {

@@ -257,7 +257,7 @@ class _AddNewAddressScreenState extends State<AddNewAddressScreen> {
                   child: Stack(
                     children: [
                       GoogleMap(
-                        myLocationEnabled: false,
+                        myLocationEnabled: true,
                         myLocationButtonEnabled: false,
                         zoomGesturesEnabled: true,
                         rotateGesturesEnabled: true,

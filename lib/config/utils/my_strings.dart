@@ -167,6 +167,8 @@ class MyStrings {
   static const String wallet = "Wallet";
   static const String type = "Type";
   static const String profile = "Profile";
+  static const String guestLogin = "Guest Login";
+  static const String guestLogin2 = "You are logged in as a guest. Please log in to access this feature.";
   static const String theme = "Theme";
   static const String language = "Language";
   static const String deleteAddress = "Delete Address";

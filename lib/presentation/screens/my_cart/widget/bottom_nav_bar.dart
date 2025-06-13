@@ -11,6 +11,7 @@ import 'package:ShapeCom/domain/controller/cart_controller/cartController.dart';
 import 'package:ShapeCom/presentation/screens/menu/menu_screen.dart';
 import 'package:ShapeCom/presentation/screens/my_order/my_order_screen.dart';
 import 'package:ShapeCom/presentation/screens/wish_list/wish_list_screen.dart';
+import '../../../../config/utils/my_preferences.dart';
 import '../../../../config/utils/style.dart';
 import '../../../../domain/controller/bottom nav bar/bottom_nav_bar_controller.dart';
 import '../../../components/image/custom_svg_picture.dart';
@@ -79,7 +80,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
                   hoverColor: MyColor.primaryColor.withOpacity(0.2),
                   shape: const OvalBorder(),
                   onPressed: () async {
-                    Get.toNamed(RouteHelper.myCartScreen);
+                    checkLogin();
                   },
                   child: Container(
                       alignment: Alignment.center,
@@ -128,9 +129,19 @@ class _BottomNavBarState extends State<BottomNavBar> {
   navBarItem(String imagePath, int index, String label) {
     return GestureDetector(
       onTap: () {
-        setState(() {
-          currentIndex = index;
-        });
+        if (index == 2) {
+          if (bottomNavBarController.isGuestLogin) {
+            showGuestLoginDialog();
+          } else {
+            setState(() {
+              currentIndex = index;
+            });
+          }
+        } else {
+          setState(() {
+            currentIndex = index;
+          });
+        }
       },
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: Dimensions.space17),
@@ -157,6 +168,60 @@ class _BottomNavBarState extends State<BottomNavBar> {
           ],
         ),
       ),
+    );
+  }
+
+  checkLogin() {
+    if (bottomNavBarController.isGuestLogin) {
+      showGuestLoginDialog();
+    } else {
+      Get.toNamed(RouteHelper.myCartScreen);
+    }
+  }
+
+  showGuestLoginDialog() {
+    Get.defaultDialog(
+      title: MyStrings.guestLogin,
+      titleStyle: const TextStyle(
+        fontSize: 18,
+        fontWeight: FontWeight.bold,
+        color: Colors.black,
+      ),
+      middleText: MyStrings.guestLogin2,
+      middleTextStyle: const TextStyle(
+        fontSize: 14,
+        color: Colors.black87,
+      ),
+      barrierDismissible: false, // Prevent dismissing by tapping outside
+      radius: 10, // Rounded corners
+      actions: [
+        TextButton(
+          onPressed: () {
+            Get.back(); // Close dialog
+            Get.toNamed(RouteHelper.loginScreen, arguments: "guest");
+          },
+          child: Text(
+            MyStrings.signInSignup,
+            style: TextStyle(
+              color: MyColor.primaryColor,
+              fontSize: 14,
+            ),
+          ),
+        ),
+        TextButton(
+          onPressed: () {
+            Get.back(); // Close dialog
+          },
+          child: Text(
+            MyStrings.close,
+            style: TextStyle(
+              color: MyColor.colorGrey,
+              fontSize: 14,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
