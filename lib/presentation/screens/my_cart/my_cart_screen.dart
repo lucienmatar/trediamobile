@@ -79,13 +79,18 @@ class _MyCartScreenState extends State<MyCartScreen> {
                               ),
                             ),
                           );
-                        }
-                        )
+                        })
                     : SingleChildScrollView(
-                        child: Column(
-                          children: [
-                            Center(child: Text(myCartController.noDataFound, style: semiBoldLarge.copyWith(fontSize: 14), maxLines: 1)),
-                          ],
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        child: SizedBox(
+                          height: MediaQuery.of(context).size.height - kToolbarHeight - MediaQuery.of(context).padding.top, // Adjust for app bar and status bar
+                          child: Center(
+                            child: Text(
+                              myCartController.noDataFound ?? MyStrings.noRecordsFound,
+                              style: semiBoldLarge.copyWith(fontSize: 14),
+                              maxLines: 1,
+                            ),
+                          ),
                         ),
                       )
                 : ListView.builder(

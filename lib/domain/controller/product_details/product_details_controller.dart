@@ -98,18 +98,14 @@ class ProductDetailsController extends GetxController {
         token = MyPrefrences.getString(MyPrefrences.token) ?? "";
         guidData = MyPrefrences.getString(MyPrefrences.guidUser) ?? "";
       }
-      var requestBody = {
-        "token": token,
-        "lang": MyConstants.currentLanguage,
-        "GuidUser": guidData,
-        "Id_College": MyConstants.Id_College,
-        "Id_Item": productID,
-        "ccy": currency
-      };
+      var requestBody = {"token": token, "lang": MyConstants.currentLanguage, "GuidUser": guidData, "Id_College": MyConstants.Id_College, "Id_Item": productID, "ccy": currency};
       dynamic responseBody = await apiService.makeRequest(endPoint: MyConstants.endpointGetRelatedItems, method: MyConstants.POST, body: requestBody);
+      String res=responseBody.toString();
+      print("relatedItemsresponseBody ${responseBody.toString()}");
       getRelatedItemsModel = GetRelatedItemsModel.fromJson(responseBody);
       if (getRelatedItemsModel!.status == 1) {
         relatedItemsCount = getRelatedItemsModel!.data!.items!.length;
+        print("relatedItemsCount $relatedItemsCount");
         /*if (getItemDetailsModel!.msg!.isNotEmpty) {
           CustomSnackBar.success(successList: [getItemDetailsModel!.msg!]);
         }*/

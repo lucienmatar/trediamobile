@@ -27,7 +27,7 @@ class MyCartController extends GetxController {
   int cartCount = 0;
   ApiService apiService = ApiService(context: Get.context!);
   MyCartItemModel? myCartItemModel;
-  String noDataFound = "";
+  String? noDataFound = "";
   SubTotalPriceCart? subTotalPriceCart;
   bool loadTotalPrice = false;
   bool isShimmerShow = true;

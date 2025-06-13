@@ -33,9 +33,7 @@ class _ProductDetailsScreen2State extends State<ProductDetailsScreen2> {
   void initState() {
     super.initState();
     productModel = Get.arguments as ProductModel;
-    productDetailsController =
-        Get.put(ProductDetailsController(productModel.productID),
-            tag: productModel.productID.toString());
+    productDetailsController = Get.put(ProductDetailsController(productModel.productID), tag: productModel.productID.toString());
   }
 
   @override
@@ -50,130 +48,130 @@ class _ProductDetailsScreen2State extends State<ProductDetailsScreen2> {
         body: productDetailsController.isLoading!
             ? const Center(child: CircularProgressIndicator())
             : SingleChildScrollView(
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(14),
                 child: Column(
                   children: [
-                    Stack(
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: MyColor.primaryColor.withOpacity(.07)),
-                          child: Column(
+                    Padding(
+                      padding: const EdgeInsets.all(14),
+                      child: Column(
+                        children: [
+                          Stack(
                             children: [
-                              CarouselSlider(
-                                items: productDetailsController.getItemDetailsModel!.data!.media!.map((e) => Image.network("${MyConstants.imageBaseURL}${e.thumbnailURL}")).toList(),
-                                options: CarouselOptions(
-                                  aspectRatio: 1,
-                                  autoPlay: true,
-                                  autoPlayInterval: const Duration(seconds: 2),
-                                  viewportFraction: 1.0,
-                                  height: context.height * .38,
-                                  enableInfiniteScroll: true,
-                                  onPageChanged: (index, reason) {
-                                    controller.setCurrentIndex(index);
-                                  },
-                                ),
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: List.generate(
-                                    3,
-                                        (index) => Container(
-                                      padding: const EdgeInsets.symmetric(vertical: Dimensions.space8),
-                                      margin: const EdgeInsets.only(right: Dimensions.space10),
-                                      width: controller.currentIndex == index ? 20 : 10,
-                                      height: 8,
-                                      decoration: BoxDecoration(
-                                        color: controller.currentIndex == index ? MyColor.primaryColor : MyColor.bodyTextColor,
-                                        borderRadius: BorderRadius.circular(Dimensions.cardRadius),
+                              Container(
+                                decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: MyColor.primaryColor.withOpacity(.07)),
+                                child: Column(
+                                  children: [
+                                    CarouselSlider(
+                                      items: productDetailsController.getItemDetailsModel!.data!.media!.map((e) => Image.network("${MyConstants.imageBaseURL}${e.thumbnailURL}")).toList(),
+                                      options: CarouselOptions(
+                                        aspectRatio: 1,
+                                        autoPlay: true,
+                                        autoPlayInterval: const Duration(seconds: 2),
+                                        viewportFraction: 1.0,
+                                        height: context.height * .38,
+                                        enableInfiniteScroll: true,
+                                        onPageChanged: (index, reason) {
+                                          controller.setCurrentIndex(index);
+                                        },
                                       ),
-                                    )),
+                                    ),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: List.generate(
+                                          3,
+                                          (index) => Container(
+                                                padding: const EdgeInsets.symmetric(vertical: Dimensions.space8),
+                                                margin: const EdgeInsets.only(right: Dimensions.space10),
+                                                width: controller.currentIndex == index ? 20 : 10,
+                                                height: 8,
+                                                decoration: BoxDecoration(
+                                                  color: controller.currentIndex == index ? MyColor.primaryColor : MyColor.bodyTextColor,
+                                                  borderRadius: BorderRadius.circular(Dimensions.cardRadius),
+                                                ),
+                                              )),
+                                    ),
+                                    const SizedBox(height: 10)
+                                  ],
+                                ),
                               ),
-                              const SizedBox(height: 10)
+                              Positioned(
+                                  top: 10,
+                                  right: 10,
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      productDetailsController.toggleFavorite(productModel.productID);
+                                    },
+                                    child: Container(
+                                      height: 40,
+                                      width: 40,
+                                      padding: const EdgeInsets.all(10),
+                                      decoration: const BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: MyColor.colorWhite,
+                                      ),
+                                      child: SvgPicture.asset(
+                                        productDetailsController.getItemDetailsModel!.data!.item!.isFavorite! ? MyImages.wishList : MyImages.wishListOutline,
+                                        colorFilter: const ColorFilter.mode(MyColor.primaryColor, BlendMode.srcIn),
+                                      ),
+                                    ),
+                                  ))
                             ],
                           ),
-                        ),
-                        Positioned(
-                            top: 10,
-                            right: 10,
-                            child: GestureDetector(
-                              onTap: () {
-                                productDetailsController.toggleFavorite(productModel.productID);
-                              },
-                              child: Container(
-                                height: 40,
-                                width: 40,
-                                padding: const EdgeInsets.all(10),
-                                decoration: const BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: MyColor.colorWhite,
-                                ),
-                                child: SvgPicture.asset(
-                                  productDetailsController.getItemDetailsModel!.data!.item!.isFavorite! ? MyImages.wishList : MyImages.wishListOutline,
-                                  colorFilter: const ColorFilter.mode(MyColor.primaryColor, BlendMode.srcIn),
-                                ),
-                              ),
-                            ))
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          flex: 6,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(
-                                productDetailsController.getItemDetailsModel!.data!.item!.itemName!,
-                                style: boldLarge,
-                                maxLines: 1,
-                              ),
-                              Text(
-                                productDetailsController.getItemDetailsModel!.data!.item!.categoryName!,
-                                style: regularLarge.copyWith(color: MyColor.naturalDark),
-                              ),
-                              const SizedBox(
-                                height: 8,
-                              ),
-                              //const CustomRatingWidget()
-                            ],
-                          ),
-                        ),
-                        Expanded(
-                          flex: 4,
-                          child: Column(
-                            children: [
-                              Text(
-                                "${productModel.sellingCurrencyLogo}${productModel.onlinePriceBeforeDiscount}",
-                                style: boldLarge.copyWith(
-                                  decoration: TextDecoration.lineThrough,
-                                  color: MyColor.canceledTextColor,
+                              Expanded(
+                                flex: 6,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      productDetailsController.getItemDetailsModel!.data!.item!.itemName!,
+                                      style: boldLarge,
+                                      maxLines: 1,
+                                    ),
+                                    Text(
+                                      productDetailsController.getItemDetailsModel!.data!.item!.categoryName!,
+                                      style: regularLarge.copyWith(color: MyColor.naturalDark),
+                                    ),
+                                    const SizedBox(
+                                      height: 8,
+                                    ),
+                                    //const CustomRatingWidget()
+                                  ],
                                 ),
                               ),
-                              Text(
-                                "${productModel.sellingCurrencyLogo}${productModel.price}",
-                                style: mediumOverLarge,
-                              ),
+                              Expanded(
+                                flex: 4,
+                                child: Column(
+                                  children: [
+                                    Text(
+                                      "${productModel.sellingCurrencyLogo}${productModel.onlinePriceBeforeDiscount}",
+                                      style: boldLarge.copyWith(
+                                        decoration: TextDecoration.lineThrough,
+                                        color: MyColor.canceledTextColor,
+                                      ),
+                                    ),
+                                    Text(
+                                      "${productModel.sellingCurrencyLogo}${productModel.price}",
+                                      style: mediumOverLarge,
+                                    ),
+                                  ],
+                                ),
+                              )
                             ],
                           ),
-                        )
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    Align(alignment: Alignment.topLeft, child: CustomReadMoreText('${productDetailsController.getItemDetailsModel!.data!.item!.onlineDetails ?? ''} ', trimLines: 4, colorClickableText: MyColor.primaryColor, trimMode: TrimMode.Line, trimCollapsedText: MyStrings.seeMore, trimExpandedText: MyStrings.seeLess, moreStyle: regularLarge.copyWith(color: MyColor.primaryColor, fontWeight: FontWeight.w600), lessStyle: regularLarge.copyWith(color: MyColor.colorGreen, fontWeight: FontWeight.w600), style: regularLarge.copyWith(color: MyColor.bodyTextColor))),
-                    const SizedBox(height: 20),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        /*Row(
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          Align(alignment: Alignment.topLeft, child: CustomReadMoreText('${productDetailsController.getItemDetailsModel!.data!.item!.onlineDetails ?? ''} ', trimLines: 4, colorClickableText: MyColor.primaryColor, trimMode: TrimMode.Line, trimCollapsedText: MyStrings.seeMore, trimExpandedText: MyStrings.seeLess, moreStyle: regularLarge.copyWith(color: MyColor.primaryColor, fontWeight: FontWeight.w600), lessStyle: regularLarge.copyWith(color: MyColor.colorGreen, fontWeight: FontWeight.w600), style: regularLarge.copyWith(color: MyColor.bodyTextColor))),
+                          const SizedBox(height: 20),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              /*Row(
                                 children: [
                                   const Text(
                                     MyStrings.color,
@@ -217,63 +215,63 @@ class _ProductDetailsScreen2State extends State<ProductDetailsScreen2> {
                                   )
                                 ],
                               ),*/
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-                                controller.decreaseQuantity();
-                              },
-                              child: Container(
-                                width: 30,
-                                height: 30,
-                                decoration: BoxDecoration(shape: BoxShape.circle, color: MyColor.bodyTextColor, border: Border.all(color: MyColor.colorWhite, width: 3)),
-                                child: const Icon(
-                                  Icons.remove,
-                                  size: 14,
-                                  color: MyColor.colorWhite,
-                                ),
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 6),
-                              child: Text(
-                                "${controller.quantity}",
-                                style: mediumLarge.copyWith(color: MyColor.bodyTextColor),
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                controller.increaseQuantity();
-                              },
-                              child: Container(
-                                width: 30,
-                                height: 30,
-                                decoration: BoxDecoration(shape: BoxShape.circle, color: MyColor.bodyTextColor, border: Border.all(color: MyColor.colorWhite, width: 3)),
-                                child: const Icon(
-                                  Icons.add,
-                                  size: 14,
-                                  color: MyColor.colorWhite,
-                                ),
-                              ),
-                            ),
-                          ],
-                        )
-                      ],
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  GestureDetector(
+                                    onTap: () {
+                                      controller.decreaseQuantity();
+                                    },
+                                    child: Container(
+                                      width: 30,
+                                      height: 30,
+                                      decoration: BoxDecoration(shape: BoxShape.circle, color: MyColor.bodyTextColor, border: Border.all(color: MyColor.colorWhite, width: 3)),
+                                      child: const Icon(
+                                        Icons.remove,
+                                        size: 14,
+                                        color: MyColor.colorWhite,
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 6),
+                                    child: Text(
+                                      "${controller.quantity}",
+                                      style: mediumLarge.copyWith(color: MyColor.bodyTextColor),
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      controller.increaseQuantity();
+                                    },
+                                    child: Container(
+                                      width: 30,
+                                      height: 30,
+                                      decoration: BoxDecoration(shape: BoxShape.circle, color: MyColor.bodyTextColor, border: Border.all(color: MyColor.colorWhite, width: 3)),
+                                      child: const Icon(
+                                        Icons.add,
+                                        size: 14,
+                                        color: MyColor.colorWhite,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              )
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 20),
-              productDetailsController.relatedItemsCount > 0 ? buildRelatedProductList() : const Offstage(),
-              /* CustomProductSection(
+                    const SizedBox(height: 20),
+                    productDetailsController.relatedItemsCount > 0 ? buildRelatedProductList() : const Offstage(),
+                    /* CustomProductSection(
                       productList: MyProduct.shoeList.reversed.toList(),
                       controller: Get.find(),
                       productType: MyStrings.relatedProduct,
                     )*/
-            ],
-          ),
-        ),
+                  ],
+                ),
+              ),
         bottomNavigationBar: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
           child: Row(
@@ -349,64 +347,86 @@ class _ProductDetailsScreen2State extends State<ProductDetailsScreen2> {
               return GestureDetector(
                 onTap: () {
                   ProductModel productModel = ProductModel(
-                      image: "${MyConstants.imageBaseURL}${productDetailsController.getRelatedItemsModel!.data!.items![index].imageURL}",
-                      brand: productDetailsController.getRelatedItemsModel!.data!.items![index].categoryName!,
-                      title: productDetailsController.getRelatedItemsModel!.data!.items![index].itemName!,
-                      description: productDetailsController.getRelatedItemsModel!.data!.items![index].onlineDetails!,
-                      onlinePriceBeforeDiscount: productDetailsController.getRelatedItemsModel!.data!.items![index].onlinePriceBeforeDiscount!.toDouble(),
-                      price: productDetailsController.getRelatedItemsModel!.data!.items![index].onlinePrice!.toDouble(),
-                      sellingCurrencyLogo: productDetailsController.getRelatedItemsModel!.data!.items![index].sellingCurrencyLogo!,
-                      productID: productDetailsController.getRelatedItemsModel!.data!.items![index].idItem!.toInt());
+                    image: "${MyConstants.imageBaseURL}${productDetailsController.getRelatedItemsModel!.data!.items![index].imageURL}",
+                    brand: productDetailsController.getRelatedItemsModel!.data!.items![index].categoryName!,
+                    title: productDetailsController.getRelatedItemsModel!.data!.items![index].itemName!,
+                    description: productDetailsController.getRelatedItemsModel!.data!.items![index].onlineDetails!,
+                    onlinePriceBeforeDiscount: productDetailsController.getRelatedItemsModel!.data!.items![index].onlinePriceBeforeDiscount!.toDouble(),
+                    price: productDetailsController.getRelatedItemsModel!.data!.items![index].onlinePrice!.toDouble(),
+                    sellingCurrencyLogo: productDetailsController.getRelatedItemsModel!.data!.items![index].sellingCurrencyLogo!,
+                    productID: productDetailsController.getRelatedItemsModel!.data!.items![index].idItem!.toInt(),
+                  );
                   Future.delayed(const Duration(milliseconds: 100), () {
                     Get.toNamed(RouteHelper.productDetailsScreen2, arguments: productModel, preventDuplicates: false);
                   });
                 },
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.symmetric(horizontal: Dimensions.space8),
-                      padding: const EdgeInsets.all(Dimensions.space10),
-                      width: context.width * .4,
-                      decoration: BoxDecoration(
-                        color: MyColor.colorLightGrey,
-                        borderRadius: BorderRadius.circular(Dimensions.space7),
+                child: Container(
+                  width: context.width * .4,
+                  margin: const EdgeInsets.symmetric(horizontal: Dimensions.space8),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(Dimensions.space10),
+                        width: context.width * .4,
+                        decoration: BoxDecoration(
+                          color: MyColor.colorLightGrey,
+                          borderRadius: BorderRadius.circular(Dimensions.space7),
+                        ),
+                        child: Image.network(
+                          fit: BoxFit.cover,
+                          "${MyConstants.imageBaseURL}${productDetailsController.getRelatedItemsModel!.data!.items![index].imageURL}",
+                          width: 110,
+                          height: 115,
+                        ),
                       ),
-                      child: Image.network("${MyConstants.imageBaseURL}${productDetailsController.getRelatedItemsModel!.data!.items![index].imageURL}", width: 110, height: 115),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.symmetric(horizontal: Dimensions.space8),
-                      width: context.width * .4,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                      const SizedBox(height: Dimensions.space10),
+                      Text(
+                        productDetailsController.getRelatedItemsModel!.data!.items![index].categoryName!,
+                        style: mediumDefault.copyWith(color: MyColor.bodyTextColor),
+                      ),
+                      const SizedBox(height: 4),
+                      SizedBox(
+                        height: 20, // Reserve fixed height for itemName
+                        width: context.width * .4,
+                        child: Text(
+                          productDetailsController.getRelatedItemsModel!.data!.items![index].itemName!,
+                          style: boldLarge.copyWith(color: MyColor.colorBlack, fontSize: 14),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      SizedBox(
+                        height: 34, // Reserve fixed height for description (2 lines)
+                        width: context.width * .4,
+                        child: Text(
+                          productDetailsController.getRelatedItemsModel!.data!.items![index].onlineDetails!,
+                          style: mediumDefault.copyWith(color: MyColor.bodyTextColor),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Row(
                         children: [
-                          const SizedBox(height: Dimensions.space10),
                           Text(
-                            productDetailsController.getRelatedItemsModel!.data!.items![index].categoryName!,
-                            style: mediumDefault.copyWith(color: MyColor.bodyTextColor),
+                            "${productDetailsController.getRelatedItemsModel!.data!.items![index].sellingCurrencyLogo}${productDetailsController.getRelatedItemsModel!.data!.items![index].onlinePrice}",
+                            style: boldLarge,
                           ),
-                          const SizedBox(height: 4),
+                          const SizedBox(width: 10),
                           Text(
-                            productDetailsController.getRelatedItemsModel!.data!.items![index].itemName!,
-                            textAlign: TextAlign.center,
-                            style: boldLarge.copyWith(color: MyColor.colorBlack, fontSize: 14),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          const SizedBox(height: 4),
-                          Text(productDetailsController.getRelatedItemsModel!.data!.items![index].onlineDetails!, style: mediumDefault.copyWith(color: MyColor.bodyTextColor), maxLines: 2, overflow: TextOverflow.ellipsis),
-                          const SizedBox(height: 4),
-                          Row(
-                            children: [
-                              Text("${productDetailsController.getRelatedItemsModel!.data!.items![index].sellingCurrencyLogo}${productDetailsController.getRelatedItemsModel!.data!.items![index].onlinePrice}", style: boldLarge),
-                              const SizedBox(width: 10),
-                              Text("${productDetailsController.getRelatedItemsModel!.data!.items![index].sellingCurrencyLogo}${productDetailsController.getRelatedItemsModel!.data!.items![index].onlinePriceBeforeDiscount}", style: boldLarge.copyWith(fontSize: 12, decoration: TextDecoration.lineThrough, color: MyColor.bodyTextColor)),
-                            ],
+                            "${productDetailsController.getRelatedItemsModel!.data!.items![index].sellingCurrencyLogo}${productDetailsController.getRelatedItemsModel!.data!.items![index].onlinePriceBeforeDiscount}",
+                            style: boldLarge.copyWith(
+                              fontSize: 12,
+                              decoration: TextDecoration.lineThrough,
+                              color: MyColor.bodyTextColor,
+                            ),
                           ),
                         ],
                       ),
-                    )
-                  ],
+                    ],
+                  ),
                 ),
               );
             }),

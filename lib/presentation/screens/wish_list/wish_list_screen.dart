@@ -49,67 +49,24 @@ class _WishListScreenState extends State<WishListScreen> {
           },
         ),
         body: RefreshIndicator(
-          color: MyColor.primaryColor, // Color of the loading indicator
-          backgroundColor: Colors.white, // Background color of the refresh indicator
+          color: MyColor.primaryColor,
+          backgroundColor: Colors.white,
           onRefresh: wishListController.refreshItem,
-          child: wishListController.isShimmerShow == false
+          child: wishListController.isShimmerShow
               ? ListView(
                   controller: _scrollController,
-                  children: List.generate(wishListController.favoriteItemCount, (index) {
-                    return Column(
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            ProductModel productModel = ProductModel(image: "${MyConstants.imageBaseURL}${wishListController.favoriteItemModel!.data!.items![index].imageURL}", brand: wishListController.favoriteItemModel!.data!.items![index].categoryName!, title: wishListController.favoriteItemModel!.data!.items![index].itemName!, description: "", onlinePriceBeforeDiscount: wishListController.favoriteItemModel!.data!.items![index].onlinePriceBeforeDiscount!.toDouble(), price: wishListController.favoriteItemModel!.data!.items![index].onlinePrice!.toDouble(), sellingCurrencyLogo: wishListController.favoriteItemModel!.data!.items![index].sellingCurrencyLogo!, productID: wishListController.favoriteItemModel!.data!.items![index].idItem!.toInt());
-                            Future.delayed(const Duration(milliseconds: 100), () {
-                              Get.toNamed(RouteHelper.productDetailsScreen2, arguments: productModel);
-                            });
-                          },
-                          child: SlideMenu(
-                            swipeContentWidth: 0.3,
-                            menuItems: [
-                              // GestureDetector(onTap: () {}, child: SvgPicture.asset(MyImages.delete, width: Dimensions.space20)),
-                              GestureDetector(
-                                  onTap: () {},
-                                  child: SvgPicture.asset(
-                                    MyImages.card,
-                                    width: Dimensions.space20,
-                                    colorFilter: const ColorFilter.mode(MyColor.primaryColor, BlendMode.srcIn),
-                                  )),
-                              // GestureDetector(
-                              //     onTap: () {},
-                              //     child: SvgPicture.asset(
-                              //       MyImages.comparison,
-                              //       width: Dimensions.space20,
-                              //       colorFilter: const ColorFilter.mode(MyColor.iconColor, BlendMode.srcIn),
-                              //     )),
-                            ],
-                            child: Container(
-                              color: MyColor.colorWhite,
-                              child: ListTile(
-                                contentPadding: Dimensions.lisTilePaddingHV,
-                                title: buildWishlist(index),
-                              ),
-                            ),
-                          ),
-                        ),
-                        Container(
-                          height: 1,
-                          width: double.maxFinite,
-                          color: MyColor.colorLightGrey,
-                        )
-                      ],
-                    );
-                  }),
-                )
-              : ListView(
                   children: List.generate(10, (index) {
                     return Column(
                       children: [
                         SlideMenu(
                           swipeContentWidth: 0.3,
                           menuItems: [
-                            GestureDetector(onTap: () {}, child: SvgPicture.asset(MyImages.delete, width: Dimensions.space20)),
+                            GestureDetector(
+                                onTap: () {},
+                                child: SvgPicture.asset(
+                                  MyImages.delete,
+                                  width: Dimensions.space20,
+                                )),
                             GestureDetector(
                                 onTap: () {},
                                 child: SvgPicture.asset(
@@ -137,11 +94,76 @@ class _WishListScreenState extends State<WishListScreen> {
                           height: 1,
                           width: double.maxFinite,
                           color: MyColor.colorLightGrey,
-                        )
+                        ),
                       ],
                     );
                   }),
-                ),
+                )
+              : wishListController.favoriteItemCount > 0
+                  ? ListView(
+                      controller: _scrollController,
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      children: List.generate(wishListController.favoriteItemCount, (index) {
+                        return Column(
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                ProductModel productModel = ProductModel(
+                                  image: "${MyConstants.imageBaseURL}${wishListController.favoriteItemModel!.data!.items![index].imageURL}",
+                                  brand: wishListController.favoriteItemModel!.data!.items![index].categoryName!,
+                                  title: wishListController.favoriteItemModel!.data!.items![index].itemName!,
+                                  description: "",
+                                  onlinePriceBeforeDiscount: wishListController.favoriteItemModel!.data!.items![index].onlinePriceBeforeDiscount!.toDouble(),
+                                  price: wishListController.favoriteItemModel!.data!.items![index].onlinePrice!.toDouble(),
+                                  sellingCurrencyLogo: wishListController.favoriteItemModel!.data!.items![index].sellingCurrencyLogo!,
+                                  productID: wishListController.favoriteItemModel!.data!.items![index].idItem!.toInt(),
+                                );
+                                Future.delayed(const Duration(milliseconds: 100), () {
+                                  Get.toNamed(RouteHelper.productDetailsScreen2, arguments: productModel);
+                                });
+                              },
+                              child: SlideMenu(
+                                swipeContentWidth: 0.3,
+                                menuItems: [
+                                  GestureDetector(
+                                      onTap: () {},
+                                      child: SvgPicture.asset(
+                                        MyImages.card,
+                                        width: Dimensions.space20,
+                                        colorFilter: const ColorFilter.mode(MyColor.primaryColor, BlendMode.srcIn),
+                                      )),
+                                ],
+                                child: Container(
+                                  color: MyColor.colorWhite,
+                                  child: ListTile(
+                                    contentPadding: Dimensions.lisTilePaddingHV,
+                                    title: buildWishlist(index),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Container(
+                              height: 1,
+                              width: double.maxFinite,
+                              color: MyColor.colorLightGrey,
+                            ),
+                          ],
+                        );
+                      }),
+                    )
+                  : SingleChildScrollView(
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      child: SizedBox(
+                        height: MediaQuery.of(context).size.height - kToolbarHeight - MediaQuery.of(context).padding.top, // Adjust for app bar and status bar
+                        child: Center(
+                          child: Text(
+                            wishListController.noDataFound ?? MyStrings.noRecordsFound,
+                            style: semiBoldLarge.copyWith(fontSize: 14),
+                            maxLines: 1,
+                          ),
+                        ),
+                      ),
+                    ),
         ),
       ),
     );
