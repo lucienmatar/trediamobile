@@ -31,10 +31,12 @@ class MyCartController extends GetxController {
   SubTotalPriceCart? subTotalPriceCart;
   bool loadTotalPrice = false;
   bool isShimmerShow = true;
+  bool isGuestLogin = false;
 
   @override
   void onInit() {
     super.onInit();
+    isGuestLogin = MyPrefrences.getBool(MyPrefrences.guestLogin) ?? false;
     loadCartApis();
   }
 

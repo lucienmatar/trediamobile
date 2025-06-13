@@ -80,43 +80,47 @@ class _BottomNavBarState extends State<BottomNavBar> {
                   hoverColor: MyColor.primaryColor.withOpacity(0.2),
                   shape: const OvalBorder(),
                   onPressed: () async {
-                    checkLogin();
+                    Get.toNamed(RouteHelper.myCartScreen)!.then((result) {
+                      controller.getItemsInCartCountApi();
+                      print("Updated cart count: ${controller.cartCount}");
+                    });
                   },
                   child: Container(
-                      alignment: Alignment.center,
-                      padding: const EdgeInsets.all(Dimensions.space20),
-                      decoration: BoxDecoration(
-                        color: MyColor.colorWhite,
-                        shape: BoxShape.circle,
-                        boxShadow: [
-                          BoxShadow(
-                            blurRadius: 2.6,
-                            spreadRadius: 0.2,
-                            color: MyColor.primaryColor.withOpacity(0.3),
-                          )
-                        ],
-                      ),
-                      child: GetBuilder<CartCountController>(
-                        builder: (controller) => badges.Badge(
-                          showBadge: controller.cartCount > 0,
-                          badgeStyle: const badges.BadgeStyle(
-                            shape: badges.BadgeShape.circle,
-                            badgeColor: MyColor.inProgressTextColor,
-                            padding: EdgeInsets.all(5),
-                            elevation: 0,
-                          ),
-                          badgeContent: Text(
-                            controller.cartCount.toString(),
-                            style: regularSmall.copyWith(fontSize: 8, color: MyColor.colorWhite),
-                          ),
-                          child: SvgPicture.asset(
-                            MyImages.cart,
-                            width: 65,
-                            height: 65,
-                            colorFilter: const ColorFilter.mode(MyColor.primaryColor, BlendMode.srcATop),
-                          ),
+                    alignment: Alignment.center,
+                    padding: const EdgeInsets.all(Dimensions.space20),
+                    decoration: BoxDecoration(
+                      color: MyColor.colorWhite,
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          blurRadius: 2.6,
+                          spreadRadius: 0.2,
+                          color: MyColor.primaryColor.withOpacity(0.3),
+                        )
+                      ],
+                    ),
+                    child: GetBuilder<CartCountController>(
+                      builder: (controller) => badges.Badge(
+                        showBadge: controller.cartCount > 0,
+                        badgeStyle: const badges.BadgeStyle(
+                          shape: badges.BadgeShape.circle,
+                          badgeColor: MyColor.inProgressTextColor,
+                          padding: EdgeInsets.all(5),
+                          elevation: 0,
                         ),
-                      )),
+                        badgeContent: Text(
+                          controller.cartCount.toString(),
+                          style: regularSmall.copyWith(fontSize: 8, color: MyColor.colorWhite),
+                        ),
+                        child: SvgPicture.asset(
+                          MyImages.cart,
+                          width: 65,
+                          height: 65,
+                          colorFilter: const ColorFilter.mode(MyColor.primaryColor, BlendMode.srcATop),
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
               ),
             ),
@@ -169,14 +173,6 @@ class _BottomNavBarState extends State<BottomNavBar> {
         ),
       ),
     );
-  }
-
-  checkLogin() {
-    if (bottomNavBarController.isGuestLogin) {
-      showGuestLoginDialog();
-    } else {
-      Get.toNamed(RouteHelper.myCartScreen);
-    }
   }
 
   showGuestLoginDialog() {

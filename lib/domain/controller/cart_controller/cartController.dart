@@ -7,9 +7,17 @@ import '../../../presentation/components/snack_bar/show_custom_snackbar.dart';
 import '../../../presentation/screens/my_cart/model/cart_count_model.dart';
 
 class CartCountController extends GetxController {
-  int cartCount = 0;
   ApiService apiService = ApiService(context: Get.context!);
   CartCountModel? cartCountModel;
+
+  int cartCount = 0;
+
+  int get cartCount2 => cartCount;
+
+  void updateCartCount(int newCount) {
+    cartCount = newCount;
+    update(); // Notify GetBuilder to rebuild
+  }
 
   getItemsInCartCountApi() async {
     try {
@@ -34,7 +42,7 @@ class CartCountController extends GetxController {
       cartCountModel = CartCountModel.fromJson(responseBody);
       if (cartCountModel!.status == 1) {
         cartCount = cartCountModel!.data!.count!.toInt();
-        update();
+        updateCartCount(cartCount);
         /*if (getItemModel.msg!.isNotEmpty) {
           CustomSnackBar.success(successList: [getItemModel.msg!]);
         }*/

@@ -30,84 +30,90 @@ class _MyCartScreenState extends State<MyCartScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<MyCartController>(
-      builder: (controller) => Scaffold(
-          backgroundColor: MyColor.colorLightGrey,
-          appBar: AppBar(
-            centerTitle: true,
-            title: Text(
-              MyStrings.myCart,
-              style: titleText,
+    return WillPopScope(
+      onWillPop: () async {
+        Get.back(result: "success");
+        return false;
+      },
+      child: GetBuilder<MyCartController>(
+        builder: (controller) => Scaffold(
+            backgroundColor: MyColor.colorLightGrey,
+            appBar: AppBar(
+              centerTitle: true,
+              title: Text(
+                MyStrings.myCart,
+                style: titleText,
+              ),
+              leading: widget.isShowBackButton
+                  ? IconButton(
+                      splashColor: Colors.transparent,
+                      highlightColor: Colors.transparent,
+                      onPressed: () {
+                        print("object success");
+                        Get.back(result: "success");
+                      },
+                      icon: SvgPicture.asset(MyImages.backButton))
+                  : null,
+              automaticallyImplyLeading: false,
             ),
-            leading: widget.isShowBackButton
-                ? IconButton(
-                    splashColor: Colors.transparent,
-                    highlightColor: Colors.transparent,
-                    onPressed: () {
-                      print("object success");
-                      Get.back(result: "success");
-                    },
-                    icon: SvgPicture.asset(MyImages.backButton))
-                : null,
-            automaticallyImplyLeading: false,
-          ),
-          body: RefreshIndicator(
-            color: MyColor.primaryColor, // Color of the loading indicator
-            backgroundColor: Colors.white, // Background color of the refresh indicator
-            onRefresh: myCartController.refreshItem,
-            child: myCartController.isShimmerShow == false
-                ? myCartController.cartCount > 0
-                    ? ListView.builder(
-                        controller: _scrollController,
-                        shrinkWrap: true,
-                        itemCount: myCartController.cartCount,
-                        itemBuilder: (context, index) {
-                          return InkWell(
-                            onTap: () {
-                              // Handle item tap
-                              ProductModel productModel = ProductModel(image: "${MyConstants.imageBaseURL}${myCartController.myCartItemModel!.data!.items![index].imageURL}", brand: myCartController.myCartItemModel!.data!.items![index].categoryName!, title: myCartController.myCartItemModel!.data!.items![index].itemName!, description: "", onlinePriceBeforeDiscount: myCartController.myCartItemModel!.data!.items![index].sumOnlinePriceBeforeDiscount!.toDouble(), price: myCartController.myCartItemModel!.data!.items![index].sumOnlinePrice!.toDouble(), sellingCurrencyLogo: myCartController.myCartItemModel!.data!.items![index].sellingCurrencyLogo!, productID: myCartController.myCartItemModel!.data!.items![index].idItem!.toInt());
-                              Future.delayed(const Duration(milliseconds: 100), () {
-                                Get.toNamed(RouteHelper.productDetailsScreen2, arguments: productModel);
-                              });
-                            },
-                            child: Container(
-                              color: MyColor.colorWhite,
-                              margin: const EdgeInsets.only(bottom: Dimensions.space4),
-                              child: ListTile(
-                                contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
-                                title: buildCartWidget(index),
+            body: RefreshIndicator(
+              color: MyColor.primaryColor, // Color of the loading indicator
+              backgroundColor: Colors.white, // Background color of the refresh indicator
+              onRefresh: myCartController.refreshItem,
+              child: myCartController.isShimmerShow == false
+                  ? myCartController.cartCount > 0
+                      ? ListView.builder(
+                          controller: _scrollController,
+                          shrinkWrap: true,
+                          itemCount: myCartController.cartCount,
+                          itemBuilder: (context, index) {
+                            return InkWell(
+                              onTap: () {
+                                // Handle item tap
+                                ProductModel productModel = ProductModel(image: "${MyConstants.imageBaseURL}${myCartController.myCartItemModel!.data!.items![index].imageURL}", brand: myCartController.myCartItemModel!.data!.items![index].categoryName!, title: myCartController.myCartItemModel!.data!.items![index].itemName!, description: "", onlinePriceBeforeDiscount: myCartController.myCartItemModel!.data!.items![index].sumOnlinePriceBeforeDiscount!.toDouble(), price: myCartController.myCartItemModel!.data!.items![index].sumOnlinePrice!.toDouble(), sellingCurrencyLogo: myCartController.myCartItemModel!.data!.items![index].sellingCurrencyLogo!, productID: myCartController.myCartItemModel!.data!.items![index].idItem!.toInt());
+                                Future.delayed(const Duration(milliseconds: 100), () {
+                                  Get.toNamed(RouteHelper.productDetailsScreen2, arguments: productModel);
+                                });
+                              },
+                              child: Container(
+                                color: MyColor.colorWhite,
+                                margin: const EdgeInsets.only(bottom: Dimensions.space4),
+                                child: ListTile(
+                                  contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
+                                  title: buildCartWidget(index),
+                                ),
+                              ),
+                            );
+                          })
+                      : SingleChildScrollView(
+                          physics: const AlwaysScrollableScrollPhysics(),
+                          child: SizedBox(
+                            height: MediaQuery.of(context).size.height - kToolbarHeight - MediaQuery.of(context).padding.top, // Adjust for app bar and status bar
+                            child: Center(
+                              child: Text(
+                                myCartController.noDataFound ?? MyStrings.noRecordsFound,
+                                style: semiBoldLarge.copyWith(fontSize: 14),
+                                maxLines: 1,
                               ),
                             ),
-                          );
-                        })
-                    : SingleChildScrollView(
-                        physics: const AlwaysScrollableScrollPhysics(),
-                        child: SizedBox(
-                          height: MediaQuery.of(context).size.height - kToolbarHeight - MediaQuery.of(context).padding.top, // Adjust for app bar and status bar
-                          child: Center(
-                            child: Text(
-                              myCartController.noDataFound ?? MyStrings.noRecordsFound,
-                              style: semiBoldLarge.copyWith(fontSize: 14),
-                              maxLines: 1,
-                            ),
                           ),
-                        ),
-                      )
-                : ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: 5,
-                    itemBuilder: (context, index) {
-                      return Container(
-                        color: MyColor.colorWhite,
-                        margin: const EdgeInsets.only(bottom: Dimensions.space4),
-                        child: ListTile(
-                          contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
-                          title: buildShimmerCartWidget(),
-                        ),
-                      );
-                    }),
-          ),
-          bottomNavigationBar: widget.isShowBackButton ? buildBottomSection() : const SizedBox.shrink()),
+                        )
+                  : ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: 5,
+                      itemBuilder: (context, index) {
+                        return Container(
+                          color: MyColor.colorWhite,
+                          margin: const EdgeInsets.only(bottom: Dimensions.space4),
+                          child: ListTile(
+                            contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
+                            title: buildShimmerCartWidget(),
+                          ),
+                        );
+                      }),
+            ),
+            bottomNavigationBar: widget.isShowBackButton ? buildBottomSection() : const SizedBox.shrink()),
+      ),
     );
   }
 
@@ -139,7 +145,11 @@ class _MyCartScreenState extends State<MyCartScreen> {
                   const Spacer(),
                   InkWell(
                     onTap: () {
-                      myCartController.gotoCheckOutPage();
+                      if (myCartController.isGuestLogin) {
+                        showGuestLoginDialog();
+                      } else {
+                        myCartController.gotoCheckOutPage();
+                      }
                     },
                     child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -155,6 +165,52 @@ class _MyCartScreenState extends State<MyCartScreen> {
             ),
           )
         : const Offstage();
+  }
+
+  showGuestLoginDialog() {
+    Get.defaultDialog(
+      title: MyStrings.guestLogin,
+      titleStyle: const TextStyle(
+        fontSize: 18,
+        fontWeight: FontWeight.bold,
+        color: Colors.black,
+      ),
+      middleText: MyStrings.guestLogin2,
+      middleTextStyle: const TextStyle(
+        fontSize: 14,
+        color: Colors.black87,
+      ),
+      barrierDismissible: false, // Prevent dismissing by tapping outside
+      radius: 10, // Rounded corners
+      actions: [
+        TextButton(
+          onPressed: () {
+            Get.back(); // Close dialog
+            Get.toNamed(RouteHelper.loginScreen, arguments: "guest");
+          },
+          child: Text(
+            MyStrings.signInSignup,
+            style: TextStyle(
+              color: MyColor.primaryColor,
+              fontSize: 14,
+            ),
+          ),
+        ),
+        TextButton(
+          onPressed: () {
+            Get.back(); // Close dialog
+          },
+          child: Text(
+            MyStrings.close,
+            style: TextStyle(
+              color: MyColor.colorGrey,
+              fontSize: 14,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+      ],
+    );
   }
 
   Widget buildCartWidget(int index) {
