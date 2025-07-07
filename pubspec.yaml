@@ -40,7 +40,7 @@ dependencies:
 flutter_icons:
   android: false
   ios: true
-  image_path: "assets/images/app_logo/splash_logo.png" # icon file path
+  image_path: "assets/images/app_logo/logo.png" # icon file path
 
 dev_dependencies:
   flutter_launcher_icons: ^0.13.1 # use to generate app icons
