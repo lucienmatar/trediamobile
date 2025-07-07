@@ -181,50 +181,60 @@ class _MenuScreenState extends State<MenuScreen> {
   void showGenderBottomSheet() {
     Get.bottomSheet(
       Container(
-        height: 300,
         padding: const EdgeInsets.all(16),
         decoration: const BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text("${MyStrings.select} ${MyStrings.currency}", style: boldLarge.copyWith(fontWeight: FontWeight.w700, fontSize: 14)),
-            const SizedBox(height: Dimensions.space20),
-            ListView.builder(
-              shrinkWrap: true,
-              itemCount: menuScreenController.currencyCount,
-              itemBuilder: (context, index) {
-                return Obx(() {
-                  return ListTile(
-                    dense: true, // Reduces internal padding
-                    title: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 7),
-                      child: Text(
-                        menuScreenController.currencyModel!.data![index].display!,
-                        style: regularLarge,
-                        maxLines: 1,
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min, // Important: allows Column to take min height
+            children: [
+              Text(
+                "${MyStrings.select} ${MyStrings.currency}",
+                style: boldLarge.copyWith(fontWeight: FontWeight.w700, fontSize: 14),
+              ),
+              const SizedBox(height: Dimensions.space20),
+
+              // Dynamic list
+              Obx(() {
+                return Column(
+                  children: List.generate(menuScreenController.currencyCount, (index) {
+                    return ListTile(
+                      dense: true,
+                      title: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 7),
+                        child: Text(
+                          menuScreenController.currencyModel!.data![index].display!,
+                          style: regularLarge,
+                          maxLines: 1,
+                        ),
                       ),
-                    ),
-                    trailing: Radio<int>(
-                      value: index,
-                      groupValue: menuScreenController.selectedCurrencyValue.value,
-                      onChanged: (int? value) {
-                        menuScreenController.selectedCurrencyValue.value = value!;
-                        MyPrefrences.saveString(MyPrefrences.currency, menuScreenController.currencyModel!.data![index].display!);
-                        CustomSnackBar.success(successList: [MyStrings.currencyUpdated]);
-                        Get.back();
-                      },
-                    ),
-                    visualDensity: const VisualDensity(vertical: -4), // Adjust density to make it compact
-                  );
-                });
-              },
-            ),
-          ],
+                      trailing: Radio<int>(
+                        value: index,
+                        groupValue: menuScreenController.selectedCurrencyValue.value,
+                        onChanged: (int? value) {
+                          menuScreenController.selectedCurrencyValue.value = value!;
+                          MyPrefrences.saveString(
+                            MyPrefrences.currency,
+                            menuScreenController.currencyModel!.data![index].display!,
+                          );
+                          CustomSnackBar.success(successList: [MyStrings.currencyUpdated]);
+                          Get.back();
+                        },
+                      ),
+                      visualDensity: const VisualDensity(vertical: -4),
+                    );
+                  }),
+                );
+              }),
+            ],
+          ),
         ),
       ),
+      isScrollControlled: true, // Important for bottom sheet to expand
     );
   }
+
 }

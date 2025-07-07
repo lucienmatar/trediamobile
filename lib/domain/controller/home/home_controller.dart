@@ -103,7 +103,7 @@ class HomeController extends GetxController {
           productCount = getItemModel!.data!.items!.length;
           for (int i = 0; i < productCount; i++) {
             String imgURL = "${MyConstants.imageBaseURL}${getItemModel!.data!.items![i].imageURL!}";
-            ProductModel productModel = ProductModel(image: imgURL, brand: getItemModel!.data!.items![i].categoryName!, title: getItemModel!.data!.items![i].itemName!, description: getItemModel!.data!.items![i].onlineDetails!, onlinePriceBeforeDiscount: getItemModel!.data!.items![i].onlinePriceBeforeDiscount!.toDouble(), price: getItemModel!.data!.items![i].onlinePrice!.toDouble(), sellingCurrencyLogo: getItemModel!.data!.items![i].sellingCurrencyLogo!, productID: getItemModel!.data!.items![i].idItem!.toInt());
+            ProductModel productModel = ProductModel(image: imgURL, brand: getItemModel!.data!.items![i].categoryName!, title: getItemModel!.data!.items![i].itemName!, description: getItemModel!.data!.items![i].onlineDetails ?? "", onlinePriceBeforeDiscount: getItemModel!.data!.items![i].onlinePriceBeforeDiscount!.toDouble(), price: getItemModel!.data!.items![i].onlinePrice!.toDouble(), sellingCurrencyLogo: getItemModel!.data!.items![i].sellingCurrencyLogo!, productID: getItemModel!.data!.items![i].idItem!.toInt());
             productModelList.add(productModel);
           }
           /*if (productModelList.isNotEmpty) {
@@ -184,12 +184,13 @@ class HomeController extends GetxController {
               image: "${MyConstants.imageBaseURL}${item.imageURL}",
               brand: item.categoryName!,
               title: item.itemName!,
-              description: item.onlineDetails!,
+              description: item.onlineDetails ?? "",
               onlinePriceBeforeDiscount: item.onlinePriceBeforeDiscount!.toDouble(),
               price: item.onlinePrice!.toDouble(),
               sellingCurrencyLogo: item.sellingCurrencyLogo!,
               productID: item.idItem!.toInt(),
             ));
+            print("${MyConstants.imageBaseURL}${item.imageURL}");
           }
         }
       } else {

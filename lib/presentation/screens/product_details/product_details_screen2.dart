@@ -46,7 +46,7 @@ class _ProductDetailsScreen2State extends State<ProductDetailsScreen2> {
           leadingImage: MyImages.backButton,
         ),
         body: productDetailsController.isLoading!
-            ? const Center(child: CircularProgressIndicator())
+            ? const Center()
             : SingleChildScrollView(
                 child: Column(
                   children: [
@@ -401,7 +401,7 @@ class _ProductDetailsScreen2State extends State<ProductDetailsScreen2> {
                         height: 34, // Reserve fixed height for description (2 lines)
                         width: context.width * .4,
                         child: Text(
-                          productDetailsController.getRelatedItemsModel!.data!.items![index].onlineDetails!,
+                          productDetailsController.getRelatedItemsModel!.data!.items![index].onlineDetails ?? '',
                           style: mediumDefault.copyWith(color: MyColor.bodyTextColor),
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,

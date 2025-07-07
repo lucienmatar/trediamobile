@@ -210,7 +210,9 @@ class _MyOrderScreenState extends State<MyOrderScreen> {
                           ),
                         ),
                       )
-                    : SafeArea(child: RefreshIndicator(color: MyColor.primaryColor, backgroundColor: Colors.white, onRefresh: myOrderController.refreshItem, child: MyUtils.noRecordsFoundWidget())),
+                    : SafeArea(child: RefreshIndicator(color: MyColor.primaryColor, backgroundColor: Colors.white, onRefresh: myOrderController.refreshItem, child: Center(
+              child: MyUtils.noRecordsFoundWidget(),
+            ),)),
           ),
         ),
       ),

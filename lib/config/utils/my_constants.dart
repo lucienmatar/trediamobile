@@ -5,8 +5,8 @@ class MyConstants {
   static String GET = 'GET';
   static String POST = 'POST';
   static String baseURL = "http://tredia.co/api/Mobile/";
-  static String imageBaseURL = "http://tredia.co";
-  static int Id_College = 400;
+  static String imageBaseURL = "https://lb.datarays.co";
+  static int Id_College = 707;
   static String endpointGuestLogin = "LoginAsGuest";
   static String endpointGetTowns = "GetTowns";
   static String endpointGetCountryCodes = "GetCountryCodes";

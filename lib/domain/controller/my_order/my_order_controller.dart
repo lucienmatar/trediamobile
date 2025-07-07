@@ -23,10 +23,10 @@ class MyOrderController extends GetxController {
   void onInit() {
     super.onInit();
     initPreference();
-    getMyOrderApi();
+    getMyOrderApi(false);
   }
 
-  getMyOrderApi() async {
+  getMyOrderApi(bool showProgress) async {
     try {
       bool isGuestLogin = MyPrefrences.getBool(MyPrefrences.guestLogin) ?? false;
       String? token;
@@ -42,7 +42,7 @@ class MyOrderController extends GetxController {
         "pageNumber": currentPageNumber,
         "pageSize": pageSize,
       };
-      dynamic responseBody = await apiService.makeRequest(endPoint: MyConstants.endpointGetOrders, method: MyConstants.POST, body: requestBody, showProgress: false);
+      dynamic responseBody = await apiService.makeRequest(endPoint: MyConstants.endpointGetOrders, method: MyConstants.POST, body: requestBody, showProgress: showProgress);
       MyOrderModel tempMyOrderModel = MyOrderModel.fromJson(responseBody);
       if (tempMyOrderModel!.status == 1 && tempMyOrderModel!.data!.orders != null) {
         if (currentPageNumber == 1) {
@@ -77,7 +77,7 @@ class MyOrderController extends GetxController {
     update();
     currentPageNumber = 1;
     await Future.delayed(const Duration(seconds: 1));
-    getMyOrderApi();
+    getMyOrderApi(false);
   }
 
   Future<void> refreshLoadMoreItem() async {
@@ -85,11 +85,11 @@ class MyOrderController extends GetxController {
       // No more items to load
       return;
     }
-    isLoading = true;
+    // isLoading = true;
     update();
     currentPageNumber++;
     await Future.delayed(const Duration(seconds: 1));
-    getMyOrderApi();
+    getMyOrderApi(true);
   }
 
   initPreference() async {

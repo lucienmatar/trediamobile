@@ -2,7 +2,7 @@ class MyImages {
   static const String appLogo = "assets/images/app_logo/app_logo.png";
   static const String splashLogo = "assets/images/app_logo/splash_logo.png";
   static const String loadingLogo = "assets/images/loading_logo.svg";
-  static const String dashboardLogo = "assets/images/app_logo/dashboard_logo.png";
+  static const String dashboardLogo = "assets/images/app_logo/dashboard_logo.jpg";
 
   //bottom nav
   static const String cart = "assets/images/nav_bar/cart.svg";
