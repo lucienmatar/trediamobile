@@ -61,7 +61,7 @@ class RegistrationController extends GetxController {
 
   RegExp regex = RegExp(r'[!@#$%^&*(),.?":{}|<>]');
   bool submitLoading = false;
-  String? selectedGender = "temp";
+  String? selectedGender;
   // TownModel? townModel;
   // //List<Map<String, String>>? townList;
   // List<String>? townList;

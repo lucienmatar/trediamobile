@@ -240,6 +240,9 @@ class MyStrings {
   static const String verificationSuccess = 'Verification Success';
   static const String enterLocation = 'Enter Location';
   static String get enterYourUsername => "enterYourUsername".tr;
+  static String get enterYourFirstName => "enterYourFirstName".tr;
+  static String get enterYourMiddleName => "enterYourMiddleName".tr;
+  static String get enterYourLastName => "enterYourLastName".tr;
   static String get enterYourLocation => "enterYourLocation".tr;
   static String get enterYourEmail => "enterYourEmail".tr;
   static const String enterYourPhoneNumber = "Enter your phone number";
@@ -364,7 +367,7 @@ class MyStrings {
   static const String paid = "paid";
   static const String paidWith = "Paid with";
   static const String ok = "Ok";
-  static const String gender = "Gender";
+  static const String gender = "Gender (Optional)";
   static const String cartSubtext = "1 x t-start lite";
   static const String dummyAddresstext = "2118 Thornridge Cir. Syracuse,\nConnecticut 35624";
   static const String purchasedOn = "Purchased on 04 Jul 2022";
@@ -425,7 +428,7 @@ class MyStrings {
   static String get selectGender => "selectGender".tr;
   static String get male => "male".tr;
   static String get female => "female".tr;
-  static String get dob => "Date of Birth".tr;
+  static String get dob => "Date of Birth (Optional)".tr;
   static String get enterDateOfBirth => "Please select your date of birth".tr;
 
   static const String description = "Discover a blend of quality and innovation with our latest offering. Designed with precision and crafted for durability, this product meets all your needs with style and efficiency. Whether for everyday use or special occasions, it delivers unmatched performance. Experience the perfect balance of functionality and design, making it an essential addition to your collection. Upgrade your lifestyle with a product that truly stands out";

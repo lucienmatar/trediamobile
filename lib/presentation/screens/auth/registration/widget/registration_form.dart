@@ -61,7 +61,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
                       fieldKey: _fieldKey1,
                       validator: (value) {
                         if (value!.isEmpty) {
-                          return MyStrings.enterYourUsername;
+                          return MyStrings.enterYourFirstName;
                         } else {
                           return null;
                         }
@@ -86,7 +86,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
                       inputAction: TextInputAction.next,
                       validator: (value) {
                         if (value!.isEmpty) {
-                          return MyStrings.enterYourUsername;
+                          return MyStrings.enterYourMiddleName;
                         } else {
                           return null;
                         }
@@ -111,7 +111,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
                 inputAction: TextInputAction.next,
                 validator: (value) {
                   if (value != null && value.isEmpty) {
-                    return MyStrings.enterYourUsername;
+                    return MyStrings.enterYourLastName;
                   } else {
                     return null;
                   }
@@ -203,9 +203,9 @@ class _RegistrationFormState extends State<RegistrationForm> {
                     inputAction: TextInputAction.next,
                     prefixIcon: MyImages.calendar,
                     validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return MyStrings.enterDateOfBirth;
-                      }
+                      // if (value == null || value.isEmpty) {
+                      //   return MyStrings.enterDateOfBirth;
+                      // }
                       return null;
                     }, onChanged: (_) {},
                   ),
@@ -576,13 +576,14 @@ class _RegistrationFormState extends State<RegistrationForm> {
                         registrationController.update();
                         if (formKey.currentState!.validate()) {
                           // If the form is valid, display a snackbar. In the real world,
-                          if (registrationController.selectedGender == null || registrationController.selectedGender!.isEmpty) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text(MyStrings.selectGender)),
-                            );
-                          } else {
-                            registrationController.registerApi();
-                          }
+                          // if (registrationController.selectedGender == null || registrationController.selectedGender!.isEmpty) {
+                          //   ScaffoldMessenger.of(context).showSnackBar(
+                          //     SnackBar(content: Text(MyStrings.selectGender)),
+                          //   );
+                          // } else {
+                          //   registrationController.registerApi();
+                          // }
+                          registrationController.registerApi();
                         }
                       }),
             ],
